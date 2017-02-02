@@ -7,6 +7,7 @@ package de.htwberlin.prog2.datamodel;
 public class BalancedTreeNode<T extends Comparable<T>> implements Comparable<BalancedTreeNode<T>> {
 
     private T data;
+    private BalancedTreeNode<T> prev; // <---------------------------------------------------new!
     private BalancedTreeNode<T> left;
     private BalancedTreeNode<T> right;
     public int level;
@@ -86,12 +87,13 @@ public class BalancedTreeNode<T extends Comparable<T>> implements Comparable<Bal
         return this.data.compareTo(node.data);
     }
 
-
+/*
     @Override
     public String toString() {
         return "Level " + level + ": " + data;
     }
-    /*
+    */
+
     @Override
     public String toString() {
         if (this.getLeft() != null && this.getRight() != null) {
@@ -103,6 +105,6 @@ public class BalancedTreeNode<T extends Comparable<T>> implements Comparable<Bal
         }
         return "Level " + level + ": " + data;
     }
-    */
+
 }
 

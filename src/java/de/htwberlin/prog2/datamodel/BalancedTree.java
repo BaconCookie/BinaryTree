@@ -1,7 +1,8 @@
 package de.htwberlin.prog2.datamodel;
 
+//needed for printTree & toString method
 import java.util.LinkedList;
-import java.util.Queue;
+
 
 /**
  * Created by laura on 01.01.17.
@@ -163,26 +164,31 @@ public class BalancedTree<T extends Comparable<T>> {
         return false;
     }
 
+    /**
+     * Method to search a node
+     * @param data contained by node
+     * @return node that is being searched or null if node is not found
+     */
+    public BalancedTreeNode<T> searchNode(T data) {
+        BalancedTreeNode<T> searchNode = root;
+        while (searchNode != null) {
+            if (searchNode.getData().compareTo(data) == 0)
+                return searchNode;
+            else if (searchNode.getData().compareTo(data) > 0)
+                searchNode = searchNode.getLeft();
+            else
+                searchNode = searchNode.getRight();
+        }
+        return null;
+    }
+
     public void remove(BalancedTreeNode<T> nodeToRemove){
         BalancedTreeNode<T> searchNode = root;
         if (search(nodeToRemove.getData()))
         try {
             while (searchNode != null) {
                 if (searchNode.compareTo(nodeToRemove) == 0){
-                    //REMOVE NODE __________________________UNCHECKED CODE___________________________
-                    // by default move leftChild of node one level up and then rebalance
-                    BalancedTreeNode leftChild = nodeToRemove.getLeft(); //to update link later
-                    BalancedTreeNode nodeToReplace = nodeToRemove.getRight(); //to find the node to replace nodeToRemove
-                    BalancedTreeNode nodeToUpdateLink = nodeToRemove.getRight().getLeft();
-                    BalancedTreeNode newRightChild = nodeToRemove.getRight();
-                    while (nodeToReplace != null){
-                        nodeToReplace.getLeft();
-                        nodeToUpdateLink.getLeft();
-                    }
-                    nodeToReplace.setLeft(leftChild);
-                    nodeToReplace.setRight(newRightChild);
-                    nodeToUpdateLink.setLeft(null);
-                    reBalance(root);
+                    removeNode(nodeToRemove);
                 }
                 else if (searchNode.compareTo(nodeToRemove) > 0) {
                     searchNode = searchNode.getLeft();
@@ -191,8 +197,27 @@ public class BalancedTree<T extends Comparable<T>> {
                 }
             }
         } catch (Exception e){
+            e.printStackTrace();
+            System.out.println();
             System.out.println("An error occurred!");
         }
+    }
+
+    private void removeNode(BalancedTreeNode<T> nodeToRemove) {
+        //REMOVE NODE __________________________UNCHECKED CODE___________________________
+        // by default move leftChild of node one level up and then rebalance
+        BalancedTreeNode leftChild = nodeToRemove.getLeft(); //to update link later
+        BalancedTreeNode nodeToReplace = nodeToRemove.getRight(); //to find the node to replace nodeToRemove
+        BalancedTreeNode newRightChild = nodeToRemove.getRight().getLeft();                             //NULLPOINTER EXC!
+        BalancedTreeNode nodeToUpdateLink = nodeToRemove.getRight();
+        while (nodeToReplace != null){
+            nodeToReplace.getLeft();
+            nodeToUpdateLink.getLeft();
+        }
+        nodeToReplace.setLeft(leftChild);
+        nodeToReplace.setRight(newRightChild);
+        nodeToUpdateLink.setLeft(null);
+        reBalance(root);
     }
 
 
@@ -200,23 +225,24 @@ public class BalancedTree<T extends Comparable<T>> {
         return root.toString();
     }
 
-    public void PrintTree() {
+    public void printTree() {
         root.level = 0;
-        Queue<BalancedTreeNode<T>> queue = new LinkedList<BalancedTreeNode<T>>();
-        queue.add(root);
-        while (!queue.isEmpty()) {
-            BalancedTreeNode<T> balancedTreeNode = queue.poll();
+        LinkedList<BalancedTreeNode<T>> list = new LinkedList<BalancedTreeNode<T>>();
+
+        list.add(root);
+        while (!list.isEmpty()) {
+            BalancedTreeNode<T> balancedTreeNode = list.poll();
             System.out.println(balancedTreeNode);
             int level = balancedTreeNode.level;
             BalancedTreeNode<T> left = balancedTreeNode.getLeft();
             BalancedTreeNode<T> right = balancedTreeNode.getRight();
             if (left != null) {
                 left.level = level + 1;
-                queue.add(left);
+                list.add(left);
             }
             if (right != null) {
                 right.level = level + 1;
-                queue.add(right);
+                list.add(right);
             }
         }
     }
