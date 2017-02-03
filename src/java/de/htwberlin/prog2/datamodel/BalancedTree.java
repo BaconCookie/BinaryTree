@@ -236,23 +236,26 @@ public class BalancedTree<T extends Comparable<T>> {
             // find parentNode of nodeToRemove and set link to nodeToRemove to null
             else if (hasNoChild(nodeToRemove)) {
                 BalancedTreeNode<T> parentNode = getParentNode(nodeToRemove);
+                //if nodeToRemove is/was the left child
                 if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
                     parentNode.setLeft(null);
                 } else {
                     parentNode.setRight(null);
                 }
+            } else {
+                removeNodeFromTheMiddle(nodeToRemove);
             }
+            reBalance(root);
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error in removeNode method");
         }
-        reBalance(root);
     }
 
     private boolean hasNoChild(BalancedTreeNode<T> nodeToRemove) {
         return nodeToRemove.getLeft() == null && nodeToRemove.getRight() == null;
     }
-
 
     /**
      * Method to get the parent node of a node
@@ -311,6 +314,69 @@ public class BalancedTree<T extends Comparable<T>> {
         }
         return updatedParentNode;
     }
+
+    private void removeNodeFromTheMiddle(BalancedTreeNode<T> nodeToRemove) {
+
+        BalancedTreeNode<T> parentNode = getParentNode(nodeToRemove);
+        BalancedTreeNode<T> replacementNode = getNodeToReplaceRemoved(nodeToRemove);
+        BalancedTreeNode<T> parentOfReplacementNode = getParentNode(replacementNode);
+        BalancedTreeNode<T> leftChildOfNodeToRemove = nodeToRemove.getLeft();
+        BalancedTreeNode<T> rightChildOfNodeToRemove = nodeToRemove.getRight();
+
+        //update link from parent to replacement node
+        //if nodeToRemove is/was the left child
+        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
+            parentNode.setLeft(replacementNode);
+        } else {
+            parentNode.setRight(replacementNode);
+        }
+        //update link(s) from replacementNode to it new child(ren)
+        if (leftChildOfNodeToRemove.getData().compareTo(replacementNode.getData()) != 0) {
+            replacementNode.setLeft(leftChildOfNodeToRemove);
+        } else if (rightChildOfNodeToRemove.getData().compareTo(replacementNode.getData()) != 0) {
+            replacementNode.setRight(rightChildOfNodeToRemove);
+        }
+        //update link of the parent from the replacement node to null, since it was the highest or lowest value
+        else if ((parentOfReplacementNode.getLeft() != null) && (parentOfReplacementNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
+            parentOfReplacementNode.setLeft(null);
+        } else {
+            parentOfReplacementNode.setRight(null);
+        }
+
+    }
+
+    /**
+     * Method to find a suitable node to replace one in the middle of the tree
+     *
+     * @param nodeToRemove this node must have at least one child
+     * @return a suitable node for replacement
+     */
+    private BalancedTreeNode<T> getNodeToReplaceRemoved(BalancedTreeNode<T> nodeToRemove) {
+        BalancedTreeNode<T> nodeToReplaceWith;
+
+        //if there is a node (or more) on the left, get the one with the highest value
+        if (nodeToRemove.getLeft() != null) {
+            nodeToReplaceWith = nodeToRemove.getLeft();
+            while (nodeToReplaceWith != null) {
+                if (nodeToReplaceWith.getRight() != null) {
+                    nodeToReplaceWith = nodeToReplaceWith.getRight();
+                } else if (nodeToReplaceWith.getLeft() != null) {
+                    nodeToReplaceWith = nodeToReplaceWith.getLeft();
+                }
+            }
+        } else { //get the node with the lowest value on the right (there must be at least one child)
+            nodeToReplaceWith = nodeToRemove.getRight();
+            while (nodeToReplaceWith != null) {
+                if (nodeToReplaceWith.getLeft() != null) {
+                    nodeToReplaceWith = nodeToReplaceWith.getLeft();
+                } else if (nodeToReplaceWith.getRight() != null) {
+                    nodeToReplaceWith = nodeToReplaceWith.getRight();
+                }
+            }
+        }
+        return nodeToReplaceWith;
+    }
+
 
     public String toString() {
         return root.toString();
