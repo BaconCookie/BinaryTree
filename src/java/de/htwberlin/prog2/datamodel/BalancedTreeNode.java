@@ -7,16 +7,18 @@ package de.htwberlin.prog2.datamodel;
 public class BalancedTreeNode<T extends Comparable<T>> implements Comparable<BalancedTreeNode<T>> {
 
     private T data;
-    private BalancedTreeNode<T> prev; // <---------------------------------------------------new!
     private BalancedTreeNode<T> left;
     private BalancedTreeNode<T> right;
     public int level;
-    private int height;
-
-    public BalancedTreeNode(){}
+    private int depth;
 
     /**
      * Constructor method of BalancedTreeNode
+     */
+    public BalancedTreeNode(){}
+
+    /**
+     * Overloaded constructor method of BalancedTreeNode
      *
      * @param data data belonging to this BalancedTreeNode
      */
@@ -37,13 +39,13 @@ public class BalancedTreeNode<T extends Comparable<T>> implements Comparable<Bal
         this.left = left;
         this.right = right;
         if (left == null && right == null)
-            setHeight(1);
+            setDepth(1);
         else if (left == null)
-            setHeight(right.getHeight() + 1);
+            setDepth(right.getDepth() + 1);
         else if (right == null)
-            setHeight(left.getHeight() + 1);
+            setDepth(left.getDepth() + 1);
         else
-            setHeight(Math.max(left.getHeight(), right.getHeight()) + 1);
+            setDepth(Math.max(left.getDepth(), right.getDepth()) + 1);
     }
 
     public T getData() {
@@ -71,19 +73,24 @@ public class BalancedTreeNode<T extends Comparable<T>> implements Comparable<Bal
     }
 
     /**
-     * @return the height
+     * @return the depth
      */
-    public int getHeight() {
-        return height;
+    public int getDepth() {
+        return depth;
     }
 
     /**
-     * @param height the height to set
+     * @param depth the depth to set
      */
-    public void setHeight(int height) {
-        this.height = height;
+    public void setDepth(int depth) {
+        this.depth = depth;
     }
 
+    /**
+     * Compare data of two Nodes
+     * @param node
+     * @return
+     */
     @Override
     public int compareTo(BalancedTreeNode<T> node) {
         return this.data.compareTo(node.data);

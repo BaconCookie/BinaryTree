@@ -1,6 +1,6 @@
 package de.htwberlin.prog2.datamodel;
 
-//needed for printTree & toString method
+//needed for printTree method
 
 import java.util.LinkedList;
 
@@ -12,10 +12,18 @@ public class BalancedTree<T extends Comparable<T>> {
 
     BalancedTreeNode<T> root;
 
+    /**
+     * Constructor of empty tree
+     */
     public BalancedTree() {
         root = null;
     }
 
+    /**
+     * Method to find the biggest value in the tree
+     *
+     * @return Data from node with the biggest value
+     */
     public T Maximum() {
         BalancedTreeNode<T> local = root;
         if (local == null)
@@ -25,6 +33,11 @@ public class BalancedTree<T extends Comparable<T>> {
         return local.getData();
     }
 
+    /**
+     * Method to find the smallest value in the tree
+     *
+     * @return Data from node with the smallest value
+     */
     public T Minimum() {
         BalancedTreeNode<T> local = root;
         if (local == null)
@@ -35,18 +48,24 @@ public class BalancedTree<T extends Comparable<T>> {
         return local.getData();
     }
 
-    private int height(BalancedTreeNode<T> node) {
+    /**
+     * Method to determine depth of node in the tree
+     *
+     * @param node to measure depth of
+     * @return int depth of node in tree
+     */
+    private int depth(BalancedTreeNode<T> node) {
         if (node == null)
             return 0;
-        return node.getHeight();
-        // 1 + Math.max(height(node.getLeft()), height(node.getRight()));
+        return node.getDepth();
+        // 1 + Math.max(depth(node.getLeft()), depth(node.getRight()));
     }
 
     /**
      * Method to insert a node
      *
-     * @param data
-     * @return
+     * @param data from node to insert
+     * @return updated root of the tree
      */
     public BalancedTreeNode<T> insert(T data) {
         root = insert(root, data);
@@ -65,6 +84,7 @@ public class BalancedTree<T extends Comparable<T>> {
 
     /**
      * Overloading insert() method to insert a new node in relation to an already existing node
+     * Rebalances tree if necessary
      *
      * @param node already existing node
      * @param data belonging to new node
@@ -86,6 +106,14 @@ public class BalancedTree<T extends Comparable<T>> {
         return reBalance(node);
     }
 
+    /**
+     * Method to rebalance the tree
+     * If the tree is to deep on the right, it will rotate towards the left
+     * If the tree is to deep on the left, it will rotate towards the right
+     *
+     * @param node
+     * @return
+     */
     private BalancedTreeNode<T> reBalance(BalancedTreeNode<T> node) {
         switch (balanceNumber(node)) {
             case 1:
@@ -101,8 +129,8 @@ public class BalancedTree<T extends Comparable<T>> {
     }
 
     private int balanceNumber(BalancedTreeNode<T> node) {
-        int L = height(node.getLeft());
-        int R = height(node.getRight());
+        int L = depth(node.getLeft());
+        int R = depth(node.getRight());
         if (L - R >= 2) {
             return -1;
         } else if (L - R <= -2) {
@@ -188,19 +216,28 @@ public class BalancedTree<T extends Comparable<T>> {
     }
 
 
-    public void removeNode(BalancedTreeNode<T> nodeToRemove) {
+    /**
+     * Method to remove a node from the tree
+     *
+     * @param nodeToRemove node which will be removed by this method
+     */
+    public void remove(BalancedTreeNode<T> nodeToRemove) {
         try {
             //in case nodeToRemove == root
             if (nodeToRemove.getData().compareTo(root.getData()) == 0) {
-                root = null;
+                if (root.getLeft() != null) {
+                    root = root.getLeft();
+                } else if (root.getRight() != null) {
+                    root = root.getRight();
+                } else {
+                    root = null;
+                }
             }
             // find parentNode of nodeToRemove and set link to nodeToRemove to null
             else if (hasNoChild(nodeToRemove)) {
                 BalancedTreeNode<T> parentNode = getParentNode(nodeToRemove);
-                if (parentNode.getLeft() != null) {
-                    if (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0) {
-                        parentNode.setLeft(null);
-                    }
+                if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
+                    parentNode.setLeft(null);
                 } else {
                     parentNode.setRight(null);
                 }
@@ -208,30 +245,21 @@ public class BalancedTree<T extends Comparable<T>> {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error in removeNode method");
-
-            //reBalance(root);
         }
+        reBalance(root);
     }
-
 
     private boolean hasNoChild(BalancedTreeNode<T> nodeToRemove) {
         return nodeToRemove.getLeft() == null && nodeToRemove.getRight() == null;
     }
 
-    private MoveDirection whereDidTheChildGo;
 
-    private BalancedTreeNode<T> followChild(BalancedTreeNode<T> parentNode, MoveDirection dirChild) {
-        BalancedTreeNode<T> updatedParentNode = new BalancedTreeNode<T>();
-        if (dirChild == MoveDirection.LEFT) {
-            updatedParentNode = parentNode.getLeft();
-        } else if (dirChild == MoveDirection.RIGHT) {
-            updatedParentNode = parentNode.getRight();
-        } else {
-            System.out.println("Error in followChild");
-        }
-        return updatedParentNode;
-    }
-
+    /**
+     * Method to get the parent node of a node
+     *
+     * @param childNode node to get the parent from
+     * @return parentNode
+     */
     private BalancedTreeNode<T> getParentNode(BalancedTreeNode<T> childNode) {
 
         //childNode != root, double checking for security
@@ -241,7 +269,6 @@ public class BalancedTree<T extends Comparable<T>> {
 
             BalancedTreeNode<T> parentNode = root;
             BalancedTreeNode<T> searchChildNode = root;
-
 
             //now the child needs to go one level ahead of the parent
             if (searchChildNode.getData().compareTo(childNode.getData()) > 0) { //
@@ -271,6 +298,19 @@ public class BalancedTree<T extends Comparable<T>> {
         }
     }
 
+    private MoveDirection whereDidTheChildGo;
+
+    private BalancedTreeNode<T> followChild(BalancedTreeNode<T> parentNode, MoveDirection dirChild) {
+        BalancedTreeNode<T> updatedParentNode = new BalancedTreeNode<T>();
+        if (dirChild == MoveDirection.LEFT) {
+            updatedParentNode = parentNode.getLeft();
+        } else if (dirChild == MoveDirection.RIGHT) {
+            updatedParentNode = parentNode.getRight();
+        } else {
+            System.out.println("Error in followChild");
+        }
+        return updatedParentNode;
+    }
 
     public String toString() {
         return root.toString();

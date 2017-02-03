@@ -15,7 +15,7 @@ public class Main {
             tree.insert("uio");
             tree.insert("r");
             tree.insert("xx");
-            tree.insert("iop");
+            tree.insert("ibb");
             tree.insert("zzz");
             tree.insert("ab");
             tree.printTree();
@@ -27,7 +27,7 @@ public class Main {
           //  tree.remove(tree.searchNode("a"));
 
             BalancedTreeNode<String> nodeToRemove = new BalancedTreeNode<String>("ab");
-            tree.removeNode(nodeToRemove);
+            tree.remove(nodeToRemove);
 
             //tree.remove(tree.searchNode("uio"));
             tree.printTree();
