@@ -13,6 +13,8 @@ public class BalancedTreeNode<T extends Comparable<T>> implements Comparable<Bal
     public int level;
     private int height;
 
+    public BalancedTreeNode(){}
+
     /**
      * Constructor method of BalancedTreeNode
      *

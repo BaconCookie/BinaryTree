@@ -23,11 +23,11 @@ public class Main {
 
          //   System.out.println("search a:");
          //   tree.searchNode("a");
-            System.out.println("remove a & ab:");
+            System.out.println("remove:");
           //  tree.remove(tree.searchNode("a"));
 
-            BalancedTreeNode<String> a = new BalancedTreeNode<String>("uio");
-            tree.remove(a);
+            BalancedTreeNode<String> nodeToRemove = new BalancedTreeNode<String>("ab");
+            tree.removeNode(nodeToRemove);
 
             //tree.remove(tree.searchNode("uio"));
             tree.printTree();
