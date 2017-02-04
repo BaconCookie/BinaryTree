@@ -26,17 +26,17 @@ public class Main {
             smallTree.insert("a");
             smallTree.insert("b");
             smallTree.insert("c");
-           // smallTree.printTree();
+            //smallTree.printTree();
 
          //   System.out.println("search a:");
-         //   tree.searchNode("a");
+         //   tree.getNode("a");
             System.out.println("remove:");
-          //  tree.remove(tree.searchNode("a"));
+            tree.remove(tree.getNode("a"));
 
             BalancedTreeNode<String> nodeToRemove = new BalancedTreeNode<String>("uuu");
             tree.remove(nodeToRemove);
 
-            //tree.remove(tree.searchNode("uio"));
+            //tree.remove(tree.getNode("uio"));
             tree.printTree();
 
         }

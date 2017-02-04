@@ -48,7 +48,7 @@ public class BalancedTree<T extends Comparable<T>> {
         return local.getData();
     }
 
-    public int getDepthOfTree(){
+    public int getDepthOfTree() {
         return depth(root);
     }
 
@@ -204,7 +204,7 @@ public class BalancedTree<T extends Comparable<T>> {
      * @param data contained by node
      * @return node that is being searched or null if node is not found
      */
-    public BalancedTreeNode<T> searchNode(T data) {
+    public BalancedTreeNode<T> getNode(T data) {
         BalancedTreeNode<T> searchNode = root;
         while (searchNode != null) {
             if (searchNode.getData().compareTo(data) == 0)
@@ -228,26 +228,17 @@ public class BalancedTree<T extends Comparable<T>> {
         try {
             //in case nodeToRemove == root
             if (nodeToRemove.getData().compareTo(root.getData()) == 0) {
-                if (root.getLeft() != null) {
-                    root = root.getLeft();
-                } else if (root.getRight() != null) {
-                    root = root.getRight();
-                } else {
-                    root = null;
-                }
+                removeNodeWhichIsCurrentRoot();
             }
-            // find parentNode of nodeToRemove and set link to nodeToRemove to null
             else if (hasNoChild(nodeToRemove)) {
-                BalancedTreeNode<T> parentNode = findParentNode(nodeToRemove);
-                //if nodeToRemove is/was the left child
-                if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
-                    parentNode.setLeft(null);
-                } else {
-                    parentNode.setRight(null);
-                }
-            } else {
-                removeNodeFromTheMiddle(nodeToRemove);
+                removeNodeWhichIsLeaf(nodeToRemove); // find parentNode of nodeToRemove and set link to nodeToRemove to null
             }
+            else if (hasOneChild(nodeToRemove)) {
+                removeNodeWithOneChild(nodeToRemove);
+            }
+            else {
+                    removeNodeFromTheMiddle(nodeToRemove);
+                }
             reBalance(root);
 
         } catch (Exception e) {
@@ -257,11 +248,57 @@ public class BalancedTree<T extends Comparable<T>> {
         return root;
     }
 
+    private void removeNodeWithOneChild(BalancedTreeNode<T> nodeToRemove) {
+        BalancedTreeNode<T> parentNode = findParentNode(nodeToRemove);
+        BalancedTreeNode<T> childNode = findOnlyChild(nodeToRemove);
+        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
+            parentNode.setLeft(childNode);
+        } else {
+            parentNode.setRight(childNode);
+        }
+    }
+
+    private void removeNodeWhichIsLeaf(BalancedTreeNode<T> nodeToRemove) {
+        BalancedTreeNode<T> parentNode = findParentNode(nodeToRemove);
+        //if nodeToRemove is/was the left child
+        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
+            parentNode.setLeft(null);
+        } else {
+            parentNode.setRight(null);
+        }
+    }
+
+    private void removeNodeWhichIsCurrentRoot() {
+        if (root.getLeft() != null) {
+            root = root.getLeft();
+        } else if (root.getRight() != null) {
+            root = root.getRight();
+        } else {
+            root = null;
+        }
+    }
+
+    private boolean hasOneChild(BalancedTreeNode<T> nodeToRemove) {
+        return (nodeToRemove.getLeft() != null || nodeToRemove.getRight() != null);
+    }
+
+    private BalancedTreeNode<T> findOnlyChild(BalancedTreeNode<T> nodeToRemove) {
+        BalancedTreeNode<T> childNode = new BalancedTreeNode<T>();
+
+        if (nodeToRemove.getLeft() != null) {
+            childNode = nodeToRemove.getLeft();
+        }
+        if (nodeToRemove.getLeft() != null) {
+            childNode = nodeToRemove.getRight();
+        }
+        return childNode;
+    }
+
     private boolean hasNoChild(BalancedTreeNode<T> nodeToRemove) {
         return nodeToRemove.getLeft() == null && nodeToRemove.getRight() == null;
     }
 
-    public boolean getIfNodeIsLeaf(BalancedTreeNode<T> nodeToCheck){
+    public boolean getIfNodeIsLeaf(BalancedTreeNode<T> nodeToCheck) {
         return hasNoChild(nodeToCheck);
     }
 
@@ -295,7 +332,7 @@ public class BalancedTree<T extends Comparable<T>> {
                 //if child is found, return parent node
                 if (searchChildNode.getData().compareTo(childNode.getData()) == 0) {
                     return parentNode;
-                } else if (searchChildNode.getData().compareTo(childNode.getData()) > 0) { // if searchNode is < child(our goal here), go left
+                } else if (searchChildNode.getData().compareTo(childNode.getData()) > 0) { // if getNode is < child(our goal here), go left
                     parentNode = followChild(parentNode, whereDidTheChildGo);
                     searchChildNode = searchChildNode.getLeft();
                     whereDidTheChildGo = MoveDirection.LEFT;
@@ -336,7 +373,10 @@ public class BalancedTree<T extends Comparable<T>> {
         BalancedTreeNode<T> replacementNode = findNodeToReplaceRemoved(nodeToRemove);
 
         updateParentLink(nodeToRemove, replacementNode);
-        updateReplacementNodeToChildren(nodeToRemove, replacementNode);
+        if (!hasNoChild(replacementNode)) {
+            updateReplacementNodeToChildren(nodeToRemove, replacementNode);
+        }
+
         updateParentOfReplacementNode(replacementNode);
     }
 
@@ -397,39 +437,32 @@ public class BalancedTree<T extends Comparable<T>> {
      * @return a suitable node for replacement
      */
     private BalancedTreeNode<T> findNodeToReplaceRemoved(BalancedTreeNode<T> nodeToRemove) {
-        BalancedTreeNode<T> searchNode;
         BalancedTreeNode<T> nodeToReplaceWith;
 
         //if there is a node (or more) on the left, get the one with the highest value
         if (nodeToRemove.getLeft() != null) {
             nodeToReplaceWith = nodeToRemove.getLeft();
-            searchNode = nodeToRemove.getLeft();
-            while (searchNode != null) {
+            while (!hasNoChild(nodeToReplaceWith)) {
                 if (nodeToReplaceWith.getRight() != null) {
                     nodeToReplaceWith = nodeToReplaceWith.getRight();
-                    searchNode = nodeToReplaceWith.getRight();
                 } else if (nodeToReplaceWith.getLeft() != null) {
                     nodeToReplaceWith = nodeToReplaceWith.getLeft();
-                    searchNode = nodeToReplaceWith.getLeft();
                 }
             }
         } else { //get the node with the lowest value on the right (there must be at least one child)
             nodeToReplaceWith = nodeToRemove.getRight();
-            searchNode = nodeToRemove.getRight();
-            while (searchNode != null) {
+            while (!hasNoChild(nodeToReplaceWith)) {
                 if (nodeToReplaceWith.getLeft() != null) {
                     nodeToReplaceWith = nodeToReplaceWith.getLeft();
-                    searchNode = nodeToReplaceWith.getLeft();
                 } else if (nodeToReplaceWith.getRight() != null) {
                     nodeToReplaceWith = nodeToReplaceWith.getRight();
-                    searchNode = nodeToReplaceWith.getRight();
                 }
             }
         }
         return nodeToReplaceWith;
     }
 
-    public BalancedTreeNode<T> getNodeToReplaceRemoved(BalancedTreeNode<T> nodeToRemove){
+    public BalancedTreeNode<T> getNodeToReplaceRemoved(BalancedTreeNode<T> nodeToRemove) {
         return findNodeToReplaceRemoved(nodeToRemove);
     }
 
@@ -442,7 +475,7 @@ public class BalancedTree<T extends Comparable<T>> {
         return new BalancedTree<>();
     }
 
-    public BalancedTreeNode<T> getRoot(){
+    public BalancedTreeNode<T> getRoot() {
         return this.root;
     }
 

@@ -89,6 +89,7 @@ public class BalancedTreeNode<T extends Comparable<T>> implements Comparable<Bal
 
     /**
      * Compare data of two Nodes
+     * Override is necessary because this class implements Comparable
      * @param node
      * @return
      */
