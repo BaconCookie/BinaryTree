@@ -224,7 +224,7 @@ public class BalancedTree<T extends Comparable<T>> {
      *
      * @param nodeToRemove node which will be removed by this method
      */
-    public void remove(BalancedTreeNode<T> nodeToRemove) {
+    public BalancedTreeNode<T> remove(BalancedTreeNode<T> nodeToRemove) {
         try {
             //in case nodeToRemove == root
             if (nodeToRemove.getData().compareTo(root.getData()) == 0) {
@@ -254,10 +254,15 @@ public class BalancedTree<T extends Comparable<T>> {
             e.printStackTrace();
             System.out.println("Error in removeNode method");
         }
+        return root;
     }
 
     private boolean hasNoChild(BalancedTreeNode<T> nodeToRemove) {
         return nodeToRemove.getLeft() == null && nodeToRemove.getRight() == null;
+    }
+
+    public boolean getIfNodeIsLeaf(BalancedTreeNode<T> nodeToCheck){
+        return hasNoChild(nodeToCheck);
     }
 
     /**
@@ -428,6 +433,10 @@ public class BalancedTree<T extends Comparable<T>> {
     public BalancedTree<String> clear() {
         this.root = null;
         return new BalancedTree<>();
+    }
+
+    public BalancedTreeNode<T> getRoot(){
+        return this.root;
     }
 
     public String toString() {

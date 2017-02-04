@@ -8,9 +8,11 @@ import static org.junit.Assert.*;
 public class BalancedTreeTest {
 
     private BalancedTree<String> tree;
-    private BalancedTree<String> emptyTree;
+    private BalancedTree<String> smallTree;
     private BalancedTreeNode<String> expectedNode;
     private BalancedTreeNode<String> actualNode;
+    private BalancedTreeNode<String> testNode;
+    private boolean actualBool;
 
 
     @org.junit.Before
@@ -28,36 +30,40 @@ public class BalancedTreeTest {
         tree.insert("uuu");
         tree.insert("vvv");
 
-        emptyTree = new BalancedTree<>();
+        smallTree = new BalancedTree<>();
+        smallTree.insert("a");
+        smallTree.insert("b");
+        smallTree.insert("c");
     }
 
     @org.junit.After
     public void tearDown() throws Exception {
 
         tree.clear();
+        smallTree.clear();
     }
 
     @org.junit.Test
     public void insert() throws Exception {
+        smallTree.insert("d");
 
+        assertTrue(smallTree.search("d"));
     }
 
     @org.junit.Test
     public void searchTrue() throws Exception {
 
-        boolean expectedBool = true;
         boolean actualBool = tree.search("xx");
 
-        assertEquals(expectedBool, actualBool);
+        assertTrue(actualBool);
     }
 
     @org.junit.Test
     public void searchFalse() throws Exception {
 
-        boolean expectedBool = false;
         boolean actualBool = tree.search("xyz");
 
-        assertEquals(expectedBool, actualBool);
+        assertFalse(actualBool);
     }
 
     @org.junit.Test
@@ -79,7 +85,64 @@ public class BalancedTreeTest {
     }
 
     @org.junit.Test
-    public void remove() throws Exception {
+    public void removeTheRootNode() throws Exception {
+
+        //before removal of root
+        expectedNode = new BalancedTreeNode<>("b");
+        actualNode = smallTree.getRoot();
+
+        assertEquals(expectedNode.getData(), actualNode.getData());
+
+        //after removal of root
+        expectedNode = new BalancedTreeNode<>("a");
+        testNode = new BalancedTreeNode<>("b");
+        actualNode = smallTree.remove(testNode);
+        actualNode = smallTree.getRoot();
+
+        assertEquals(expectedNode.getData(), actualNode.getData());
+    }
+
+    @org.junit.Test
+    public void isNodeALeaf() throws Exception {
+        //if node == leaf
+        testNode = tree.searchNode("ab");
+        actualBool = tree.getIfNodeIsLeaf(testNode);
+
+        assertTrue(actualBool);
+    }
+
+    @org.junit.Test
+    public void isNodeNotALeaf() throws Exception {
+        //if node != leaf
+        testNode = tree.searchNode("ibb");
+        actualBool = tree.getIfNodeIsLeaf(testNode);
+
+        assertFalse(actualBool);
+    }
+
+    @org.junit.Test
+    public void removeALeafNode() throws Exception {
+        //before removal of leaf, node is in the tree
+        expectedNode = new BalancedTreeNode<>("ab");
+        actualNode = tree.searchNode("ab");
+
+        assertEquals(expectedNode.getData(), actualNode.getData());
+
+        //after removal of leaf, node is not in the tree
+        testNode = new BalancedTreeNode<>("ab");
+        tree.remove(testNode);
+        actualBool = tree.search("ab");
+
+        assertFalse(actualBool);
+
+        //after removal of leaf, parentNode(=="a") of "ab" is now a leaf
+        testNode = new BalancedTreeNode<>("a");
+
+        assertTrue(tree.getIfNodeIsLeaf(testNode));
+    }
+
+    @org.junit.Test
+    public void removeAMiddleNode() throws Exception {
 
     }
 
@@ -87,9 +150,6 @@ public class BalancedTreeTest {
     public void clear() throws Exception {
         int expectedDepth = 0;
         int actualDepth = tree.clear().getDepthOfTree();
-
-        //BalancedTree<String> expectedTree = emptyTree;
-        //BalancedTree<String> actualTree = tree.clear();
 
         assertEquals(expectedDepth, actualDepth);
     }

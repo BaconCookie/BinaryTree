@@ -22,6 +22,11 @@ public class Main {
             tree.insert("vvv");
             tree.printTree();
 
+            BalancedTree<String> smallTree = new BalancedTree<>();
+            smallTree.insert("a");
+            smallTree.insert("b");
+            smallTree.insert("c");
+           // smallTree.printTree();
 
          //   System.out.println("search a:");
          //   tree.searchNode("a");
