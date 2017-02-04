@@ -315,34 +315,67 @@ public class BalancedTree<T extends Comparable<T>> {
         return updatedParentNode;
     }
 
+    /**
+     * Method to remove a node that is neither the root nor a leaf
+     *
+     * @param nodeToRemove node that will be removed
+     */
     private void removeNodeFromTheMiddle(BalancedTreeNode<T> nodeToRemove) {
-
-        BalancedTreeNode<T> parentNode = getParentNode(nodeToRemove);
         BalancedTreeNode<T> replacementNode = getNodeToReplaceRemoved(nodeToRemove);
-        BalancedTreeNode<T> parentOfReplacementNode = getParentNode(replacementNode);
-        BalancedTreeNode<T> leftChildOfNodeToRemove = nodeToRemove.getLeft();
-        BalancedTreeNode<T> rightChildOfNodeToRemove = nodeToRemove.getRight();
 
-        //update link from parent to replacement node
+        updateParentLink(nodeToRemove, replacementNode);
+        updateReplacementNodeToChildren(nodeToRemove, replacementNode);
+        updateParentOfReplacementNode(replacementNode);
+    }
+
+    /**
+     * Method used in removeNodeFromTheMiddle to update the link from the parent node from the removed node to the replacement node
+     *
+     * @param nodeToRemove    node that will be removed
+     * @param replacementNode node that replaces the removed node
+     */
+    private void updateParentLink(BalancedTreeNode<T> nodeToRemove, BalancedTreeNode<T> replacementNode) {
+        BalancedTreeNode<T> parentNode = getParentNode(nodeToRemove);
         //if nodeToRemove is/was the left child
         if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
             parentNode.setLeft(replacementNode);
-        } else {
+        } else { //if nodeToRemove is/was the right child
             parentNode.setRight(replacementNode);
         }
-        //update link(s) from replacementNode to it new child(ren)
+    }
+
+    /**
+     * Method used in removeNodeFromTheMiddle to update the link(s) from the replacementNode to its new child(ren)
+     *
+     * @param nodeToRemove    node that will be removed
+     * @param replacementNode node that replaces the removed node
+     */
+    private void updateReplacementNodeToChildren(BalancedTreeNode<T> nodeToRemove, BalancedTreeNode<T> replacementNode) {
+        BalancedTreeNode<T> leftChildOfNodeToRemove = nodeToRemove.getLeft();
+        BalancedTreeNode<T> rightChildOfNodeToRemove = nodeToRemove.getRight();
+
         if (leftChildOfNodeToRemove.getData().compareTo(replacementNode.getData()) != 0) {
             replacementNode.setLeft(leftChildOfNodeToRemove);
-        } else if (rightChildOfNodeToRemove.getData().compareTo(replacementNode.getData()) != 0) {
+        }
+        if (rightChildOfNodeToRemove.getData().compareTo(replacementNode.getData()) != 0) {
             replacementNode.setRight(rightChildOfNodeToRemove);
         }
+    }
+
+    /**
+     * Method used in removeNodeFromTheMiddle to update the link from the parent of the replacementNode to its now gone child
+     *
+     * @param replacementNode node that replaces the removed node, therefore the old link from it's parent needs to be set to null
+     */
+    private void updateParentOfReplacementNode(BalancedTreeNode<T> replacementNode) {
+        BalancedTreeNode<T> parentOfReplacementNode = getParentNode(replacementNode);
         //update link of the parent from the replacement node to null, since it was the highest or lowest value
-        else if ((parentOfReplacementNode.getLeft() != null) && (parentOfReplacementNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
+        //if replacementNode is/was the left child
+        if ((parentOfReplacementNode.getLeft() != null) && (parentOfReplacementNode.getLeft().getData().compareTo(replacementNode.getData()) > 0)) {
             parentOfReplacementNode.setLeft(null);
-        } else {
+        } else { //if replacementNode is/was the right child
             parentOfReplacementNode.setRight(null);
         }
-
     }
 
     /**
