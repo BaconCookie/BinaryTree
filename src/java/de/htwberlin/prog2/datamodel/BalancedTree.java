@@ -238,7 +238,7 @@ public class BalancedTree<T extends Comparable<T>> {
             }
             // find parentNode of nodeToRemove and set link to nodeToRemove to null
             else if (hasNoChild(nodeToRemove)) {
-                BalancedTreeNode<T> parentNode = getParentNode(nodeToRemove);
+                BalancedTreeNode<T> parentNode = findParentNode(nodeToRemove);
                 //if nodeToRemove is/was the left child
                 if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
                     parentNode.setLeft(null);
@@ -271,7 +271,7 @@ public class BalancedTree<T extends Comparable<T>> {
      * @param childNode node to get the parent from
      * @return parentNode
      */
-    private BalancedTreeNode<T> getParentNode(BalancedTreeNode<T> childNode) {
+    private BalancedTreeNode<T> findParentNode(BalancedTreeNode<T> childNode) {
 
         //childNode != root, double checking for security
         if (childNode.getData().compareTo(root.getData()) == 0) {
@@ -309,6 +309,10 @@ public class BalancedTree<T extends Comparable<T>> {
         }
     }
 
+    public BalancedTreeNode<T> getParentNode(BalancedTreeNode<T> childNode) {
+        return findParentNode(childNode);
+    }
+
     private MoveDirection whereDidTheChildGo;
 
     private BalancedTreeNode<T> followChild(BalancedTreeNode<T> parentNode, MoveDirection dirChild) {
@@ -329,7 +333,7 @@ public class BalancedTree<T extends Comparable<T>> {
      * @param nodeToRemove node that will be removed
      */
     private void removeNodeFromTheMiddle(BalancedTreeNode<T> nodeToRemove) {
-        BalancedTreeNode<T> replacementNode = getNodeToReplaceRemoved(nodeToRemove);
+        BalancedTreeNode<T> replacementNode = findNodeToReplaceRemoved(nodeToRemove);
 
         updateParentLink(nodeToRemove, replacementNode);
         updateReplacementNodeToChildren(nodeToRemove, replacementNode);
@@ -343,7 +347,7 @@ public class BalancedTree<T extends Comparable<T>> {
      * @param replacementNode node that replaces the removed node
      */
     private void updateParentLink(BalancedTreeNode<T> nodeToRemove, BalancedTreeNode<T> replacementNode) {
-        BalancedTreeNode<T> parentNode = getParentNode(nodeToRemove);
+        BalancedTreeNode<T> parentNode = findParentNode(nodeToRemove);
         //if nodeToRemove is/was the left child
         if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
             parentNode.setLeft(replacementNode);
@@ -376,7 +380,7 @@ public class BalancedTree<T extends Comparable<T>> {
      * @param replacementNode node that replaces the removed node, therefore the old link from it's parent needs to be set to null
      */
     private void updateParentOfReplacementNode(BalancedTreeNode<T> replacementNode) {
-        BalancedTreeNode<T> parentOfReplacementNode = getParentNode(replacementNode);
+        BalancedTreeNode<T> parentOfReplacementNode = findParentNode(replacementNode);
         //update link of the parent from the replacement node to null, since it was the highest or lowest value
         //if replacementNode is/was the left child
         if ((parentOfReplacementNode.getLeft() != null) && (parentOfReplacementNode.getLeft().getData().compareTo(replacementNode.getData()) > 0)) {
@@ -392,7 +396,7 @@ public class BalancedTree<T extends Comparable<T>> {
      * @param nodeToRemove this node must have at least one child
      * @return a suitable node for replacement
      */
-    private BalancedTreeNode<T> getNodeToReplaceRemoved(BalancedTreeNode<T> nodeToRemove) {
+    private BalancedTreeNode<T> findNodeToReplaceRemoved(BalancedTreeNode<T> nodeToRemove) {
         BalancedTreeNode<T> searchNode;
         BalancedTreeNode<T> nodeToReplaceWith;
 
@@ -425,6 +429,9 @@ public class BalancedTree<T extends Comparable<T>> {
         return nodeToReplaceWith;
     }
 
+    public BalancedTreeNode<T> getNodeToReplaceRemoved(BalancedTreeNode<T> nodeToRemove){
+        return findNodeToReplaceRemoved(nodeToRemove);
+    }
 
     /**
      * Method which seems to clear the tree by pointing the root to null

@@ -142,6 +142,30 @@ public class BalancedTreeTest {
     }
 
     @org.junit.Test
+    public void getParentNodeIfParentIsRoot() throws Exception {
+        expectedNode = new BalancedTreeNode<>("uio");
+        testNode = new BalancedTreeNode<>("uuu");
+
+        assertEquals(expectedNode.getData(), tree.getParentNode(testNode).getData());
+    }
+
+    @org.junit.Test
+    public void getParentNode() throws Exception {
+        expectedNode = new BalancedTreeNode<>("ibb");
+        testNode = new BalancedTreeNode<>("r");
+
+        assertEquals(expectedNode.getData(), tree.getParentNode(testNode).getData());
+    }
+
+    @org.junit.Test
+    public void testGetNodeToReplaceRemoved() throws Exception {
+        expectedNode = new BalancedTreeNode<>("vvv");
+        testNode = new BalancedTreeNode<>("uuu");
+
+        assertEquals(expectedNode.getData(), tree.getNodeToReplaceRemoved(testNode).getData());
+    }
+
+    @org.junit.Test
     public void removeAMiddleNode() throws Exception {
 
     }
