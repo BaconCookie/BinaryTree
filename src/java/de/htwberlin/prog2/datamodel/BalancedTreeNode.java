@@ -14,6 +14,7 @@ public class BalancedTreeNode<T extends Comparable<T>> implements Comparable<Bal
 
     /**
      * Constructor method of BalancedTreeNode
+     * to avoid null pointer exception
      */
     public BalancedTreeNode(){}
 

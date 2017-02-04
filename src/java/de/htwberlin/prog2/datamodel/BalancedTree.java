@@ -48,6 +48,10 @@ public class BalancedTree<T extends Comparable<T>> {
         return local.getData();
     }
 
+    public int getDepthOfTree(){
+        return depth(root);
+    }
+
     /**
      * Method to determine depth of node in the tree
      *
@@ -185,14 +189,12 @@ public class BalancedTree<T extends Comparable<T>> {
         BalancedTreeNode<T> searchNode = root;
         while (searchNode != null) {
             if (searchNode.getData().compareTo(data) == 0) {
-                System.out.println("search = true"); //<------------------------remove when project finish
                 return true;
             } else if (searchNode.getData().compareTo(data) > 0)
                 searchNode = searchNode.getLeft();
             else
                 searchNode = searchNode.getRight();
         }
-        System.out.println("search = false"); //<-------------------------------remove when project finish
         return false;
     }
 
@@ -212,6 +214,7 @@ public class BalancedTree<T extends Comparable<T>> {
             else
                 searchNode = searchNode.getRight();
         }
+        //if node is not found return null
         return null;
     }
 
@@ -385,31 +388,47 @@ public class BalancedTree<T extends Comparable<T>> {
      * @return a suitable node for replacement
      */
     private BalancedTreeNode<T> getNodeToReplaceRemoved(BalancedTreeNode<T> nodeToRemove) {
+        BalancedTreeNode<T> searchNode;
         BalancedTreeNode<T> nodeToReplaceWith;
 
         //if there is a node (or more) on the left, get the one with the highest value
         if (nodeToRemove.getLeft() != null) {
             nodeToReplaceWith = nodeToRemove.getLeft();
-            while (nodeToReplaceWith != null) {
+            searchNode = nodeToRemove.getLeft();
+            while (searchNode != null) {
                 if (nodeToReplaceWith.getRight() != null) {
                     nodeToReplaceWith = nodeToReplaceWith.getRight();
+                    searchNode = nodeToReplaceWith.getRight();
                 } else if (nodeToReplaceWith.getLeft() != null) {
                     nodeToReplaceWith = nodeToReplaceWith.getLeft();
+                    searchNode = nodeToReplaceWith.getLeft();
                 }
             }
         } else { //get the node with the lowest value on the right (there must be at least one child)
             nodeToReplaceWith = nodeToRemove.getRight();
-            while (nodeToReplaceWith != null) {
+            searchNode = nodeToRemove.getRight();
+            while (searchNode != null) {
                 if (nodeToReplaceWith.getLeft() != null) {
                     nodeToReplaceWith = nodeToReplaceWith.getLeft();
+                    searchNode = nodeToReplaceWith.getLeft();
                 } else if (nodeToReplaceWith.getRight() != null) {
                     nodeToReplaceWith = nodeToReplaceWith.getRight();
+                    searchNode = nodeToReplaceWith.getRight();
                 }
             }
         }
         return nodeToReplaceWith;
     }
 
+
+    /**
+     * Method which seems to clear the tree by pointing the root to null
+     * and thus making all tree elements unreachable
+     */
+    public BalancedTree<String> clear() {
+        this.root = null;
+        return new BalancedTree<>();
+    }
 
     public String toString() {
         return root.toString();
