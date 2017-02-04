@@ -172,9 +172,12 @@ public class BalancedTreeTest {
     public void testGetNodeToReplaceRemoved() throws Exception {
         expectedNode = new BalancedTreeNode<>("vvv");
         testNode = new BalancedTreeNode<>("uuu");
+        testNode2 = tree.getNode(testNode.getData());
+        actualNode = tree.getNodeToReplaceRemoved(testNode2);
 
-       // assertEquals(expectedNode.getData(), tree.getNodeToReplaceRemoved(testNode).getData());
+        assertEquals(expectedNode.getData(), actualNode.getData());
     }
+
 
     @org.junit.Test
     public void removeAMiddleNode() throws Exception {

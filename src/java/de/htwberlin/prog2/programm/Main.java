@@ -31,7 +31,7 @@ public class Main {
          //   System.out.println("search a:");
          //   tree.getNode("a");
             System.out.println("remove:");
-            tree.remove(tree.getNode("a"));
+           // tree.remove(tree.getNode("a"));
 
             BalancedTreeNode<String> nodeToRemove = new BalancedTreeNode<String>("uuu");
             tree.remove(nodeToRemove);
