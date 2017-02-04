@@ -239,12 +239,12 @@ public class BalancedTree<T extends Comparable<T>> {
             else {
                     removeNodeFromTheMiddle(nodeToRemove);
                 }
-            reBalance(root);
 
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error in removeNode method");
         }
+        reBalance(root);
         return root;
     }
 
@@ -372,80 +372,16 @@ public class BalancedTree<T extends Comparable<T>> {
      */
     private void removeNodeFromTheMiddle(BalancedTreeNode<T> nodeToRemove) {
         BalancedTreeNode<T> replacementNode = findNodeToReplaceRemoved(nodeToRemove);
-        BalancedTreeNode<T> oldReplacementNode = replacementNode;
 
-     //   updateParentOfReplacementNode(replacementNode);
+        //remove old link to node which is going to replace the nodeToRemove
+        removeNodeWhichIsLeaf(replacementNode);
 
-        removeNodeWhichIsLeaf(oldReplacementNode);
-
-       // updateParentLink(nodeToRemove, replacementNode);
-
-        //set data to be the same as the replacement node, the links of the nodeToRemove can stay the same this way
+        //set data to be the same as the replacement node:
+        //the links of the nodeToRemove and its parent can stay the same this way
         nodeToRemove.setData(replacementNode.getData());
-
-
-        // BE GONE
-        // if (!hasNoChild(replacementNode))
-      //   updateReplacementNodeToChildren(nodeToRemove, replacementNode);
-
-
-
-
-
-    }
-
-    /**
-     * Method used in removeNodeFromTheMiddle to update the link from the parent node from the removed node to the replacement node
-     *
-     * @param nodeToRemove    node that will be removed
-     * @param replacementNode node that replaces the removed node
-     */
-    private void updateParentLink(BalancedTreeNode<T> nodeToRemove, BalancedTreeNode<T> replacementNode) {
-        BalancedTreeNode<T> parentNode = findParentNode(nodeToRemove);
-        //if nodeToRemove is/was the left child
-        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
-            parentNode.setLeft(replacementNode);
-        } else { //if nodeToRemove is/was the right child
-            parentNode.setRight(replacementNode);
-        }
     }
 
 
-    /**
-     * Method used in removeNodeFromTheMiddle to update the link(s) from the replacementNode to its new child(ren)
-     *
-     * @param nodeToRemove    node that will be removed
-     * @param replacementNode node that replaces the removed node
-     */
-
-    private void updateReplacementNodeToChildren(BalancedTreeNode<T> nodeToRemove, BalancedTreeNode<T> replacementNode) {
-        BalancedTreeNode<T> leftChildOfNodeToRemove = nodeToRemove.getLeft();
-        BalancedTreeNode<T> rightChildOfNodeToRemove = nodeToRemove.getRight();
-
-        if (leftChildOfNodeToRemove.getData().compareTo(replacementNode.getData()) != 0) {
-            replacementNode.setLeft(leftChildOfNodeToRemove);
-        }
-        if (rightChildOfNodeToRemove.getData().compareTo(replacementNode.getData()) != 0) {
-            replacementNode.setRight(rightChildOfNodeToRemove);
-        }
-    }
-
-
-    /**
-     * Method used in removeNodeFromTheMiddle to update the link from the parent of the replacementNode to its now gone child
-     *
-     * @param replacementNode node that replaces the removed node, therefore the old link from it's parent needs to be set to null
-     */
-    private void updateParentOfReplacementNode(BalancedTreeNode<T> replacementNode) {
-        BalancedTreeNode<T> parentOfReplacementNode = findParentNode(replacementNode);
-        //update link of the parent from the replacement node to null, since it was the highest or lowest value
-        //if replacementNode is/was the left child
-        if ((parentOfReplacementNode.getLeft() != null) && (parentOfReplacementNode.getLeft().getData().compareTo(replacementNode.getData()) > 0)) {
-            parentOfReplacementNode.setLeft(null);
-        } else { //if replacementNode is/was the right child
-            parentOfReplacementNode.setRight(null);
-        }
-    }
 
     /**
      * Method to find a suitable node to replace one in the middle of the tree

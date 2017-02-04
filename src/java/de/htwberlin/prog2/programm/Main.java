@@ -32,7 +32,7 @@ public class Main {
          //   tree.getNode("a");
            // tree.remove(tree.getNode("a"));
 
-            BalancedTreeNode<String> testNode = new BalancedTreeNode<String>("yyy");
+            BalancedTreeNode<String> testNode = new BalancedTreeNode<String>("ibb");
             BalancedTreeNode<String> nodeToRemove = tree.getNode(testNode.getData());
 
             tree.remove(nodeToRemove);
