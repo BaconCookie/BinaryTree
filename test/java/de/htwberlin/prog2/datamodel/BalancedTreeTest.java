@@ -178,9 +178,35 @@ public class BalancedTreeTest {
         assertEquals(expectedNode.getData(), actualNode.getData());
     }
 
+    @org.junit.Test
+    public void testGetNodeToReplaceRemovedTwoChildren() throws Exception {
+        expectedNode = new BalancedTreeNode<>("ab");
+        testNode = new BalancedTreeNode<>("ibb");
+        testNode2 = tree.getNode(testNode.getData());
+        actualNode = tree.getNodeToReplaceRemoved(testNode2);
+
+        assertEquals(expectedNode.getData(), actualNode.getData());
+
+    }
 
     @org.junit.Test
-    public void removeAMiddleNode() throws Exception {
+    public void testGetNodeToReplaceRemovedTwoChildren2() throws Exception {
+        expectedNode = new BalancedTreeNode<>("vvv");
+        testNode = new BalancedTreeNode<>("yyy");
+        testNode2 = tree.getNode(testNode.getData());
+        actualNode = tree.getNodeToReplaceRemoved(testNode2);
+
+        assertEquals(expectedNode.getData(), actualNode.getData());
+    }
+
+        @org.junit.Test
+    public void removeAMiddleNodeWithTwoChildren() throws Exception {
+        expectedNode = new BalancedTreeNode<>("vvv");
+        testNode = new BalancedTreeNode<>("yyy");
+        testNode2 = tree.getNode(testNode.getData());
+        actualNode = tree.remove(testNode2);
+
+     //   assertEquals(expectedNode.getData(), actualNode.getData());
 
     }
 

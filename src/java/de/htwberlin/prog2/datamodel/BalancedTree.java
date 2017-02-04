@@ -251,7 +251,7 @@ public class BalancedTree<T extends Comparable<T>> {
     private void removeNodeWithOneChild(BalancedTreeNode<T> nodeToRemove) {
         BalancedTreeNode<T> parentNode = findParentNode(nodeToRemove);
         BalancedTreeNode<T> childNode = findOnlyChild(nodeToRemove);
-        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
+        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) == 0)) {
             parentNode.setLeft(childNode);
         } else {
             parentNode.setRight(childNode);
@@ -261,7 +261,7 @@ public class BalancedTree<T extends Comparable<T>> {
     private void removeNodeWhichIsLeaf(BalancedTreeNode<T> nodeToRemove) {
         BalancedTreeNode<T> parentNode = findParentNode(nodeToRemove);
         //if nodeToRemove is/was the left child
-        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) > 0)) {
+        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) == 0)) {
             parentNode.setLeft(null);
         } else {
             parentNode.setRight(null);
@@ -279,7 +279,8 @@ public class BalancedTree<T extends Comparable<T>> {
     }
 
     private boolean hasOneChild(BalancedTreeNode<T> nodeToRemove) {
-        return (nodeToRemove.getLeft() != null || nodeToRemove.getRight() != null);
+        return ((nodeToRemove.getLeft() == null | nodeToRemove.getRight() == null) &&
+                (nodeToRemove.getLeft() != null | nodeToRemove.getRight() != null));
     }
 
     private BalancedTreeNode<T> findOnlyChild(BalancedTreeNode<T> nodeToRemove) {
@@ -288,7 +289,7 @@ public class BalancedTree<T extends Comparable<T>> {
         if (nodeToRemove.getLeft() != null) {
             childNode = nodeToRemove.getLeft();
         }
-        if (nodeToRemove.getLeft() != null) {
+        if (nodeToRemove.getRight() != null) {
             childNode = nodeToRemove.getRight();
         }
         return childNode;
@@ -328,7 +329,7 @@ public class BalancedTree<T extends Comparable<T>> {
             }
 
             //then the they both go ahead, parent follows child and stays one step behind
-            while (searchChildNode != null) {
+            while (searchChildNode.getData().compareTo(childNode.getData()) != 0) {
                 //if child is found, return parent node
                 if (searchChildNode.getData().compareTo(childNode.getData()) == 0) {
                     return parentNode;
@@ -371,13 +372,26 @@ public class BalancedTree<T extends Comparable<T>> {
      */
     private void removeNodeFromTheMiddle(BalancedTreeNode<T> nodeToRemove) {
         BalancedTreeNode<T> replacementNode = findNodeToReplaceRemoved(nodeToRemove);
+        BalancedTreeNode<T> oldReplacementNode = replacementNode;
 
-        updateParentLink(nodeToRemove, replacementNode);
-        if (!hasNoChild(replacementNode)) {
-            updateReplacementNodeToChildren(nodeToRemove, replacementNode);
-        }
+     //   updateParentOfReplacementNode(replacementNode);
 
-        updateParentOfReplacementNode(replacementNode);
+        removeNodeWhichIsLeaf(oldReplacementNode);
+
+       // updateParentLink(nodeToRemove, replacementNode);
+
+        //set data to be the same as the replacement node, the links of the nodeToRemove can stay the same this way
+        nodeToRemove.setData(replacementNode.getData());
+
+
+        // BE GONE
+        // if (!hasNoChild(replacementNode))
+      //   updateReplacementNodeToChildren(nodeToRemove, replacementNode);
+
+
+
+
+
     }
 
     /**
@@ -396,12 +410,14 @@ public class BalancedTree<T extends Comparable<T>> {
         }
     }
 
+
     /**
      * Method used in removeNodeFromTheMiddle to update the link(s) from the replacementNode to its new child(ren)
      *
      * @param nodeToRemove    node that will be removed
      * @param replacementNode node that replaces the removed node
      */
+
     private void updateReplacementNodeToChildren(BalancedTreeNode<T> nodeToRemove, BalancedTreeNode<T> replacementNode) {
         BalancedTreeNode<T> leftChildOfNodeToRemove = nodeToRemove.getLeft();
         BalancedTreeNode<T> rightChildOfNodeToRemove = nodeToRemove.getRight();
@@ -413,6 +429,7 @@ public class BalancedTree<T extends Comparable<T>> {
             replacementNode.setRight(rightChildOfNodeToRemove);
         }
     }
+
 
     /**
      * Method used in removeNodeFromTheMiddle to update the link from the parent of the replacementNode to its now gone child

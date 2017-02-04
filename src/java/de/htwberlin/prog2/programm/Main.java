@@ -30,13 +30,14 @@ public class Main {
 
          //   System.out.println("search a:");
          //   tree.getNode("a");
-            System.out.println("remove:");
            // tree.remove(tree.getNode("a"));
 
-            BalancedTreeNode<String> nodeToRemove = new BalancedTreeNode<String>("uuu");
+            BalancedTreeNode<String> testNode = new BalancedTreeNode<String>("yyy");
+            BalancedTreeNode<String> nodeToRemove = tree.getNode(testNode.getData());
+
             tree.remove(nodeToRemove);
 
-            //tree.remove(tree.getNode("uio"));
+            System.out.println("after remove:");
             tree.printTree();
 
         }
