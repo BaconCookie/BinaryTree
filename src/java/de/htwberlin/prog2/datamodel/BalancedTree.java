@@ -10,42 +10,13 @@ import java.util.LinkedList;
  */
 public class BalancedTree<T extends Comparable<T>> {
 
-    BalancedTreeNode<T> root;
+    private BalancedTreeNode<T> root;
 
     /**
      * Constructor of empty tree
      */
     public BalancedTree() {
         root = null;
-    }
-
-    /**
-     * Method to find the biggest value in the tree
-     *
-     * @return Data from node with the biggest value
-     */
-    public T Maximum() {
-        BalancedTreeNode<T> local = root;
-        if (local == null)
-            return null;
-        while (local.getRight() != null)
-            local = local.getRight();
-        return local.getData();
-    }
-
-    /**
-     * Method to find the smallest value in the tree
-     *
-     * @return Data from node with the smallest value
-     */
-    public T Minimum() {
-        BalancedTreeNode<T> local = root;
-        if (local == null)
-            return null;
-        while (local.getLeft() != null) {
-            local = local.getLeft();
-        }
-        return local.getData();
     }
 
     public int getDepthOfTree() {
@@ -92,19 +63,18 @@ public class BalancedTree<T extends Comparable<T>> {
      *
      * @param node already existing node
      * @param data belonging to new node
-     * @return
+     * @return inserted node which will be rebalanced
      */
-    public BalancedTreeNode<T> insert(BalancedTreeNode<T> node, T data) {
+    private BalancedTreeNode<T> insert(BalancedTreeNode<T> node, T data) {
         if (node == null)
-            return new BalancedTreeNode<T>(data);
+            return new BalancedTreeNode<>(data);
         if (node.getData().compareTo(data) > 0) {
-            node = new BalancedTreeNode<T>(node.getData(), insert(node.getLeft(), data),
+            node = new BalancedTreeNode<>(node.getData(), insert(node.getLeft(), data),
                     node.getRight());
-            // balancedTreeNode.setLeft(insert(balancedTreeNode.getLeft(), data));
-        } else if (node.getData().compareTo(data) < 0) {
-            // balancedTreeNode.setRight(insert(balancedTreeNode.getRight(), data));
-            node = new BalancedTreeNode<T>(node.getData(), node.getLeft(), insert(
-                    node.getRight(), data));
+        } else {
+            if (node.getData().compareTo(data) < 0) {
+                node = new BalancedTreeNode<>(node.getData(), node.getLeft(), insert(node.getRight(), data));
+            }
         }
         // After insert the new balancedTreeNode, check and rebalance the current tree if necessary.
         return reBalance(node);
@@ -112,11 +82,11 @@ public class BalancedTree<T extends Comparable<T>> {
 
     /**
      * Method to rebalance the tree
-     * If the tree is to deep on the right, it will rotate towards the left
-     * If the tree is to deep on the left, it will rotate towards the right
+     * If the tree is too deep on the right, it will rotate towards the left
+     * If the tree is too deep on the left, it will rotate towards the right
      *
-     * @param node
-     * @return
+     * @param node root (whole tree) or other node (subtree) which will be rebalanced
+     * @return (new) root node
      */
     private BalancedTreeNode<T> reBalance(BalancedTreeNode<T> node) {
         switch (balanceNumber(node)) {
@@ -155,8 +125,8 @@ public class BalancedTree<T extends Comparable<T>> {
         BalancedTreeNode<T> leftChild = startNode.getLeft();
         BalancedTreeNode<T> leftOfRightChild = rightChild.getLeft();
         BalancedTreeNode<T> rightOfRightChild = rightChild.getRight();
-        startNode = new BalancedTreeNode<T>(startNode.getData(), leftChild, leftOfRightChild);
-        rightChild = new BalancedTreeNode<T>(rightChild.getData(), startNode, rightOfRightChild);
+        startNode = new BalancedTreeNode<>(startNode.getData(), leftChild, leftOfRightChild);
+        rightChild = new BalancedTreeNode<>(rightChild.getData(), startNode, rightOfRightChild);
         return rightChild;
     }
 
@@ -172,9 +142,22 @@ public class BalancedTree<T extends Comparable<T>> {
         BalancedTreeNode<T> rightChild = startNode.getRight();
         BalancedTreeNode<T> leftOfLeftChild = leftChild.getLeft();
         BalancedTreeNode<T> rightOfLeftChild = leftChild.getRight();
-        startNode = new BalancedTreeNode<T>(startNode.getData(), rightOfLeftChild, rightChild);
-        leftChild = new BalancedTreeNode<T>(leftChild.getData(), leftOfLeftChild, startNode);
+        startNode = new BalancedTreeNode<>(startNode.getData(), rightOfLeftChild, rightChild);
+        leftChild = new BalancedTreeNode<>(leftChild.getData(), leftOfLeftChild, startNode);
         return leftChild;
+    }
+
+    //TODO this doesn't seem to help unfortunately
+    private void rotateTowardsLighterSide(BalancedTreeNode<T> nodeToRemove) {
+        int depthLeft = root.getLeft().getDepth();
+        int depthRight = root.getRight().getDepth();
+        //BalancedTreeNode<T> leftTree = root.getLeft();
+        //BalancedTreeNode<T> rightTree = root.getRight();
+        if ((depthLeft > depthRight) && (nodeToRemove.getData().compareTo(root.getData()) < 0)) {
+            rotateRight(root);
+        } else if ((depthLeft < depthRight) && (nodeToRemove.getData().compareTo(root.getData()) > 0)) {
+            rotateLeft(root);
+        }
     }
 
     /**
@@ -226,25 +209,26 @@ public class BalancedTree<T extends Comparable<T>> {
      */
     public BalancedTreeNode<T> remove(BalancedTreeNode<T> nodeToRemove) {
         try {
+            //in order to rebalance properly later:
+            //TODO why does this not seem to work????--------------------------------------------------------
+            rotateTowardsLighterSide(nodeToRemove);
             //in case nodeToRemove == root
             if (nodeToRemove.getData().compareTo(root.getData()) == 0) {
                 removeNodeWhichIsCurrentRoot();
-            }
-            else if (hasNoChild(nodeToRemove)) {
-                removeNodeWhichIsLeaf(nodeToRemove); // find parentNode of nodeToRemove and set link to nodeToRemove to null
-            }
-            else if (hasOneChild(nodeToRemove)) {
+            } else if (hasNoChild(nodeToRemove)) {
+                // find parentNode of nodeToRemove and set link to nodeToRemove to null
+                removeNodeWhichIsLeaf(nodeToRemove);
+            } else if (hasOneChild(nodeToRemove)) {
                 removeNodeWithOneChild(nodeToRemove);
+            } else {
+                removeNodeFromTheMiddle(nodeToRemove);
             }
-            else {
-                    removeNodeFromTheMiddle(nodeToRemove);
-                }
 
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error in removeNode method");
         }
-        reBalance(root);
+        reBalance(root); //TODO why does this not seem to work????--------------------------------------------------------
         return root;
     }
 
@@ -382,7 +366,6 @@ public class BalancedTree<T extends Comparable<T>> {
     }
 
 
-
     /**
      * Method to find a suitable node to replace one in the middle of the tree
      *
@@ -442,7 +425,7 @@ public class BalancedTree<T extends Comparable<T>> {
 
         list.add(root);
         while (!list.isEmpty()) {
-            BalancedTreeNode<T> balancedTreeNode = list.poll();
+            BalancedTreeNode<T> balancedTreeNode = list.poll(); //poll: Retrieves and removes the head (first element) of this list.
             System.out.println(balancedTreeNode);
             int level = balancedTreeNode.level;
             BalancedTreeNode<T> left = balancedTreeNode.getLeft();
@@ -456,5 +439,34 @@ public class BalancedTree<T extends Comparable<T>> {
                 list.add(right);
             }
         }
+    }
+
+    /**
+     * Method to find the biggest value in the tree
+     *
+     * @return Data from node with the biggest value
+     */
+    public T Maximum() {
+        BalancedTreeNode<T> local = root;
+        if (local == null)
+            return null;
+        while (local.getRight() != null)
+            local = local.getRight();
+        return local.getData();
+    }
+
+    /**
+     * Method to find the smallest value in the tree
+     *
+     * @return Data from node with the smallest value
+     */
+    public T Minimum() {
+        BalancedTreeNode<T> local = root;
+        if (local == null)
+            return null;
+        while (local.getLeft() != null) {
+            local = local.getLeft();
+        }
+        return local.getData();
     }
 }
