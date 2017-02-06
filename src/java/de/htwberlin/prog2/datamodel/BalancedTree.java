@@ -294,6 +294,7 @@ public class BalancedTree<T extends Comparable<T>> {
      * @return parentNode
      */
     private BalancedTreeNode<T> findParentNode(BalancedTreeNode<T> childNode) {
+        MoveDirection whereDidTheChildGo;
 
         //childNode != root, double checking for security
         if (childNode.getData().compareTo(root.getData()) == 0) {
@@ -335,8 +336,6 @@ public class BalancedTree<T extends Comparable<T>> {
         return findParentNode(childNode);
     }
 
-    private MoveDirection whereDidTheChildGo;
-
     private BalancedTreeNode<T> followChild(BalancedTreeNode<T> parentNode, MoveDirection dirChild) {
         BalancedTreeNode<T> updatedParentNode = new BalancedTreeNode<T>();
         if (dirChild == MoveDirection.LEFT) {
@@ -358,7 +357,7 @@ public class BalancedTree<T extends Comparable<T>> {
         BalancedTreeNode<T> replacementNode = findNodeToReplaceRemoved(nodeToRemove);
 
         //remove old link to node which is going to replace the nodeToRemove
-        removeNodeWhichIsLeaf(replacementNode);
+        remove(replacementNode);
 
         //set data to be the same as the replacement node:
         //the links of the nodeToRemove and its parent can stay the same this way
@@ -378,22 +377,11 @@ public class BalancedTree<T extends Comparable<T>> {
         //if there is a node (or more) on the left, get the one with the highest value
         if (nodeToRemove.getLeft() != null) {
             nodeToReplaceWith = nodeToRemove.getLeft();
-            while (!hasNoChild(nodeToReplaceWith)) {
-                if (nodeToReplaceWith.getRight() != null) {
-                    nodeToReplaceWith = nodeToReplaceWith.getRight();
-                } else if (nodeToReplaceWith.getLeft() != null) {
-                    nodeToReplaceWith = nodeToReplaceWith.getLeft();
-                }
-            }
-        } else { //get the node with the lowest value on the right (there must be at least one child)
+            nodeToReplaceWith = getNode(Maximum(nodeToReplaceWith));
+
+        } else { //get the node with the lowest value on the right
             nodeToReplaceWith = nodeToRemove.getRight();
-            while (!hasNoChild(nodeToReplaceWith)) {
-                if (nodeToReplaceWith.getLeft() != null) {
-                    nodeToReplaceWith = nodeToReplaceWith.getLeft();
-                } else if (nodeToReplaceWith.getRight() != null) {
-                    nodeToReplaceWith = nodeToReplaceWith.getRight();
-                }
-            }
+            nodeToReplaceWith = getNode(Minimum(nodeToReplaceWith));
         }
         return nodeToReplaceWith;
     }
@@ -403,8 +391,35 @@ public class BalancedTree<T extends Comparable<T>> {
     }
 
     /**
+     * Method to find the biggest value in the (sub)tree
+     *
+     * @return Data from node with the biggest value
+     */
+    private T Maximum(BalancedTreeNode<T> subTreeNode) {
+        if (subTreeNode == null)
+            return null;
+        while (subTreeNode.getRight() != null)
+            subTreeNode = subTreeNode.getRight();
+        return subTreeNode.getData();
+    }
+
+    /**
+     * Method to find the smallest value in the (sub)tree
+     *
+     * @return Data from node with the smallest value
+     */
+    private T Minimum(BalancedTreeNode<T> subTreeNode) {
+        if (subTreeNode == null)
+            return null;
+        while (subTreeNode.getLeft() != null) {
+            subTreeNode = subTreeNode.getLeft();
+        }
+        return subTreeNode.getData();
+    }
+
+    /**
      * Method which seems to clear the tree by pointing the root to null
-     * and thus making all tree elements unreachable
+     * and thus making all elements of the tree unreachable
      */
     public BalancedTree<String> clear() {
         this.root = null;
@@ -439,34 +454,5 @@ public class BalancedTree<T extends Comparable<T>> {
                 list.add(right);
             }
         }
-    }
-
-    /**
-     * Method to find the biggest value in the tree
-     *
-     * @return Data from node with the biggest value
-     */
-    public T Maximum() {
-        BalancedTreeNode<T> local = root;
-        if (local == null)
-            return null;
-        while (local.getRight() != null)
-            local = local.getRight();
-        return local.getData();
-    }
-
-    /**
-     * Method to find the smallest value in the tree
-     *
-     * @return Data from node with the smallest value
-     */
-    public T Minimum() {
-        BalancedTreeNode<T> local = root;
-        if (local == null)
-            return null;
-        while (local.getLeft() != null) {
-            local = local.getLeft();
-        }
-        return local.getData();
     }
 }
