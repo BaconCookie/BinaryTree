@@ -12,12 +12,6 @@ public class TreeView extends JFrame {
 
     private static final int MAX_CHARS = 3;
     private String stringInput;
-    private Color backgroundColor;
-
-    private JLabel labelInsert;
-    private JLabel labelRemove;
-    private JLabel labelSave;
-    private JLabel labelLoad;
 
     private JTextField textfInsert;
     private JTextField textfRemove;
@@ -30,98 +24,102 @@ public class TreeView extends JFrame {
     private JButton butLoad;
 
     private JMenuItem[] toogleMenu;
+    private final GridBagConstraints gridBagConstraints;
+    private final Canvas cnvs;
 
 
     public TreeView() {
-
-
         //Window
         setTitle("BalancedTree by Laura");
         setSize(1400, 700); //width, height
-        backgroundColor = new Color(130, 225, 100);
-        setBackground(backgroundColor);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //If JFrame instead of WinConst IntelliJ complains
-        setLayout(new FlowLayout());
 
-        setVisible(true);
+        gridBagConstraints = new GridBagConstraints();
+        GridBagLayout gridBagLayout = new GridBagLayout();
+        gridBagLayout.setConstraints(this, gridBagConstraints);
+        setLayout(gridBagLayout);
 
-        /*
-         * MenuBar and menu components
-         */
-        JMenu treeMenu = new JMenu("File");
-        JMenuItem closeTree = new JMenuItem("Exit");
-        JMenuItem saveTree = new JMenuItem("Save Tree");
-        JMenuItem loadTree = new JMenuItem("Load Tree");
-        JMenu aboutMenu = new JMenu("About");
-        JMenuItem aboutItem = new JMenuItem("About");
+        setupTextFields();
+        setUpButtons();
+        setupCanvas();
 
-        treeMenu.add(saveTree);
-        treeMenu.add(closeTree);
-        treeMenu.add(loadTree);
-        aboutMenu.add(aboutItem);
+        composeLayout();
 
-        toogleMenu = new JMenuItem[3];
-        toogleMenu[0] = saveTree;
-        toogleMenu[1] = closeTree;
-        toogleMenu[2] = aboutItem;
-
-        /*
-         * adding the menu bar to the main frame
-         */
-        this.setJMenuBar(new JMenuBar());
-        this.getJMenuBar().add(treeMenu);
-        this.getJMenuBar().add(aboutMenu);
-
-
-/*
-        //Add labels
-        add(labelInsert = new JLabel("Insert"));
-        labelInsert.setBounds(30,20, 70, 20); //x,y, width, height
-        add(labelRemove) = new JLabel("Remove");
-        labelRemove.setBounds(30,50, 70, 20);
-        add(labelSave) = new JLabel("Save");
-        labelSave.setBounds(600, 20, 70, 20);
-        add(labelLoad) = new JLabel("Load");
-        labelLoad.setBounds(600, 50, 70, 20);
-*/
-        //Add textfields
-        add(textfInsert = new JTextField(""));
-        textfInsert.setBounds(160, 20, 40, 20); //x,y, width, height
-        add(textfRemove = new JTextField(""));
-        textfRemove.setBounds(160, 50, 40, 20);
-        add(textfSave = new JTextField(""));
-        textfSave.setBounds(360, 20, 60, 20);
-        add(textfLoad = new JTextField(""));
-        textfLoad.setBounds(360, 50, 60, 20);
-
-        //Add buttons
-        add(butInsert = new JButton("Insert Node"));
-        butInsert.setBounds(20, 20, 130, 20); //x,y, width, height
-        add(butRemove = new JButton("Remove Node"));
-        butRemove.setBounds(20, 50, 130, 20);
-        add(butSave = new JButton("Save Tree"));
-        butSave.setBounds(220, 20, 130, 20);
-        add(butLoad = new JButton("Load Tree"));
-        butLoad.setBounds(220, 50, 130, 20);
 
         // Add ActionListener to buttons
-        butInsert.addActionListener(new Action());
         butRemove.addActionListener(new Action());
         butSave.addActionListener(new Action());
         butLoad.addActionListener(new Action());
-
-
-
-//repaint(); //triggers update
-
+        setVisible(true);
     }
 
-    public void paint(Graphics g){
-        setBackground(backgroundColor);
-        g.setColor(Color.green);
-        g.fillOval(750,30,80,60); //x,y, width, height
-
+    private void setupCanvas() {
+        cnvs = new BinaryTreeCanvas();
+        cnvs.setSize(1000, 600);
+        cnvs.setBackground(Color.black);
     }
+
+    private void setupTextFields() {
+        textfInsert = new JTextField("");
+        textfRemove = new JTextField("");
+        textfSave = new JTextField("");
+        textfLoad = new JTextField("");
+        textfInsert.setColumns(10);
+        textfRemove.setColumns(10);
+        textfSave.setColumns(10);
+        textfLoad.setColumns(10);
+    }
+
+    private void composeLayout() {
+        addComponent(butInsert, 0, 0);
+        addComponent(textfInsert, 1, 0);
+
+        addComponent(butSave, 3, 0);
+        addComponent(textfSave, 4, 0);
+
+        addComponent(butLoad, 3, 1);
+        addComponent(textfLoad, 4, 1);
+
+        addComponent(butRemove, 0, 1);
+        addComponent(textfRemove, 1, 1);
+
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.gridwidth = 4;
+        add(cnvs, gridBagConstraints);
+    }
+
+    private void addComponent(Component component, int column, int row) {
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        gridBagConstraints.gridx = column;
+        gridBagConstraints.gridy = row;
+        add(component, gridBagConstraints);
+    }
+
+    private void setUpButtons() {
+        Bound bound = new Bound(20, 20, 130, 20);
+        butInsert = createButton("Insert Node", bound);
+
+        Bound removeBtnBound = new Bound().setX(20).setY(50).setWidth(130).setHeight(20);
+        butRemove = createButton("Remove Node", removeBtnBound);
+
+        Bound saveBtnBound = new Bound().setX(220).setY(20).setWidth(130).setHeight(20);
+        butSave = createButton("Save Tree", saveBtnBound);
+
+        Bound loadBtnBound = new Bound().setX(220).setY(50).setWidth(130).setHeight(20);
+        butLoad = createButton("Load Tree", loadBtnBound);
+    }
+
+    private JButton createButton(String text, Bound bound) {
+        JButton button = new JButton(text);
+        button.setBounds(bound.getX(), bound.getY(), bound.getWidth(), bound.getHeight()); //x,y, width, height
+        button.addActionListener(new Action());
+        return button;
+    }
+
 
     /**
      * Methods to add ActionListeners
@@ -145,8 +143,6 @@ public class TreeView extends JFrame {
 
         }
     }
-
-
 
 
 }
