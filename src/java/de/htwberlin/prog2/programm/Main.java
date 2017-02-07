@@ -2,6 +2,7 @@ package de.htwberlin.prog2.programm;
 
 import de.htwberlin.prog2.datamodel.BalancedTree;
 import de.htwberlin.prog2.datamodel.BalancedTreeNode;
+import de.htwberlin.prog2.gui.TreeView;
 
 /**
  * Created by laura on 14.01.17.
@@ -9,6 +10,9 @@ import de.htwberlin.prog2.datamodel.BalancedTreeNode;
 public class Main {
 
         public static void main(String[] args) {
+
+            new TreeView();
+            /*
             BalancedTree<String> tree = new BalancedTree<>();
             tree.insert("a");
             tree.insert("yyy");
@@ -39,6 +43,7 @@ public class Main {
 
             System.out.println("after remove:");
             tree.printTree();
+*/
 
         }
 
