@@ -24,6 +24,10 @@ public class Main {
             tree.insert("ab");
             tree.insert("uuu");
             tree.insert("vvv");
+
+            tree.saveTree();
+            tree.clear();
+            tree.loadTree();
             tree.printTree();
 /*
             BalancedTree<String> smallTree = new BalancedTree<>();

@@ -5,13 +5,14 @@ package de.htwberlin.prog2.datamodel;
 import de.htwberlin.prog2.io.TreeIO;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.LinkedList;
 
 
 /**
  * Created by laura on 01.01.17.
  */
-public class BalancedTree<T extends Comparable<T>> {
+public class BalancedTree<T extends Comparable<T>> implements Serializable {
 
     private BalancedTreeNode<T> root;
 
@@ -513,7 +514,7 @@ public class BalancedTree<T extends Comparable<T>> {
      * Method which saves tree in a file
      * The file is being placed in the folder of this program.
      */
-    private void saveTree() {
+    public void saveTree() {
         try {
             TreeIO<T> treeIO = new TreeIO<>();
             String filePath = "./saved.tree";
@@ -530,7 +531,7 @@ public class BalancedTree<T extends Comparable<T>> {
      * @return Loaded tree
      * @throws RuntimeException in case of a caught Exception
      */
-    private BalancedTree<T> loadTree() {
+    public BalancedTree<T> loadTree() {
         try {
             TreeIO<T> treeIO = new TreeIO<>();
 

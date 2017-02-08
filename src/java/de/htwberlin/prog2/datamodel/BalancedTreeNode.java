@@ -1,10 +1,12 @@
 package de.htwberlin.prog2.datamodel;
 
+import java.io.Serializable;
+
 /**
  * Created by laura on 14.01.17.
  */
 
-public class BalancedTreeNode<T extends Comparable<T>> implements Comparable<BalancedTreeNode<T>> {
+public class BalancedTreeNode<T extends Comparable<T>> implements Comparable<BalancedTreeNode<T>>, Serializable {
 
     private T data;
     private BalancedTreeNode<T> left;
