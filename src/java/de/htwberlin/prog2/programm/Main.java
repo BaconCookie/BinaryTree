@@ -11,8 +11,8 @@ public class Main {
 
         public static void main(String[] args) {
 
-            new TreeView();
-            /*
+           //new TreeView();
+
             BalancedTree<String> tree = new BalancedTree<>();
             tree.insert("a");
             tree.insert("yyy");
@@ -25,7 +25,7 @@ public class Main {
             tree.insert("uuu");
             tree.insert("vvv");
             tree.printTree();
-
+/*
             BalancedTree<String> smallTree = new BalancedTree<>();
             smallTree.insert("a");
             smallTree.insert("b");
@@ -44,6 +44,8 @@ public class Main {
             System.out.println("after remove:");
             tree.printTree();
 */
+            tree.printTreeFromList(tree.treeAsList());
+
 
         }
 

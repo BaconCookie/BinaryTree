@@ -25,7 +25,7 @@ public class TreeView extends JFrame {
 
     private JMenuItem[] toogleMenu;
     private final GridBagConstraints gridBagConstraints;
-    private final Canvas cnvs;
+    private Canvas cnvs;
 
 
     public TreeView() {

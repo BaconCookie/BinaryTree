@@ -2,6 +2,9 @@ package de.htwberlin.prog2.datamodel;
 
 //needed for printTree method
 
+import de.htwberlin.prog2.io.TreeIO;
+
+import java.io.IOException;
 import java.util.LinkedList;
 
 
@@ -434,6 +437,9 @@ public class BalancedTree<T extends Comparable<T>> {
         return root.toString();
     }
 
+    /**
+     * Method to simply print the tree on the console
+     */
     public void printTree() {
         root.level = 0;
         LinkedList<BalancedTreeNode<T>> list = new LinkedList<BalancedTreeNode<T>>();
@@ -455,4 +461,88 @@ public class BalancedTree<T extends Comparable<T>> {
             }
         }
     }
+
+    /**
+     * Method to put tree in a LinkedList of <BalancedTreeNode<T>>
+     *
+     * @return list of nodes
+     */
+    public LinkedList<BalancedTreeNode<T>> treeAsList() {
+        root.level = 0;
+        LinkedList<BalancedTreeNode<T>> list = new LinkedList<BalancedTreeNode<T>>();
+        list.add(root);
+        while (!list.isEmpty()) {
+            BalancedTreeNode<T> balancedTreeNode = list.poll(); //poll: Retrieves and removes the head (first element) of this list.
+            int level = balancedTreeNode.level;
+            BalancedTreeNode<T> left = balancedTreeNode.getLeft();
+            BalancedTreeNode<T> right = balancedTreeNode.getRight();
+            if (left != null) {
+                left.level = level + 1;
+                list.add(left);
+            }
+            if (right != null) {
+                right.level = level + 1;
+                list.add(right);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Method to print the tree from a list of nodes
+     *
+     * @param list in which tree was being saved
+     */
+    public void printTreeFromList(LinkedList<BalancedTreeNode<T>> list) {
+        while (!list.isEmpty()) {
+            BalancedTreeNode<T> balancedTreeNode = list.poll(); //poll: Retrieves and removes the head (first element) of this list.
+            System.out.println(balancedTreeNode);
+            int level = balancedTreeNode.level;
+            BalancedTreeNode<T> left = balancedTreeNode.getLeft();
+            BalancedTreeNode<T> right = balancedTreeNode.getRight();
+            if (left != null) {
+                left.level = level + 1;
+            }
+            if (right != null) {
+                right.level = level + 1;
+            }
+        }
+    }
+
+    /**
+     * Method which saves tree in a file
+     * The file is being placed in the folder of this program.
+     */
+    private void saveTree() {
+        try {
+            TreeIO<T> treeIO = new TreeIO<>();
+            String filePath = "./saved.tree";
+            treeIO.save(this, filePath);
+        } catch (IOException e) {
+            System.out.println("Error while saving.");
+        }
+    }
+
+    /**
+     * Method which loads previously saved tree from a file (./saved.tree).
+     * The file is being loaded from the folder of this program.
+     *
+     * @return Loaded tree
+     * @throws RuntimeException in case of a caught Exception
+     */
+    private BalancedTree<T> loadTree() {
+        try {
+            TreeIO<T> treeIO = new TreeIO<>();
+
+            String inputPath = "./saved.tree";
+            BalancedTree<T> loadedTree = treeIO.load(inputPath);
+            this.root = loadedTree.getRoot();
+            return loadedTree;
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error while loading.");
+            throw new RuntimeException(e);
+        }
+    }
+
 }
