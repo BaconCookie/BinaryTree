@@ -11,7 +11,7 @@ import java.util.List;
  * @author Laura Hartgers, HTW-Berlin Matrikelnummer 556238
  * @version 1.0
  */
-public class TreeIO <T extends Comparable<T>>{
+public class TreeIO {
 
 
         /**
@@ -21,7 +21,7 @@ public class TreeIO <T extends Comparable<T>>{
          * @param outputPath path where the polynomial is saved
          * @throws IOException to a higher level because the Exception can't be handled here
          */
-        public void save(BalancedTree<T> treeToSave, String outputPath) throws IOException {
+        public void save(BalancedTree treeToSave, String outputPath) throws IOException {
             FileOutputStream fileOutput = new FileOutputStream(outputPath);
             ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
             objectOutput.writeObject(treeToSave);
@@ -35,14 +35,14 @@ public class TreeIO <T extends Comparable<T>>{
          * @throws IOException            to a higher level because the Exception can't be handled here
          * @throws ClassNotFoundException in case he read Value is not of type BalancedTree
          */
-        public BalancedTree<T> load(String inputPath) throws IOException, ClassNotFoundException {
+        public BalancedTree load(String inputPath) throws IOException, ClassNotFoundException {
             FileInputStream fileInput = new FileInputStream(inputPath);
             ObjectInputStream objectInput = new ObjectInputStream(fileInput);
-            BalancedTree<T> treeToLoad = null;
+            BalancedTree treeToLoad = null;
             Object readObject = objectInput.readObject();
 
             if (readObject instanceof BalancedTree) {
-                treeToLoad = (BalancedTree<T>) readObject;
+                treeToLoad = (BalancedTree) readObject;
             } else {
                 throw new ClassNotFoundException("The read Value is not of type BalancedTree.");
             }

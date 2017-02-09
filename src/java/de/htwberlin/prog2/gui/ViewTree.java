@@ -16,8 +16,8 @@ import java.util.LinkedList;
 public class ViewTree extends JFrame {
 
 
-    private LinkedList<BalancedTreeNode<String>> listOfNodes = new LinkedList<>();
-    private BalancedTree<String> balancedTree;
+    private LinkedList<BalancedTreeNode> listOfNodes = new LinkedList<>();
+    private BalancedTree balancedTree;
     private TreePanel treePanel;
 
 
@@ -102,7 +102,7 @@ public class ViewTree extends JFrame {
         repaint();
     }
 
-    public void setBalancedTree(LinkedList<BalancedTreeNode<T>> listOfNodes) {
+    public void setBalancedTree(LinkedList<BalancedTreeNode> listOfNodes) {
         this.listOfNodes = listOfNodes;
         updateView();
     }

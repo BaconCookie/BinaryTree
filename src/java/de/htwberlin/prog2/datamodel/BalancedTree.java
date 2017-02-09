@@ -8,15 +8,14 @@ import de.htwberlin.prog2.io.TreeIO;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.Stack;
 
 
 /**
  * Created by laura on 01.01.17.
  */
-public class BalancedTree<T extends Comparable<T>> implements Serializable {
+public class BalancedTree implements Serializable {
 
-    private BalancedTreeNode<T> root;
+    private BalancedTreeNode root;
     private LinkedList drawLines = new LinkedList();
 
     private int treeDepth = getDepthOfTree(); //max level of tree
@@ -41,7 +40,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * @param node to measure depth of
      * @return int depth of node in tree
      */
-    private int depth(BalancedTreeNode<T> node) {
+    private int depth(BalancedTreeNode node) {
         if (node == null)
             return 0;
         return node.getDepth();
@@ -54,7 +53,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * @param data from node to insert
      * @return updated root of the tree
      */
-    public BalancedTreeNode<T> insert(T data) {
+    public BalancedTreeNode insert(String data) {
         root = insert(root, data);
         setPositionAndID();
         switch (balanceNumber(root)) {
@@ -78,15 +77,15 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * @param data belonging to new node
      * @return inserted node which will be rebalanced
      */
-    private BalancedTreeNode<T> insert(BalancedTreeNode<T> node, T data) {
+    private BalancedTreeNode insert(BalancedTreeNode node, String data) {
         if (node == null)
-            return new BalancedTreeNode<>(data);
+            return new BalancedTreeNode(data);
         if (node.getData().compareTo(data) > 0) {
-            node = new BalancedTreeNode<>(node.getData(), insert(node.getLeft(), data),
+            node = new BalancedTreeNode(node.getData(), insert(node.getLeft(), data),
                     node.getRight());
         } else {
             if (node.getData().compareTo(data) < 0) {
-                node = new BalancedTreeNode<>(node.getData(), node.getLeft(), insert(node.getRight(), data));
+                node = new BalancedTreeNode(node.getData(), node.getLeft(), insert(node.getRight(), data));
             }
         }
         // After insert the new balancedTreeNode, check and rebalance the current tree if necessary.
@@ -101,7 +100,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * @param node root (whole tree) or other node (subtree) which will be rebalanced
      * @return (new) root node
      */
-    private BalancedTreeNode<T> reBalance(BalancedTreeNode<T> node) {
+    private BalancedTreeNode reBalance(BalancedTreeNode node) {
         switch (balanceNumber(node)) {
             case 1:
                 node = rotateLeft(node);
@@ -115,7 +114,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
         return node;
     }
 
-    private int balanceNumber(BalancedTreeNode<T> node) {
+    private int balanceNumber(BalancedTreeNode node) {
         int L = depth(node.getLeft());
         int R = depth(node.getRight());
         if (L - R >= 2) {
@@ -132,14 +131,14 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * @param node node to balance
      * @return rightChild which is the root of this (sub)Tree
      */
-    private BalancedTreeNode<T> rotateLeft(BalancedTreeNode<T> node) {
-        BalancedTreeNode<T> startNode = node;
-        BalancedTreeNode<T> rightChild = startNode.getRight();
-        BalancedTreeNode<T> leftChild = startNode.getLeft();
-        BalancedTreeNode<T> leftOfRightChild = rightChild.getLeft();
-        BalancedTreeNode<T> rightOfRightChild = rightChild.getRight();
-        startNode = new BalancedTreeNode<>(startNode.getData(), leftChild, leftOfRightChild);
-        rightChild = new BalancedTreeNode<>(rightChild.getData(), startNode, rightOfRightChild);
+    private BalancedTreeNode rotateLeft(BalancedTreeNode node) {
+        BalancedTreeNode startNode = node;
+        BalancedTreeNode rightChild = startNode.getRight();
+        BalancedTreeNode leftChild = startNode.getLeft();
+        BalancedTreeNode leftOfRightChild = rightChild.getLeft();
+        BalancedTreeNode rightOfRightChild = rightChild.getRight();
+        startNode = new BalancedTreeNode(startNode.getData(), leftChild, leftOfRightChild);
+        rightChild = new BalancedTreeNode(rightChild.getData(), startNode, rightOfRightChild);
         return rightChild;
     }
 
@@ -149,19 +148,19 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * @param node node to balance
      * @return leftChild which is the root of this (sub)Tree
      */
-    private BalancedTreeNode<T> rotateRight(BalancedTreeNode<T> node) {
-        BalancedTreeNode<T> startNode = node;
-        BalancedTreeNode<T> leftChild = startNode.getLeft();
-        BalancedTreeNode<T> rightChild = startNode.getRight();
-        BalancedTreeNode<T> leftOfLeftChild = leftChild.getLeft();
-        BalancedTreeNode<T> rightOfLeftChild = leftChild.getRight();
-        startNode = new BalancedTreeNode<>(startNode.getData(), rightOfLeftChild, rightChild);
-        leftChild = new BalancedTreeNode<>(leftChild.getData(), leftOfLeftChild, startNode);
+    private BalancedTreeNode rotateRight(BalancedTreeNode node) {
+        BalancedTreeNode startNode = node;
+        BalancedTreeNode leftChild = startNode.getLeft();
+        BalancedTreeNode rightChild = startNode.getRight();
+        BalancedTreeNode leftOfLeftChild = leftChild.getLeft();
+        BalancedTreeNode rightOfLeftChild = leftChild.getRight();
+        startNode = new BalancedTreeNode(startNode.getData(), rightOfLeftChild, rightChild);
+        leftChild = new BalancedTreeNode(leftChild.getData(), leftOfLeftChild, startNode);
         return leftChild;
     }
 
     //TODO this doesn't seem to help unfortunately
-    private void rotateTowardsLighterSide(BalancedTreeNode<T> nodeToRemove) {
+    private void rotateTowardsLighterSide(BalancedTreeNode nodeToRemove) {
         int depthLeft = root.getLeft().getDepth();
         int depthRight = root.getRight().getDepth();
         //BalancedTreeNode<T> leftTree = root.getLeft();
@@ -181,8 +180,8 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * true    if node is in the tree
      * false   if node is not found
      */
-    public boolean search(T data) {
-        BalancedTreeNode<T> searchNode = root;
+    public boolean search(String data) {
+        BalancedTreeNode searchNode = root;
         while (searchNode != null) {
             if (searchNode.getData().compareTo(data) == 0) {
                 return true;
@@ -200,10 +199,10 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * @param id id of node that is being sought
      * @return node with corresponding id
      */
-    public BalancedTreeNode<T> searchNodeById(int id) {
-        LinkedList<BalancedTreeNode<T>> list = treeAsList();
+    public BalancedTreeNode searchNodeById(int id) {
+        LinkedList<BalancedTreeNode> list = treeAsList();
         boolean nodeIsFound = false;
-        BalancedTreeNode<T> searchNode = list.poll();
+        BalancedTreeNode searchNode = list.poll();
         while (nodeIsFound) {
             if (searchNode.getId() == id) {
 
@@ -219,11 +218,11 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
     /**
      * Method to search a node
      *
-     * @param data contained by node
+     * @param data contained by node (string)
      * @return node that is being searched or null if node is not found
      */
-    public BalancedTreeNode<T> getNode(T data) {
-        BalancedTreeNode<T> searchNode = root;
+    public BalancedTreeNode getNode(String data) {
+        BalancedTreeNode searchNode = root;
         while (searchNode != null) {
             if (searchNode.getData().compareTo(data) == 0)
                 return searchNode;
@@ -242,7 +241,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      *
      * @param nodeToRemove node which will be removed by this method
      */
-    public BalancedTreeNode<T> remove(BalancedTreeNode<T> nodeToRemove) {
+    public BalancedTreeNode remove(BalancedTreeNode nodeToRemove) {
         try {
             //in order to rebalance properly later:
             //TODO why does this not seem to work????--------------------------------------------------------
@@ -267,9 +266,9 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
         return root;
     }
 
-    private void removeNodeWithOneChild(BalancedTreeNode<T> nodeToRemove) {
-        BalancedTreeNode<T> parentNode = findParentNode(nodeToRemove);
-        BalancedTreeNode<T> childNode = findOnlyChild(nodeToRemove);
+    private void removeNodeWithOneChild(BalancedTreeNode nodeToRemove) {
+        BalancedTreeNode parentNode = findParentNode(nodeToRemove);
+        BalancedTreeNode childNode = findOnlyChild(nodeToRemove);
         if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) == 0)) {
             parentNode.setLeft(childNode);
         } else {
@@ -277,8 +276,8 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
         }
     }
 
-    private void removeNodeWhichIsLeaf(BalancedTreeNode<T> nodeToRemove) {
-        BalancedTreeNode<T> parentNode = findParentNode(nodeToRemove);
+    private void removeNodeWhichIsLeaf(BalancedTreeNode nodeToRemove) {
+        BalancedTreeNode parentNode = findParentNode(nodeToRemove);
         //if nodeToRemove is/was the left child
         if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) == 0)) {
             parentNode.setLeft(null);
@@ -297,13 +296,13 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
         }
     }
 
-    private boolean hasOneChild(BalancedTreeNode<T> nodeToRemove) {
+    private boolean hasOneChild(BalancedTreeNode nodeToRemove) {
         return ((nodeToRemove.getLeft() == null | nodeToRemove.getRight() == null) &&
                 (nodeToRemove.getLeft() != null | nodeToRemove.getRight() != null));
     }
 
-    private BalancedTreeNode<T> findOnlyChild(BalancedTreeNode<T> nodeToRemove) {
-        BalancedTreeNode<T> childNode = new BalancedTreeNode<T>();
+    private BalancedTreeNode findOnlyChild(BalancedTreeNode nodeToRemove) {
+        BalancedTreeNode childNode = new BalancedTreeNode();
 
         if (nodeToRemove.getLeft() != null) {
             childNode = nodeToRemove.getLeft();
@@ -314,11 +313,11 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
         return childNode;
     }
 
-    private boolean hasNoChild(BalancedTreeNode<T> nodeToRemove) {
+    private boolean hasNoChild(BalancedTreeNode nodeToRemove) {
         return nodeToRemove.getLeft() == null && nodeToRemove.getRight() == null;
     }
 
-    public boolean getIfNodeIsLeaf(BalancedTreeNode<T> nodeToCheck) {
+    public boolean getIfNodeIsLeaf(BalancedTreeNode nodeToCheck) {
         return hasNoChild(nodeToCheck);
     }
 
@@ -328,7 +327,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * @param childNode node to get the parent from
      * @return parentNode
      */
-    private BalancedTreeNode<T> findParentNode(BalancedTreeNode<T> childNode) {
+    private BalancedTreeNode findParentNode(BalancedTreeNode childNode) {
         MoveDirection whereDidTheChildGo;
 
         //childNode != root, double checking for security
@@ -336,8 +335,8 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
             throw new IllegalArgumentException("If childNode == root, then it has no parent!");
         } else {
 
-            BalancedTreeNode<T> parentNode = root;
-            BalancedTreeNode<T> searchChildNode = root;
+            BalancedTreeNode parentNode = root;
+            BalancedTreeNode searchChildNode = root;
 
             //now the child needs to go one level ahead of the parent
             if (searchChildNode.getData().compareTo(childNode.getData()) > 0) { //
@@ -367,12 +366,12 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
         }
     }
 
-    public BalancedTreeNode<T> getParentNode(BalancedTreeNode<T> childNode) {
+    public BalancedTreeNode getParentNode(BalancedTreeNode childNode) {
         return findParentNode(childNode);
     }
 
-    private BalancedTreeNode<T> followChild(BalancedTreeNode<T> parentNode, MoveDirection dirChild) {
-        BalancedTreeNode<T> updatedParentNode = new BalancedTreeNode<T>();
+    private BalancedTreeNode followChild(BalancedTreeNode parentNode, MoveDirection dirChild) {
+        BalancedTreeNode updatedParentNode = new BalancedTreeNode();
         if (dirChild == MoveDirection.LEFT) {
             updatedParentNode = parentNode.getLeft();
         } else if (dirChild == MoveDirection.RIGHT) {
@@ -388,8 +387,8 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      *
      * @param nodeToRemove node that will be removed
      */
-    private void removeNodeFromTheMiddle(BalancedTreeNode<T> nodeToRemove) {
-        BalancedTreeNode<T> replacementNode = findNodeToReplaceRemoved(nodeToRemove);
+    private void removeNodeFromTheMiddle(BalancedTreeNode nodeToRemove) {
+        BalancedTreeNode replacementNode = findNodeToReplaceRemoved(nodeToRemove);
 
         //remove old link to node which is going to replace the nodeToRemove
         remove(replacementNode);
@@ -406,8 +405,8 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * @param nodeToRemove this node must have at least one child
      * @return a suitable node for replacement
      */
-    private BalancedTreeNode<T> findNodeToReplaceRemoved(BalancedTreeNode<T> nodeToRemove) {
-        BalancedTreeNode<T> nodeToReplaceWith;
+    private BalancedTreeNode findNodeToReplaceRemoved(BalancedTreeNode nodeToRemove) {
+        BalancedTreeNode nodeToReplaceWith;
 
         //if there is a node (or more) on the left, get the one with the highest value
         if (nodeToRemove.getLeft() != null) {
@@ -421,7 +420,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
         return nodeToReplaceWith;
     }
 
-    public BalancedTreeNode<T> getNodeToReplaceRemoved(BalancedTreeNode<T> nodeToRemove) {
+    public BalancedTreeNode getNodeToReplaceRemoved(BalancedTreeNode nodeToRemove) {
         return findNodeToReplaceRemoved(nodeToRemove);
     }
 
@@ -430,7 +429,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      *
      * @return Data from node with the biggest value
      */
-    private T Maximum(BalancedTreeNode<T> subTreeNode) {
+    private String Maximum(BalancedTreeNode subTreeNode) {
         if (subTreeNode == null)
             return null;
         while (subTreeNode.getRight() != null)
@@ -443,7 +442,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      *
      * @return Data from node with the smallest value
      */
-    private T Minimum(BalancedTreeNode<T> subTreeNode) {
+    private String Minimum(BalancedTreeNode subTreeNode) {
         if (subTreeNode == null)
             return null;
         while (subTreeNode.getLeft() != null) {
@@ -456,15 +455,15 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * Method which seems to clear the tree by pointing the root to null
      * and thus making all elements of the tree unreachable
      */
-    public BalancedTree<String> clear() {
+    public BalancedTree clear() {
         this.root = null;
         this.drawLines = new LinkedList<>();
         this.size = 0;
         this.treeDepth = 0;
-        return new BalancedTree<>();
+        return new BalancedTree();
     }
 
-    public BalancedTreeNode<T> getRoot() {
+    public BalancedTreeNode getRoot() {
         return this.root;
     }
 
@@ -477,15 +476,15 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      */
     public void printTree() {
         root.level = 0;
-        LinkedList<BalancedTreeNode<T>> list = new LinkedList<BalancedTreeNode<T>>();
+        LinkedList<BalancedTreeNode> list = new LinkedList<BalancedTreeNode>();
 
         list.add(root);
         while (!list.isEmpty()) {
-            BalancedTreeNode<T> balancedTreeNode = list.poll(); //poll: Retrieves and removes the head (first element) of this list.
+            BalancedTreeNode balancedTreeNode = list.poll(); //poll: Retrieves and removes the head (first element) of this list.
             System.out.println(balancedTreeNode);
             int level = balancedTreeNode.level;
-            BalancedTreeNode<T> left = balancedTreeNode.getLeft();
-            BalancedTreeNode<T> right = balancedTreeNode.getRight();
+            BalancedTreeNode left = balancedTreeNode.getLeft();
+            BalancedTreeNode right = balancedTreeNode.getRight();
             if (left != null) {
                 left.level = level + 1;
                 list.add(left);
@@ -498,7 +497,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
     }
 
     /**
-     * Method to put tree in a LinkedList of <BalancedTreeNode<T>>
+     * Method to put tree in a LinkedList of <BalancedTreeNode>
      *
      * @return list of nodes
      */
@@ -600,7 +599,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
     }
 
     public ViewPosition getPositionOfNodeByIndex(int id) {
-        BalancedTreeNode<T> node = searchNodeById(id);
+        BalancedTreeNode node = searchNodeById(id);
         return node.viewPosition;
     }
 
@@ -628,7 +627,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      */
     public void saveTree() {
         try {
-            TreeIO<T> treeIO = new TreeIO<>();
+            TreeIO treeIO = new TreeIO<>();
             String filePath = "./saved.tree";
             treeIO.save(this, filePath);
         } catch (IOException e) {
@@ -643,12 +642,12 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      * @return Loaded tree
      * @throws RuntimeException in case of a caught Exception
      */
-    public BalancedTree<T> loadTree() {
+    public BalancedTree loadTree() {
         try {
-            TreeIO<T> treeIO = new TreeIO<>();
+            TreeIO treeIO = new TreeIO<>();
 
             String inputPath = "./saved.tree";
-            BalancedTree<T> loadedTree = treeIO.load(inputPath);
+            BalancedTree loadedTree = treeIO.load(inputPath);
             this.root = loadedTree.getRoot();
             return loadedTree;
 
