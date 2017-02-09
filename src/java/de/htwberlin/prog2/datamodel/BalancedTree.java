@@ -2,11 +2,13 @@ package de.htwberlin.prog2.datamodel;
 
 //needed for printTree method
 
+import de.htwberlin.prog2.gui.ViewPosition;
 import de.htwberlin.prog2.io.TreeIO;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.Stack;
 
 
 /**
@@ -15,6 +17,12 @@ import java.util.LinkedList;
 public class BalancedTree<T extends Comparable<T>> implements Serializable {
 
     private BalancedTreeNode<T> root;
+    private LinkedList drawLines = new LinkedList();
+
+    private int treeDepth = getDepthOfTree(); //max level of tree
+    private int size;
+    private final int iconSize = 80;
+
 
     /**
      * Constructor of empty tree
@@ -48,6 +56,7 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      */
     public BalancedTreeNode<T> insert(T data) {
         root = insert(root, data);
+        setPositionAndID();
         switch (balanceNumber(root)) {
             case 1:
                 root = rotateLeft(root);
@@ -183,6 +192,28 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
                 searchNode = searchNode.getRight();
         }
         return false;
+    }
+
+    /**
+     * Method to search a node by index
+     *
+     * @param id id of node that is being sought
+     * @return node with corresponding id
+     */
+    public BalancedTreeNode<T> searchNodeById(int id) {
+        LinkedList<BalancedTreeNode<T>> list = treeAsList();
+        boolean nodeIsFound = false;
+        BalancedTreeNode<T> searchNode = list.poll();
+        while (nodeIsFound) {
+            if (searchNode.getId() == id) {
+
+                nodeIsFound = true;
+            } else if (searchNode.getId() > 0)
+                searchNode = searchNode.getLeft();
+            else
+                searchNode = list.poll();
+        }
+        return searchNode;
     }
 
     /**
@@ -427,6 +458,9 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      */
     public BalancedTree<String> clear() {
         this.root = null;
+        this.drawLines = new LinkedList<>();
+        this.size = 0;
+        this.treeDepth = 0;
         return new BalancedTree<>();
     }
 
@@ -468,25 +502,29 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      *
      * @return list of nodes
      */
-    public LinkedList<BalancedTreeNode<T>> treeAsList() {
+    public LinkedList<BalancedTreeNode> treeAsList() {
         root.level = 0;
-        LinkedList<BalancedTreeNode<T>> list = new LinkedList<BalancedTreeNode<T>>();
+        LinkedList<BalancedTreeNode> list = new LinkedList<>(); //
+        LinkedList<BalancedTreeNode> listWithAllElements = new LinkedList<>(); //
         list.add(root);
+        listWithAllElements.add(root);
         while (!list.isEmpty()) {
-            BalancedTreeNode<T> balancedTreeNode = list.poll(); //poll: Retrieves and removes the head (first element) of this list.
+            BalancedTreeNode balancedTreeNode = list.poll(); //poll: Retrieves and removes the head (first element) of this list.
             int level = balancedTreeNode.level;
-            BalancedTreeNode<T> left = balancedTreeNode.getLeft();
-            BalancedTreeNode<T> right = balancedTreeNode.getRight();
+            BalancedTreeNode left = balancedTreeNode.getLeft();
+            BalancedTreeNode right = balancedTreeNode.getRight();
             if (left != null) {
                 left.level = level + 1;
                 list.add(left);
+                listWithAllElements.add(left);
             }
             if (right != null) {
                 right.level = level + 1;
                 list.add(right);
+                listWithAllElements.add(right);
             }
         }
-        return list;
+        return listWithAllElements;
     }
 
     /**
@@ -494,13 +532,13 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
      *
      * @param list in which tree was being saved
      */
-    public void printTreeFromList(LinkedList<BalancedTreeNode<T>> list) {
+    public void printTreeFromList(LinkedList<BalancedTreeNode> list) {
         while (!list.isEmpty()) {
-            BalancedTreeNode<T> balancedTreeNode = list.poll(); //poll: Retrieves and removes the head (first element) of this list.
+            BalancedTreeNode balancedTreeNode = list.poll(); //poll: Retrieves and removes the head (first element) of this list.
             System.out.println(balancedTreeNode);
             int level = balancedTreeNode.level;
-            BalancedTreeNode<T> left = balancedTreeNode.getLeft();
-            BalancedTreeNode<T> right = balancedTreeNode.getRight();
+            BalancedTreeNode left = balancedTreeNode.getLeft();
+            BalancedTreeNode right = balancedTreeNode.getRight();
             if (left != null) {
                 left.level = level + 1;
             }
@@ -508,6 +546,80 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
                 right.level = level + 1;
             }
         }
+    }
+
+
+    private void setPositionAndID() {
+        int maxWidth = (int) Math.pow(2, this.treeDepth) * iconSize;
+
+        this.drawLines = new LinkedList();
+        int i = 0;
+
+        LinkedList<BalancedTreeNode> list = treeAsList();
+
+        while (!list.isEmpty()) {
+            BalancedTreeNode getNode = list.poll();
+
+            int blockSize = maxWidth / (int) Math.pow(2, getNode.treeDepth);
+            int blockStartY = (this.iconSize * 3 / 2) * getNode.treeDepth;
+            int blockStartX;
+
+            if (getNode == root) {
+                blockStartX = maxWidth / 2 - (iconSize / 2);
+                getNode.viewPosition = new ViewPosition(blockStartX, blockStartY, this.iconSize);
+                getNode.setId(i);
+                i++;
+            } else {
+
+                if (getNode == findParentNode(getNode).getLeft()) {
+                    // location for Button
+                    blockStartX = findParentNode(getNode).viewPosition.getMiddleX() - (blockSize / 2) - (iconSize / 2);
+                    getNode.viewPosition = new ViewPosition(blockStartX, blockStartY, this.iconSize);
+                    getNode.setId(i);
+                    i++;
+                } else {
+                    // location for Button
+                    blockStartX = findParentNode(getNode).viewPosition.getMiddleX() + (blockSize / 2) - (iconSize / 2);
+                    getNode.viewPosition = new ViewPosition(blockStartX, blockStartY, this.iconSize);
+                    getNode.setId(i);
+                    i++;
+                }
+
+                if (findParentNode(getNode) != null) {
+                    // location for DrawnLines
+                    int x1 = findParentNode(getNode).viewPosition.getMiddleX();
+                    int y1 = findParentNode(getNode).viewPosition.getY2();
+                    int x2 = getNode.viewPosition.getMiddleX();
+                    int y2 = getNode.viewPosition.getY();
+
+                    this.drawLines.add(new DrawLines(x1, x2, y1, y2));
+                }
+            }
+        }
+        size = i;
+    }
+
+    public ViewPosition getPositionOfNodeByIndex(int id) {
+        BalancedTreeNode<T> node = searchNodeById(id);
+        return node.viewPosition;
+    }
+
+
+    public LinkedList<DrawLines> getDrawLines() {
+        return drawLines;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+
+    public int getWidth() {
+        return (int) Math.pow(2, this.treeDepth) * iconSize;
+    }
+
+    public int getHeight() {
+        return treeDepth * iconSize * 2;
     }
 
     /**
@@ -545,5 +657,6 @@ public class BalancedTree<T extends Comparable<T>> implements Serializable {
             throw new RuntimeException(e);
         }
     }
+
 
 }

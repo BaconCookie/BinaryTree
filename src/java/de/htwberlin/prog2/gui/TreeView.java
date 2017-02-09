@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by laura on 06.02.17.
+ * Created by laura on 06.02.17. // == OLD!
  */
 public class TreeView extends JFrame {
 
@@ -83,7 +83,7 @@ public class TreeView extends JFrame {
         addComponent(butRemove, 0, 1);
         addComponent(textfRemove, 1, 1);
 
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.weightx = 0.0;
