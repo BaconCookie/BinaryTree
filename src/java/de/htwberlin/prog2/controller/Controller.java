@@ -1,5 +1,7 @@
-package de.htwberlin.prog2.datamodel;
+package de.htwberlin.prog2.controller;
 
+import de.htwberlin.prog2.datamodel.BalancedTree;
+import de.htwberlin.prog2.datamodel.BalancedTreeNode;
 import de.htwberlin.prog2.gui.DialogWindow;
 import de.htwberlin.prog2.gui.ViewTree;
 
@@ -25,9 +27,9 @@ import java.util.LinkedList;
  */
 public class Controller {
 
-    private BalancedTree balancedTree = new BalancedTree();
+    private BalancedTree balancedTree;
 
-    private LinkedList<BalancedTreeNode> listOfNodes = new LinkedList<>();
+    private LinkedList<BalancedTreeNode> listOfNodes;
 
     private ViewTree viewTree;
 
@@ -52,12 +54,32 @@ public class Controller {
      */
     public Controller(ViewTree viewTree) {
         this.viewTree = viewTree;
-        this.listOfNodes = new LinkedList<>();
+
+    }
+
+    public void runDefaultTree(){
 
         initDefaultTree();
-        viewTree.setBalancedTree(listOfNodes);
+
+        viewTree.setBalancedTree(balancedTree);
 
         addActionListener();
+    }
+
+    private void initDefaultTree() {
+        BalancedTree tree = new BalancedTree();
+        tree.insert("a");
+        tree.insert("yyy");
+        tree.insert("uio");
+        tree.insert("r");
+        tree.insert("xx");
+        tree.insert("ibb");
+        tree.insert("zzz");
+        tree.insert("ab");
+        tree.insert("uuu");
+        tree.insert("vvv");
+        balancedTree = tree;
+        //listOfNodes = balancedTree.treeAsList();
     }
 
     /**
@@ -79,7 +101,7 @@ public class Controller {
      * </ul>
      */
     void updateView() {
-        this.viewTree.setBalancedTree(listOfNodes);
+        this.viewTree.setBalancedTree(balancedTree);
 
         addActionListener();
     }
@@ -120,12 +142,11 @@ public class Controller {
 
             int nodeId = Integer.parseInt(jButton.getName());
 
-            NodeData nodeData = listOfNodes.get(nodeId);
+            BalancedTreeNode node = listOfNodes.get(nodeId);
 
-            dialogWindow = new DialogWindow(nodeId, nodeData.getContent());
+            dialogWindow = new DialogWindow(nodeId, node.getData());
 
             // add action listener for dialog
-            dialogWindow.addRenameListener(new DialogRenameListener());
             dialogWindow.addAddListener(new DialogAddListener());
             dialogWindow.addRemoveListener(new DialogRemoveListener());
         }
@@ -136,9 +157,7 @@ public class Controller {
      */
     class MenuNewListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-            listOfNodes.clearAll();
-            listOfNodes.add(new NodeData("AAA"));
-
+            balancedTree.clear();
             updateView();
         }
     }
@@ -148,13 +167,16 @@ public class Controller {
      */
     class MenuLoadListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
+
+            balancedTree.loadTree();
+            /*
             JFileChooser chooser = new JFileChooser();
 
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
                     "Json", "json", "JSON");
             chooser.setFileFilter(filter);
 
-            chooser.setSelectedFile(new File("~/BinaryTree.json"));
+            chooser.setSelectedFile(new File("./BalancedTree.json"));
 
             int chooseFile = chooser.showOpenDialog(null);
 
@@ -162,7 +184,7 @@ public class Controller {
                 Load load = new Load(chooser.getSelectedFile());
                 listOfNodes.setBinaryTreeFromList(load.getBinaryListArray());
             }
-
+    */
             updateViewInNewWindow();
         }
     }
@@ -172,6 +194,8 @@ public class Controller {
      */
     class MenuSaveListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
+            balancedTree.saveTree();
+            /*
 
             JFileChooser chooser = new JFileChooser();
 
@@ -179,13 +203,14 @@ public class Controller {
                     "Json", "json", "JSON");
             chooser.setFileFilter(filter);
 
-            chooser.setSelectedFile(new File("~/BinaryTree.json"));
+            chooser.setSelectedFile(new File("./BinaryTree.json"));
 
             int chooseFile = chooser.showSaveDialog(null);
 
             if (chooseFile == JFileChooser.APPROVE_OPTION) {
                 Save save = new Save(chooser.getSelectedFile(), listOfNodes);
             }
+            */
 
             updateView();
 
@@ -209,7 +234,7 @@ public class Controller {
      */
     class DialogRenameListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-            NodeData nodeData = new NodeData(dialogWindow.getText());
+            BalancedTreeNode nodeData = new BalancedTreeNode(dialogWindow.getText());
 
             listOfNodes.set(dialogWindow.getNodeId(), nodeData);
 
@@ -226,7 +251,7 @@ public class Controller {
      */
     class DialogAddListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-            listOfNodes.add(dialogWindow.getNodeId(), new NodeData(dialogWindow.getText()));
+            listOfNodes.add(dialogWindow.getNodeId(), new BalancedTreeNode(dialogWindow.getText()));
 
             dialogWindow.setVisible(false);
 

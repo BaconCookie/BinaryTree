@@ -7,8 +7,9 @@ import java.io.Serializable;
 /**
  * Created by laura on 14.01.17.
  */
-//<String extends Comparable<String>> implements Comparable<BalancedTreeNode<String>>
 public class BalancedTreeNode implements Serializable {
+
+    private static final int MAX_CHARS = 3;
 
     private String data;
     private BalancedTreeNode left;
@@ -18,8 +19,7 @@ public class BalancedTreeNode implements Serializable {
     private int id;
 
     public int level;
-
-    public int treeDepth;
+    public int maxLevel;
     public ViewPosition viewPosition;
 
     public int getId() {
@@ -93,7 +93,11 @@ public class BalancedTreeNode implements Serializable {
     }
 
     public void setData(String data) {
-        this.data = data;
+        if (data.length() > MAX_CHARS) {
+            this.data = data.substring(0, 3);
+        } else {
+            this.data = data;
+        }
     }
 
     public BalancedTreeNode getLeft() {

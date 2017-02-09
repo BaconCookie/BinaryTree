@@ -7,19 +7,19 @@ import static org.junit.Assert.*;
  */
 public class BalancedTreeTest {
 
-    private BalancedTree<String> tree;
-    private BalancedTree<String> smallTree;
-    private BalancedTreeNode<String> expectedNode;
-    private BalancedTreeNode<String> actualNode;
-    private BalancedTreeNode<String> testNode;
-    private BalancedTreeNode<String> testNode2;
+    private BalancedTree tree;
+    private BalancedTree smallTree;
+    private BalancedTreeNode expectedNode;
+    private BalancedTreeNode actualNode;
+    private BalancedTreeNode testNode;
+    private BalancedTreeNode testNode2;
     private boolean actualBool;
 
 
     @org.junit.Before
     public void setUp() throws Exception {
 
-        tree = new BalancedTree<>();
+        tree = new BalancedTree();
         tree.insert("a");
         tree.insert("yyy");
         tree.insert("uio");
@@ -31,7 +31,7 @@ public class BalancedTreeTest {
         tree.insert("uuu");
         tree.insert("vvv");
 
-        smallTree = new BalancedTree<>();
+        smallTree = new BalancedTree();
         smallTree.insert("a");
         smallTree.insert("b");
         smallTree.insert("c");
@@ -70,7 +70,7 @@ public class BalancedTreeTest {
     @org.junit.Test
     public void searchNodeIsInTree() throws Exception {
 
-        expectedNode = new BalancedTreeNode<>("yyy");
+        expectedNode = new BalancedTreeNode("yyy");
         actualNode = tree.getNode("yyy");
 
         assertEquals(expectedNode.getData(), actualNode.getData());
@@ -89,14 +89,14 @@ public class BalancedTreeTest {
     public void removeTheRootNode() throws Exception {
 
         //before removal of root
-        expectedNode = new BalancedTreeNode<>("b");
+        expectedNode = new BalancedTreeNode("b");
         actualNode = smallTree.getRoot();
 
         assertEquals(expectedNode.getData(), actualNode.getData());
 
         //after removal of root
-        expectedNode = new BalancedTreeNode<>("a");
-        testNode = new BalancedTreeNode<>("b");
+        expectedNode = new BalancedTreeNode("a");
+        testNode = new BalancedTreeNode("b");
         actualNode = smallTree.remove(testNode);
         actualNode = smallTree.getRoot();
 
@@ -124,44 +124,44 @@ public class BalancedTreeTest {
     @org.junit.Test
     public void removeALeafNode() throws Exception {
         //before removal of leaf, node is in the tree
-        expectedNode = new BalancedTreeNode<>("ab");
+        expectedNode = new BalancedTreeNode("ab");
         actualNode = tree.getNode("ab");
 
         assertEquals(expectedNode.getData(), actualNode.getData());
 
         //after removal of leaf, node is not in the tree
-        testNode = new BalancedTreeNode<>("ab");
+        testNode = new BalancedTreeNode("ab");
         tree.remove(testNode);
         actualBool = tree.search("ab");
 
         assertFalse(actualBool);
 
         //after removal of leaf, parentNode(=="a") of "ab" is now a leaf
-        testNode = new BalancedTreeNode<>("a");
+        testNode = new BalancedTreeNode("a");
 
         assertTrue(tree.getIfNodeIsLeaf(testNode));
     }
 
     @org.junit.Test
     public void getParentNodeIfParentIsRoot() throws Exception {
-        expectedNode = new BalancedTreeNode<>("uio");
-        testNode = new BalancedTreeNode<>("uuu");
+        expectedNode = new BalancedTreeNode("uio");
+        testNode = new BalancedTreeNode("uuu");
 
         assertEquals(expectedNode.getData(), tree.getParentNode(testNode).getData());
     }
 
     @org.junit.Test
     public void getParentNode() throws Exception {
-        expectedNode = new BalancedTreeNode<>("ibb");
-        testNode = new BalancedTreeNode<>("r");
+        expectedNode = new BalancedTreeNode("ibb");
+        testNode = new BalancedTreeNode("r");
 
         assertEquals(expectedNode.getData(), tree.getParentNode(testNode).getData());
     }
 
     @org.junit.Test
     public void testGetNodeToReplaceRemovedEasy() throws Exception {
-        expectedNode = new BalancedTreeNode<>("vvv");
-        testNode = new BalancedTreeNode<>("xx");
+        expectedNode = new BalancedTreeNode("vvv");
+        testNode = new BalancedTreeNode("xx");
         testNode2 = tree.getNode(testNode.getData());
         actualNode = tree.getNodeToReplaceRemoved(testNode2);
 
@@ -170,8 +170,8 @@ public class BalancedTreeTest {
 
     @org.junit.Test
     public void testGetNodeToReplaceRemoved() throws Exception {
-        expectedNode = new BalancedTreeNode<>("vvv");
-        testNode = new BalancedTreeNode<>("uuu");
+        expectedNode = new BalancedTreeNode("vvv");
+        testNode = new BalancedTreeNode("uuu");
         testNode2 = tree.getNode(testNode.getData());
         actualNode = tree.getNodeToReplaceRemoved(testNode2);
 
@@ -180,8 +180,8 @@ public class BalancedTreeTest {
 
     @org.junit.Test
     public void testGetNodeToReplaceRemovedTwoChildren() throws Exception {
-        expectedNode = new BalancedTreeNode<>("ab");
-        testNode = new BalancedTreeNode<>("ibb");
+        expectedNode = new BalancedTreeNode("ab");
+        testNode = new BalancedTreeNode("ibb");
         testNode2 = tree.getNode(testNode.getData());
         actualNode = tree.getNodeToReplaceRemoved(testNode2);
 
@@ -191,8 +191,8 @@ public class BalancedTreeTest {
 
     @org.junit.Test
     public void testGetNodeToReplaceRemovedTwoChildren2() throws Exception {
-        expectedNode = new BalancedTreeNode<>("vvv");
-        testNode = new BalancedTreeNode<>("yyy");
+        expectedNode = new BalancedTreeNode("vvv");
+        testNode = new BalancedTreeNode("yyy");
         testNode2 = tree.getNode(testNode.getData());
         actualNode = tree.getNodeToReplaceRemoved(testNode2);
 
@@ -201,8 +201,8 @@ public class BalancedTreeTest {
 
         @org.junit.Test
     public void removeAMiddleNodeWithTwoChildren() throws Exception {
-        expectedNode = new BalancedTreeNode<>("vvv");
-        testNode = new BalancedTreeNode<>("yyy");
+        expectedNode = new BalancedTreeNode("vvv");
+        testNode = new BalancedTreeNode("yyy");
         testNode2 = tree.getNode(testNode.getData());
         actualNode = tree.remove(testNode2);
 

@@ -2,26 +2,29 @@ package de.htwberlin.prog2.programm;
 
 import de.htwberlin.prog2.datamodel.BalancedTree;
 import de.htwberlin.prog2.datamodel.BalancedTreeNode;
-import de.htwberlin.prog2.gui.TreeView;
+import de.htwberlin.prog2.controller.Controller;
 import de.htwberlin.prog2.gui.ViewTree;
 
 /**
  * Created by laura on 14.01.17.
  */
-public class Main <T extends Comparable<T>> {
+public class Main {
 
         public static void main(String[] args) {
 
 
             final int defaultWidth = 660;
             final int defaultHeight = 550;
-            ViewTree viewTree = new ViewTree<>(defaultWidth, defaultHeight);
+            ViewTree viewTree = new ViewTree(defaultWidth, defaultHeight);
 
             viewTree.setLocationRelativeTo(null);
 
+            Controller controller = new Controller(viewTree);
+            controller.runDefaultTree();
 
 
-            BalancedTree<String> tree = new BalancedTree<>();
+/*
+            BalancedTree tree = new BalancedTree();
             tree.insert("a");
             tree.insert("yyy");
             tree.insert("uio");
@@ -55,10 +58,10 @@ tree.printTreeFromList(tree.treeAsList());
             tree.remove(tree.getNode("a"));
 */
 
+/*
 
-
-            BalancedTreeNode<String> testNode = new BalancedTreeNode<String>("yyy");
-            BalancedTreeNode<String> nodeToRemove = tree.getNode(testNode.getData());
+            BalancedTreeNode testNode = new BalancedTreeNode("yyy");
+            BalancedTreeNode nodeToRemove = tree.getNode(testNode.getData());
 
             tree.remove(nodeToRemove);
 
@@ -66,7 +69,7 @@ tree.printTreeFromList(tree.treeAsList());
             System.out.println("after remove:");
             tree.printTree();
 
-
+*/
         }
 
 

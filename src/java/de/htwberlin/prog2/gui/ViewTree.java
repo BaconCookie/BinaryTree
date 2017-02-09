@@ -15,11 +15,9 @@ import java.util.LinkedList;
  */
 public class ViewTree extends JFrame {
 
-
-    private LinkedList<BalancedTreeNode> listOfNodes = new LinkedList<>();
     private BalancedTree balancedTree;
+    //private LinkedList<BalancedTreeNode> listOfNodes;
     private TreePanel treePanel;
-
 
     JScrollPane jScrollPane;
 
@@ -87,11 +85,12 @@ public class ViewTree extends JFrame {
     }
 
     private void updateView() {
-        getContentPane().removeAll();
-        getContentPane().invalidate();
 
-        treePanel = new TreePanel();
-        JPanel jPanel = treePanel.getJPanel(listOfNodes);
+        getContentPane().removeAll(); //TODO check what it does
+        getContentPane().invalidate(); //TODO check what it does
+
+        treePanel = new TreePanel(); //TODO NULL POINTER EXC
+        JPanel jPanel = treePanel.getJPanel(balancedTree);
 
         jPanel.setPreferredSize(new Dimension(balancedTree.getWidth(), balancedTree.getHeight()));
         jScrollPane = new JScrollPane(jPanel);
@@ -102,8 +101,9 @@ public class ViewTree extends JFrame {
         repaint();
     }
 
-    public void setBalancedTree(LinkedList<BalancedTreeNode> listOfNodes) {
-        this.listOfNodes = listOfNodes;
+    public void setBalancedTree(BalancedTree balancedTree) {
+        this.balancedTree = balancedTree;
+       // this.listOfNodes = listOfNodes;
         updateView();
     }
 

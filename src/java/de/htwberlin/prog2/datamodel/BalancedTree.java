@@ -2,6 +2,7 @@ package de.htwberlin.prog2.datamodel;
 
 //needed for printTree method
 
+import de.htwberlin.prog2.gui.DrawLines;
 import de.htwberlin.prog2.gui.ViewPosition;
 import de.htwberlin.prog2.io.TreeIO;
 
@@ -16,9 +17,8 @@ import java.util.LinkedList;
 public class BalancedTree implements Serializable {
 
     private BalancedTreeNode root;
-    private LinkedList drawLines = new LinkedList();
-
-    private int treeDepth = getDepthOfTree(); //max level of tree
+    private LinkedList<DrawLines> drawLines; // = new LinkedList();
+    private int depthOfTree; //max level of tree
     private int size;
     private final int iconSize = 80;
 
@@ -30,21 +30,18 @@ public class BalancedTree implements Serializable {
         root = null;
     }
 
-    public int getDepthOfTree() {
-        return depth(root);
-    }
 
     /**
-     * Method to determine depth of node in the tree
+     * Method to determine depthTree of node in the tree
      *
-     * @param node to measure depth of
-     * @return int depth of node in tree
+     * @param node to measure depthTree of
+     * @return int depthTree of node in tree
      */
-    private int depth(BalancedTreeNode node) {
+    private int depthTree(BalancedTreeNode node) {
         if (node == null)
             return 0;
         return node.getDepth();
-        // 1 + Math.max(depth(node.getLeft()), depth(node.getRight()));
+        // 1 + Math.max(depthTree(node.getLeft()), depthTree(node.getRight()));
     }
 
     /**
@@ -55,7 +52,7 @@ public class BalancedTree implements Serializable {
      */
     public BalancedTreeNode insert(String data) {
         root = insert(root, data);
-        setPositionAndID();
+
         switch (balanceNumber(root)) {
             case 1:
                 root = rotateLeft(root);
@@ -66,6 +63,7 @@ public class BalancedTree implements Serializable {
             default:
                 break;
         }
+        setPositionAndID();
         return root;
     }
 
@@ -78,6 +76,7 @@ public class BalancedTree implements Serializable {
      * @return inserted node which will be rebalanced
      */
     private BalancedTreeNode insert(BalancedTreeNode node, String data) {
+        int depthOfNode;
         if (node == null)
             return new BalancedTreeNode(data);
         if (node.getData().compareTo(data) > 0) {
@@ -89,7 +88,14 @@ public class BalancedTree implements Serializable {
             }
         }
         // After insert the new balancedTreeNode, check and rebalance the current tree if necessary.
-        return reBalance(node);
+        reBalance(node);
+
+        // Update depthOfTree if necessary.
+        depthOfNode = depthTree(node);
+        if (node.level  > depthOfTree){
+            depthOfTree = node.level;
+        }
+        return node;
     }
 
     /**
@@ -115,8 +121,8 @@ public class BalancedTree implements Serializable {
     }
 
     private int balanceNumber(BalancedTreeNode node) {
-        int L = depth(node.getLeft());
-        int R = depth(node.getRight());
+        int L = depthTree(node.getLeft());
+        int R = depthTree(node.getRight());
         if (L - R >= 2) {
             return -1;
         } else if (L - R <= -2) {
@@ -200,20 +206,20 @@ public class BalancedTree implements Serializable {
      * @return node with corresponding id
      */
     public BalancedTreeNode searchNodeById(int id) {
-        LinkedList<BalancedTreeNode> list = treeAsList();
-        boolean nodeIsFound = false;
-        BalancedTreeNode searchNode = list.poll();
-        while (nodeIsFound) {
-            if (searchNode.getId() == id) {
 
-                nodeIsFound = true;
-            } else if (searchNode.getId() > 0)
-                searchNode = searchNode.getLeft();
-            else
+        LinkedList<BalancedTreeNode> list = treeAsList();
+        boolean nodeIsNotFound = true;
+        BalancedTreeNode searchNode = list.poll();
+        while (nodeIsNotFound) {
+            if (searchNode.getId() == id) {
+                nodeIsNotFound = false;
+            } else {
                 searchNode = list.poll();
+            }
         }
         return searchNode;
     }
+
 
     /**
      * Method to search a node
@@ -459,13 +465,19 @@ public class BalancedTree implements Serializable {
         this.root = null;
         this.drawLines = new LinkedList<>();
         this.size = 0;
-        this.treeDepth = 0;
+        this.depthOfTree = 0;
         return new BalancedTree();
     }
 
     public BalancedTreeNode getRoot() {
         return this.root;
     }
+
+
+    public int getDepthOfTree() {
+        return depthOfTree;
+    }
+
 
     public String toString() {
         return root.toString();
@@ -476,7 +488,7 @@ public class BalancedTree implements Serializable {
      */
     public void printTree() {
         root.level = 0;
-        LinkedList<BalancedTreeNode> list = new LinkedList<BalancedTreeNode>();
+        LinkedList<BalancedTreeNode> list = new LinkedList<>();
 
         list.add(root);
         while (!list.isEmpty()) {
@@ -549,9 +561,10 @@ public class BalancedTree implements Serializable {
 
 
     private void setPositionAndID() {
-        int maxWidth = (int) Math.pow(2, this.treeDepth) * iconSize;
+        int maxWidth = (int) Math.pow(2, this.depthOfTree) * iconSize;
+        //int depthOfCurrentTree = getDepthOfTree();
 
-        this.drawLines = new LinkedList();
+        this.drawLines = new LinkedList<>();
         int i = 0;
 
         LinkedList<BalancedTreeNode> list = treeAsList();
@@ -559,8 +572,8 @@ public class BalancedTree implements Serializable {
         while (!list.isEmpty()) {
             BalancedTreeNode getNode = list.poll();
 
-            int blockSize = maxWidth / (int) Math.pow(2, getNode.treeDepth);
-            int blockStartY = (this.iconSize * 3 / 2) * getNode.treeDepth;
+            int blockSize = maxWidth / (int) Math.pow(2, depthOfTree);
+            int blockStartY = (this.iconSize * 3 / 2) * depthOfTree;
             int blockStartX;
 
             if (getNode == root) {
@@ -614,11 +627,11 @@ public class BalancedTree implements Serializable {
 
 
     public int getWidth() {
-        return (int) Math.pow(2, this.treeDepth) * iconSize;
+        return (int) Math.pow(2, depthOfTree) * iconSize;
     }
 
     public int getHeight() {
-        return treeDepth * iconSize * 2;
+        return depthOfTree * iconSize * 2;
     }
 
     /**
@@ -627,8 +640,8 @@ public class BalancedTree implements Serializable {
      */
     public void saveTree() {
         try {
-            TreeIO treeIO = new TreeIO<>();
-            String filePath = "./saved.tree";
+            TreeIO treeIO = new TreeIO();
+            String filePath = "./BalancedTree.json";
             treeIO.save(this, filePath);
         } catch (IOException e) {
             System.out.println("Error while saving.");
@@ -644,9 +657,9 @@ public class BalancedTree implements Serializable {
      */
     public BalancedTree loadTree() {
         try {
-            TreeIO treeIO = new TreeIO<>();
+            TreeIO treeIO = new TreeIO();
 
-            String inputPath = "./saved.tree";
+            String inputPath = "./BalancedTree.json";
             BalancedTree loadedTree = treeIO.load(inputPath);
             this.root = loadedTree.getRoot();
             return loadedTree;
