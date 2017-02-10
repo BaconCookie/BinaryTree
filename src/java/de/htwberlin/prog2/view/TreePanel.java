@@ -15,14 +15,10 @@ import java.util.LinkedList;
  */
 public class TreePanel extends JPanel {
 
-    /*
-
-    private JPanel jPanel;
     private BinaryTree binaryTree;
-    //private LinkedList<DrawLines> drawLinesLinkedList;
+    private PositionCalculator positionCalculator;
+    private JButton[] jButtons;
 
-//    LinkedList<BinaryTreeNode> listOfNodes = binaryTree.treeAsList();
-    public JButton[] jButtons;
     private ImageIcon nodeIcon = new ImageIcon(this.getClass().getResource("/img/CircleGreenTransparent.png"));
 
 
@@ -32,75 +28,67 @@ public class TreePanel extends JPanel {
 
     public JPanel getJPanel(BinaryTree binaryTree) {
         this.binaryTree = binaryTree;
-        //this.listOfNodes = listOfNodes;
-        update();
+        updateButtons();
         return this;
     }
 
-    private void addButton(int id) {
-
-        BinaryTreeNode node = binaryTree.searchNodeById(id);
-
-        ViewPosition viewPosition = node.viewPosition;
-
-        this.jButtons[id] = new JButton(node.getData());
-
-        // icon
-        this.jButtons[id].setIcon(nodeIcon);
-
-        // boarder & background
-        this.jButtons[id].setBorderPainted(false);
-        this.jButtons[id].setContentAreaFilled(false);
-
-        // set text font
-        this.jButtons[id].setVerticalTextPosition(SwingConstants.CENTER);
-        this.jButtons[id].setHorizontalTextPosition(SwingConstants.CENTER);
-        this.jButtons[id].setFont(new Font("Arial", Font.PLAIN, 15));
-        this.jButtons[id].setForeground(Color.GRAY);
-
-        // set location
-        this.jButtons[id].setBounds(viewPosition.getX(), viewPosition.getY(), viewPosition.getIconSize(), viewPosition.getIconSize()); // ( x, y, with, high)
-
-        // set id as button name //TODO maybe not needed
-        this.jButtons[id].setName(Integer.toString(id));
-
-        // add  button to panel
-        this.add(this.jButtons[id]);
+    private void updateButtons() {
+        this.removeAll();
+        addButtons();
     }
 
-    private void update() {
-        this.removeAll();
-        binaryTree.getSize();
-        int size = binaryTree.getSize();
-        this.jButtons = new JButton[size];
-        for (int i = 0; i < size; i++) {
-            addButton(i);
+    private void addButtons() {
+        LinkedList<BinaryTreeNode> listOfNodes = binaryTree.treeAsList();
+        int i = 0;
+
+        for (BinaryTreeNode node : listOfNodes) {
+
+            this.jButtons[i] = new JButton(node.getData());
+
+            // icon
+            this.jButtons[i].setIcon(nodeIcon);
+
+            // border & background
+            this.jButtons[i].setBorderPainted(false);
+            this.jButtons[i].setContentAreaFilled(false);
+
+            // set text font
+            this.jButtons[i].setVerticalTextPosition(SwingConstants.CENTER);
+            this.jButtons[i].setHorizontalTextPosition(SwingConstants.CENTER);
+            this.jButtons[i].setFont(new Font("Arial", Font.PLAIN, 15));
+            this.jButtons[i].setForeground(Color.GRAY);
+
+            // set location
+            PositionOfNode positionOfNode = positionCalculator.getSingleNodeFromList(node);
+            this.jButtons[i].setBounds(positionOfNode.getX(), positionOfNode.getY(), positionOfNode.getIconSize(),
+                    positionOfNode.getIconSize()); // ( x, y, width, height)
+
+            // add  button to panel
+            this.add(this.jButtons[i]);
+            i++;
         }
     }
 
     protected void paintComponent(Graphics g) {
-        LinkedList<DrawLines> drawLinesLinkedList = binaryTree.getDrawLines();
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(Color.gray);
         g2.setStroke(new BasicStroke(4));
-        int size = drawLinesLinkedList.size();
 
-        for (int i = 0; i < size; i++) {
-            DrawLines tempLine = drawLinesLinkedList.get(i);
-            g2.draw(new Line2D.Float(tempLine.getX1(), tempLine.getY1(), tempLine.getX2(), tempLine.getY2()));
+        LinkedList<PositionOfLine> positionOfLineList = positionCalculator.getPositionOfLineList();
+
+        for (PositionOfLine line : positionOfLineList) {
+
+            g2.draw(new Line2D.Float(line.getX1(), line.getY1(), line.getX2(), line.getY2()));
 
         }
     }
 
-
     public void addNodeListener(ActionListener listenerForNodeButton) {
-        binaryTree.getSize();
         int size = binaryTree.getSize();
-        //LinkedList<DrawLines> drawLinesLinkedList = binaryTree.getDrawLines();
-        //int size = drawLinesLinkedList.size();
         for (int i = 0; i < size; i++) {
             this.jButtons[i].addActionListener(listenerForNodeButton);
         }
     }
-    */
+
 }

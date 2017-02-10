@@ -8,12 +8,9 @@ import java.io.Serializable;
 //TODO Serializable??
 public class BinaryTreeNode implements Serializable {
 
-    private static final int MAX_CHARS = 3;
-
     private String data;
     private BinaryTreeNode left;
     private BinaryTreeNode right;
-
 
     /**
      * Constructor method of BinaryTreeNode
@@ -31,34 +28,12 @@ public class BinaryTreeNode implements Serializable {
         this.data = data;
     }
 
-    /*
-    /**
-     * Overloaded constructor method of BinaryTreeNode
-     *
-     * @param data  data belonging to this BinaryTreeNode
-     * @param left  left Child of Node
-     * @param right right Child of Node
-     */
-    //TODO could be removed??
-    /*
-    public BinaryTreeNode(String data, BinaryTreeNode left, BinaryTreeNode right) {
-        super();
-        this.data = data;
-        this.left = left;
-        this.right = right;
-    }
-    */
-
     public String getData() {
         return data;
     }
 
     public void setData(String data) {
-        if (data.length() > MAX_CHARS) {
-            this.data = data.substring(0, 3);
-        } else {
-            this.data = data;
-        }
+        this.data = data;
     }
 
     public BinaryTreeNode getLeft() {

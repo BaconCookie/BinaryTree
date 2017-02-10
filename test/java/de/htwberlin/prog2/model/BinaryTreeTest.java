@@ -137,7 +137,7 @@ public class BinaryTreeTest {
         assertFalse(actualBool);
 
         //after removal of leaf, parentNode(=="b") of "c" is now a leaf
-        testNode = new BinaryTreeNode("c");
+        testNode = new BinaryTreeNode("b");
 
         assertTrue(tree.getIfNodeIsLeaf(testNode));
     }

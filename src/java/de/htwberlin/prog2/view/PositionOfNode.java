@@ -3,13 +3,13 @@ package de.htwberlin.prog2.view;
 /**
  * Created by laura on 08.02.17.
  */
-public class ViewPosition {
+public class PositionOfNode {
 
     private int x;
     private int y;
     private int iconSize;
 
-    public ViewPosition(int x, int y, int IconSize) {
+    public PositionOfNode(int x, int y, int IconSize) {
         this.x = x;
         this.y = y;
         this.iconSize = IconSize;

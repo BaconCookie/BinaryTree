@@ -47,15 +47,14 @@ public class TreeView extends JFrame {
 
 
         // Add ActionListener to buttons
-        butRemove.addActionListener(new Action());
-        butSave.addActionListener(new Action());
-        butLoad.addActionListener(new Action());
+
+
         setVisible(true);
     }
 
     private void setupCanvas() {
         cnvs = new BinaryTreeCanvas();
-        cnvs.setSize(1000, 600);
+        cnvs.setSize(1400, 700);
         cnvs.setBackground(Color.black);
     }
 

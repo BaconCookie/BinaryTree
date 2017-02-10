@@ -1,5 +1,7 @@
 package de.htwberlin.prog2.view;
 
+import de.htwberlin.prog2.model.BinaryTreeNode;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -10,52 +12,43 @@ import java.awt.event.ActionListener;
  */
 
 /**
- * Dialog Fenster welches erscheint nachdem ein Knoten gedrückt worden ist.
- * Welches folgenede Optionen liefert.
- * <ul>
- * <li>Knoten hinzufügen</li>
- * <li>Knoten ändern</li>
- * <li>Knoten löschen</li>
- * </ul>
+ * Dialog Window which appears if user clicks on a node
+ *
+ * Shows user two buttons with the options:
+ * "Insert Node"
+ * "Remove Node"
  */
 public class DialogWindow extends JFrame {
 
-    private int nodeId;
-
     private JTextPane jTextPane;
-    private JButton addButton = new JButton("ADD");
-    private JButton removeButton = new JButton("REMOVE");
+    private JButton insertButton = new JButton("Insert Node");
+    private JButton removeButton = new JButton("Remove Node");
 
-    public DialogWindow(int nodeId, String nodeData) {
-        this.nodeId = nodeId;
-
-        this.setTitle(Integer.toString(nodeId) + ": " + nodeData);
-
+    public DialogWindow(BinaryTreeNode node) {
         this.setSize(400, 100);
 
         this.setLayout(new FlowLayout());
 
         this.jTextPane = new JTextPane();
-        this.jTextPane.setText(nodeData);
+        this.jTextPane.setText(node.getData());
         add(this.jTextPane);
-        add(this.addButton);
+        add(this.insertButton);
         add(this.removeButton);
 
         this.setVisible(true);
     }
 
-
     /**
-     * Button Knoten hinzufügen
+     * Button "Insert Node"
      *
-     * @param listenerForAddButton ActionListener
+     * @param listenerForInsertButton ActionListener
      */
-    public void addAddListener(ActionListener listenerForAddButton) {
-        this.addButton.addActionListener(listenerForAddButton);
+    public void addInsertListener(ActionListener listenerForInsertButton) {
+        this.insertButton.addActionListener(listenerForInsertButton);
     }
 
     /**
-     * Button Knoten löschen
+     * Button "Remove Node"
      *
      * @param listenerForRemoveButton ActionListener
      */
@@ -64,20 +57,12 @@ public class DialogWindow extends JFrame {
     }
 
     /**
-     * Gibt das Textfeld des DialogWindows zurück
+     * Gets text from jTextPane
      *
-     * @return Textfeld des Dialogfenster als String
+     * @return text from jTextPane as a String
      */
     public String getText() {
         return this.jTextPane.getText();
     }
 
-    /**
-     * Gibt die Knoten ID des DialogWindow zurück
-     *
-     * @return Knoten ID
-     */
-    public int getNodeId() {
-        return this.nodeId;
-    }
 }

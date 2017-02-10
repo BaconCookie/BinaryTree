@@ -2,10 +2,7 @@ package de.htwberlin.prog2.model;
 
 //needed for printTree method
 
-import de.htwberlin.prog2.dataAccess.TreeIO;
-
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.Serializable; //TODO Serializable??
 import java.util.LinkedList;
 
 
@@ -16,15 +13,10 @@ import java.util.LinkedList;
 public class BinaryTree implements Serializable {
 
     private BinaryTreeNode root;
-
     private int size;
 
 
-    //TODO remove to other package (view)
-    /*
-    private final int iconSize = 80;
-    private LinkedList<DrawLines> drawLines; // = new LinkedList();
-    */
+
 
     /**
      * Constructor of empty tree
@@ -52,7 +44,6 @@ public class BinaryTree implements Serializable {
     }
 
     private int measureDepthOfTree(BinaryTreeNode node) {
-        BinaryTreeNode parentnode;
         int depth = 0;
         while (findParentNode(node) != null) {
             depth++;
@@ -143,7 +134,6 @@ public class BinaryTree implements Serializable {
         //if node is not found return null
         return null;
     }
-
 
     /**
      * Method to remove a node from the tree
@@ -406,19 +396,16 @@ public class BinaryTree implements Serializable {
 
 /*
     //TODO move to other package
-    public ViewPosition getPositionOfNodeByIndex(int id) {
+    public PositionOfNode getPositionOfNodeByIndex(int id) {
         BinaryTreeNode node = searchNodeById(id);
         return node.viewPosition;
     }
 
 
-    public LinkedList<DrawLines> getDrawLines() {
+    public LinkedList<PositionOfLine> getDrawLines() {
         return drawLines;
     } //TODO move to other package
 
-    public int getSize() {
-        return size;
-    }
 
 
     public int getWidth() {
@@ -430,43 +417,10 @@ public class BinaryTree implements Serializable {
     } //TODO move to other package
 */
 
-    /**
-     * Method which saves tree in a file
-     * The file is being placed in the folder of this program.
-     */
-    //TODO move to other package
-    public void saveTree() {
-        try {
-            TreeIO treeIO = new TreeIO();
-            String filePath = "./BinaryTree.json";
-            treeIO.save(this, filePath);
-        } catch (IOException e) {
-            System.out.println("Error while saving.");
-        }
+    public int getSize() {
+        return size;
     }
 
-    /**
-     * Method which loads previously saved tree from a file (./saved.tree).
-     * The file is being loaded from the folder of this program.
-     *
-     * @return Loaded tree
-     * @throws RuntimeException in case of a caught Exception
-     */
-    //TODO move to other package
-    public BinaryTree loadTree() {
-        try {
-            TreeIO treeIO = new TreeIO();
-
-            String inputPath = "./BinaryTree.json";
-            BinaryTree loadedTree = treeIO.load(inputPath);
-            this.root = loadedTree.getRoot();
-            return loadedTree;
-
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error while loading.");
-            throw new RuntimeException(e);
-        }
-    }
 
 
 }

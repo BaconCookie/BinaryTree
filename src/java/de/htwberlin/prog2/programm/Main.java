@@ -28,7 +28,7 @@ public class Main {
             /*
             final int defaultWidth = 660;
             final int defaultHeight = 550;
-            ViewTree viewTree = new ViewTree(defaultWidth, defaultHeight);
+            View viewTree = new View(defaultWidth, defaultHeight);
 
             viewTree.setLocationRelativeTo(null);
 
