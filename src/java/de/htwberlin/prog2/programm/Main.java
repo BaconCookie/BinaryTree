@@ -17,7 +17,7 @@ public class Main {
             smallTree.insert("x");
             smallTree.insert("f");
             smallTree.insert("d");
-            smallTree.printTree();
+
 
             LinkedList list = smallTree.treeAsList();
             System.out.println(list);

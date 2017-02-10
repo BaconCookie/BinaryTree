@@ -15,6 +15,8 @@ import java.util.LinkedList;
  */
 public class TreePanel extends JPanel {
 
+    /*
+
     private JPanel jPanel;
     private BinaryTree binaryTree;
     //private LinkedList<DrawLines> drawLinesLinkedList;
@@ -100,4 +102,5 @@ public class TreePanel extends JPanel {
             this.jButtons[i].addActionListener(listenerForNodeButton);
         }
     }
+    */
 }

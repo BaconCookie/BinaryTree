@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
  * Created by laura on 08.02.17.
  */
 public class ViewTree extends JFrame {
+    /*
 
     private BinaryTree binaryTree;
     //private LinkedList<BinaryTreeNode> listOfNodes;
@@ -124,5 +125,5 @@ public class ViewTree extends JFrame {
     public void addMenuExitListener(ActionListener listenerForMenuExit) {
         jMenuBar.getMenu(0).getItem(3).addActionListener(listenerForMenuExit);
     }
-
+*/
     }

@@ -68,7 +68,7 @@ public class BinaryTree implements Serializable {
      * @return updated root of the tree
      */
     public void insert(String data) {
-        try { //TODO rewrite method
+        try {
             size++;
             if (root == null) {
                 root = new BinaryTreeNode(data);
