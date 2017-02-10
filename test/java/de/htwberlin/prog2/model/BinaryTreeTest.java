@@ -139,7 +139,7 @@ public class BinaryTreeTest {
         //after removal of leaf, parentNode(=="b") of "c" is now a leaf
         testNode = new BinaryTreeNode("b");
 
-        assertTrue(tree.getIfNodeIsLeaf(testNode));
+        assertTrue(smallTree.getIfNodeIsLeaf(testNode));
     }
 
     @org.junit.Test
