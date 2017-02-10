@@ -1,22 +1,20 @@
-package de.htwberlin.prog2.gui;
+package de.htwberlin.prog2.view;
 
 
-import de.htwberlin.prog2.datamodel.BalancedTreeNode;
-import de.htwberlin.prog2.datamodel.BalancedTree;
+import de.htwberlin.prog2.model.BinaryTree;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.LinkedList;
 
 /**
  * Created by laura on 08.02.17.
  */
 public class ViewTree extends JFrame {
 
-    private BalancedTree balancedTree;
-    //private LinkedList<BalancedTreeNode> listOfNodes;
+    private BinaryTree binaryTree;
+    //private LinkedList<BinaryTreeNode> listOfNodes;
     private TreePanel treePanel;
 
     JScrollPane jScrollPane;
@@ -90,9 +88,9 @@ public class ViewTree extends JFrame {
         getContentPane().invalidate(); //TODO check what it does
 
         treePanel = new TreePanel(); //TODO NULL POINTER EXC
-        JPanel jPanel = treePanel.getJPanel(balancedTree);
+        JPanel jPanel = treePanel.getJPanel(binaryTree);
 
-        jPanel.setPreferredSize(new Dimension(balancedTree.getWidth(), balancedTree.getHeight()));
+        jPanel.setPreferredSize(new Dimension(binaryTree.getWidth(), binaryTree.getHeight()));
         jScrollPane = new JScrollPane(jPanel);
         jPanel.setAutoscrolls(true);
         add(jScrollPane);
@@ -101,8 +99,8 @@ public class ViewTree extends JFrame {
         repaint();
     }
 
-    public void setBalancedTree(BalancedTree balancedTree) {
-        this.balancedTree = balancedTree;
+    public void setBinaryTree(BinaryTree binaryTree) {
+        this.binaryTree = binaryTree;
        // this.listOfNodes = listOfNodes;
         updateView();
     }

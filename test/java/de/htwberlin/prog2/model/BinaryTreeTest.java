@@ -1,25 +1,25 @@
-package de.htwberlin.prog2.datamodel;
+package de.htwberlin.prog2.model;
 
 import static org.junit.Assert.*;
 
 /**
  * Created by laura on 04.02.17.
  */
-public class BalancedTreeTest {
+public class BinaryTreeTest {
 
-    private BalancedTree tree;
-    private BalancedTree smallTree;
-    private BalancedTreeNode expectedNode;
-    private BalancedTreeNode actualNode;
-    private BalancedTreeNode testNode;
-    private BalancedTreeNode testNode2;
+    private BinaryTree tree;
+    private BinaryTree smallTree;
+    private BinaryTreeNode expectedNode;
+    private BinaryTreeNode actualNode;
+    private BinaryTreeNode testNode;
+    private BinaryTreeNode testNode2;
     private boolean actualBool;
 
 
     @org.junit.Before
     public void setUp() throws Exception {
 
-        tree = new BalancedTree();
+        tree = new BinaryTree();
         tree.insert("a");
         tree.insert("yyy");
         tree.insert("uio");
@@ -31,7 +31,7 @@ public class BalancedTreeTest {
         tree.insert("uuu");
         tree.insert("vvv");
 
-        smallTree = new BalancedTree();
+        smallTree = new BinaryTree();
         smallTree.insert("a");
         smallTree.insert("b");
         smallTree.insert("c");
@@ -40,8 +40,8 @@ public class BalancedTreeTest {
     @org.junit.After
     public void tearDown() throws Exception {
 
-        tree.clear();
-        smallTree.clear();
+        tree.clearTree();
+        smallTree.clearTree();
     }
 
     @org.junit.Test
@@ -70,7 +70,7 @@ public class BalancedTreeTest {
     @org.junit.Test
     public void searchNodeIsInTree() throws Exception {
 
-        expectedNode = new BalancedTreeNode("yyy");
+        expectedNode = new BinaryTreeNode("yyy");
         actualNode = tree.getNode("yyy");
 
         assertEquals(expectedNode.getData(), actualNode.getData());
@@ -89,14 +89,14 @@ public class BalancedTreeTest {
     public void removeTheRootNode() throws Exception {
 
         //before removal of root
-        expectedNode = new BalancedTreeNode("b");
+        expectedNode = new BinaryTreeNode("b");
         actualNode = smallTree.getRoot();
 
         assertEquals(expectedNode.getData(), actualNode.getData());
 
         //after removal of root
-        expectedNode = new BalancedTreeNode("a");
-        testNode = new BalancedTreeNode("b");
+        expectedNode = new BinaryTreeNode("a");
+        testNode = new BinaryTreeNode("b");
         actualNode = smallTree.remove(testNode);
         actualNode = smallTree.getRoot();
 
@@ -124,44 +124,44 @@ public class BalancedTreeTest {
     @org.junit.Test
     public void removeALeafNode() throws Exception {
         //before removal of leaf, node is in the tree
-        expectedNode = new BalancedTreeNode("ab");
+        expectedNode = new BinaryTreeNode("ab");
         actualNode = tree.getNode("ab");
 
         assertEquals(expectedNode.getData(), actualNode.getData());
 
         //after removal of leaf, node is not in the tree
-        testNode = new BalancedTreeNode("ab");
+        testNode = new BinaryTreeNode("ab");
         tree.remove(testNode);
         actualBool = tree.search("ab");
 
         assertFalse(actualBool);
 
         //after removal of leaf, parentNode(=="a") of "ab" is now a leaf
-        testNode = new BalancedTreeNode("a");
+        testNode = new BinaryTreeNode("a");
 
         assertTrue(tree.getIfNodeIsLeaf(testNode));
     }
 
     @org.junit.Test
     public void getParentNodeIfParentIsRoot() throws Exception {
-        expectedNode = new BalancedTreeNode("uio");
-        testNode = new BalancedTreeNode("uuu");
+        expectedNode = new BinaryTreeNode("uio");
+        testNode = new BinaryTreeNode("uuu");
 
         assertEquals(expectedNode.getData(), tree.getParentNode(testNode).getData());
     }
 
     @org.junit.Test
     public void getParentNode() throws Exception {
-        expectedNode = new BalancedTreeNode("ibb");
-        testNode = new BalancedTreeNode("r");
+        expectedNode = new BinaryTreeNode("ibb");
+        testNode = new BinaryTreeNode("r");
 
         assertEquals(expectedNode.getData(), tree.getParentNode(testNode).getData());
     }
 
     @org.junit.Test
     public void testGetNodeToReplaceRemovedEasy() throws Exception {
-        expectedNode = new BalancedTreeNode("vvv");
-        testNode = new BalancedTreeNode("xx");
+        expectedNode = new BinaryTreeNode("vvv");
+        testNode = new BinaryTreeNode("xx");
         testNode2 = tree.getNode(testNode.getData());
         actualNode = tree.getNodeToReplaceRemoved(testNode2);
 
@@ -170,8 +170,8 @@ public class BalancedTreeTest {
 
     @org.junit.Test
     public void testGetNodeToReplaceRemoved() throws Exception {
-        expectedNode = new BalancedTreeNode("vvv");
-        testNode = new BalancedTreeNode("uuu");
+        expectedNode = new BinaryTreeNode("vvv");
+        testNode = new BinaryTreeNode("uuu");
         testNode2 = tree.getNode(testNode.getData());
         actualNode = tree.getNodeToReplaceRemoved(testNode2);
 
@@ -180,8 +180,8 @@ public class BalancedTreeTest {
 
     @org.junit.Test
     public void testGetNodeToReplaceRemovedTwoChildren() throws Exception {
-        expectedNode = new BalancedTreeNode("ab");
-        testNode = new BalancedTreeNode("ibb");
+        expectedNode = new BinaryTreeNode("ab");
+        testNode = new BinaryTreeNode("ibb");
         testNode2 = tree.getNode(testNode.getData());
         actualNode = tree.getNodeToReplaceRemoved(testNode2);
 
@@ -191,8 +191,8 @@ public class BalancedTreeTest {
 
     @org.junit.Test
     public void testGetNodeToReplaceRemovedTwoChildren2() throws Exception {
-        expectedNode = new BalancedTreeNode("vvv");
-        testNode = new BalancedTreeNode("yyy");
+        expectedNode = new BinaryTreeNode("vvv");
+        testNode = new BinaryTreeNode("yyy");
         testNode2 = tree.getNode(testNode.getData());
         actualNode = tree.getNodeToReplaceRemoved(testNode2);
 
@@ -201,8 +201,8 @@ public class BalancedTreeTest {
 
         @org.junit.Test
     public void removeAMiddleNodeWithTwoChildren() throws Exception {
-        expectedNode = new BalancedTreeNode("vvv");
-        testNode = new BalancedTreeNode("yyy");
+        expectedNode = new BinaryTreeNode("vvv");
+        testNode = new BinaryTreeNode("yyy");
         testNode2 = tree.getNode(testNode.getData());
         actualNode = tree.remove(testNode2);
 
@@ -211,9 +211,9 @@ public class BalancedTreeTest {
     }
 /*
     @org.junit.Test
-    public void clear() throws Exception {
+    public void clearTree() throws Exception {
         int expectedDepth = 0;
-        int actualDepth = tree.clear().getDepthOfTree();
+        int actualDepth = tree.clearTree().getDepthOfTree();
 
         assertEquals(expectedDepth, actualDepth);
     }

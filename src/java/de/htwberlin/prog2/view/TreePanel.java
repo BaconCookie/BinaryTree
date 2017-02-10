@@ -1,8 +1,8 @@
-package de.htwberlin.prog2.gui;
+package de.htwberlin.prog2.view;
 
 
-import de.htwberlin.prog2.datamodel.BalancedTree;
-import de.htwberlin.prog2.datamodel.BalancedTreeNode;
+import de.htwberlin.prog2.model.BinaryTree;
+import de.htwberlin.prog2.model.BinaryTreeNode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +16,10 @@ import java.util.LinkedList;
 public class TreePanel extends JPanel {
 
     private JPanel jPanel;
-    private BalancedTree balancedTree;
+    private BinaryTree binaryTree;
     //private LinkedList<DrawLines> drawLinesLinkedList;
 
-//    LinkedList<BalancedTreeNode> listOfNodes = balancedTree.treeAsList();
+//    LinkedList<BinaryTreeNode> listOfNodes = binaryTree.treeAsList();
     public JButton[] jButtons;
     private ImageIcon nodeIcon = new ImageIcon(this.getClass().getResource("/img/CircleGreenTransparent.png"));
 
@@ -28,8 +28,8 @@ public class TreePanel extends JPanel {
         this.setLayout(null);
     }
 
-    public JPanel getJPanel(BalancedTree balancedTree) {
-        this.balancedTree = balancedTree;
+    public JPanel getJPanel(BinaryTree binaryTree) {
+        this.binaryTree = binaryTree;
         //this.listOfNodes = listOfNodes;
         update();
         return this;
@@ -37,7 +37,7 @@ public class TreePanel extends JPanel {
 
     private void addButton(int id) {
 
-        BalancedTreeNode node = balancedTree.searchNodeById(id);
+        BinaryTreeNode node = binaryTree.searchNodeById(id);
 
         ViewPosition viewPosition = node.viewPosition;
 
@@ -68,8 +68,8 @@ public class TreePanel extends JPanel {
 
     private void update() {
         this.removeAll();
-        balancedTree.getSize();
-        int size = balancedTree.getSize();
+        binaryTree.getSize();
+        int size = binaryTree.getSize();
         this.jButtons = new JButton[size];
         for (int i = 0; i < size; i++) {
             addButton(i);
@@ -77,7 +77,7 @@ public class TreePanel extends JPanel {
     }
 
     protected void paintComponent(Graphics g) {
-        LinkedList<DrawLines> drawLinesLinkedList = balancedTree.getDrawLines();
+        LinkedList<DrawLines> drawLinesLinkedList = binaryTree.getDrawLines();
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(4));
@@ -92,9 +92,9 @@ public class TreePanel extends JPanel {
 
 
     public void addNodeListener(ActionListener listenerForNodeButton) {
-        balancedTree.getSize();
-        int size = balancedTree.getSize();
-        //LinkedList<DrawLines> drawLinesLinkedList = balancedTree.getDrawLines();
+        binaryTree.getSize();
+        int size = binaryTree.getSize();
+        //LinkedList<DrawLines> drawLinesLinkedList = binaryTree.getDrawLines();
         //int size = drawLinesLinkedList.size();
         for (int i = 0; i < size; i++) {
             this.jButtons[i].addActionListener(listenerForNodeButton);

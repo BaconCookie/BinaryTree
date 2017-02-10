@@ -1,4 +1,4 @@
-package de.htwberlin.prog2.gui;
+package de.htwberlin.prog2.view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +30,7 @@ public class TreeView extends JFrame {
 
     public TreeView() {
         //Window
-        setTitle("BalancedTree by Laura");
+        setTitle("BinaryTree by Laura");
         setSize(1400, 700); //width, height
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //If JFrame instead of WinConst IntelliJ complains
 

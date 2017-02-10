@@ -1,10 +1,8 @@
-package de.htwberlin.prog2.io;
+package de.htwberlin.prog2.dataAccess;
 
-import de.htwberlin.prog2.datamodel.BalancedTree;
+import de.htwberlin.prog2.model.BinaryTree;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by laura on 01.01.17.
@@ -21,7 +19,7 @@ public class TreeIO {
          * @param outputPath path where the polynomial is saved
          * @throws IOException to a higher level because the Exception can't be handled here
          */
-        public void save(BalancedTree treeToSave, String outputPath) throws IOException {
+        public void save(BinaryTree treeToSave, String outputPath) throws IOException {
             FileOutputStream fileOutput = new FileOutputStream(outputPath);
             ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
             objectOutput.writeObject(treeToSave);
@@ -33,18 +31,18 @@ public class TreeIO {
          * @param inputPath location where the file can be found
          * @return treeToLoad if successful
          * @throws IOException            to a higher level because the Exception can't be handled here
-         * @throws ClassNotFoundException in case he read Value is not of type BalancedTree
+         * @throws ClassNotFoundException in case he read Value is not of type BinaryTree
          */
-        public BalancedTree load(String inputPath) throws IOException, ClassNotFoundException {
+        public BinaryTree load(String inputPath) throws IOException, ClassNotFoundException {
             FileInputStream fileInput = new FileInputStream(inputPath);
             ObjectInputStream objectInput = new ObjectInputStream(fileInput);
-            BalancedTree treeToLoad = null;
+            BinaryTree treeToLoad = null;
             Object readObject = objectInput.readObject();
 
-            if (readObject instanceof BalancedTree) {
-                treeToLoad = (BalancedTree) readObject;
+            if (readObject instanceof BinaryTree) {
+                treeToLoad = (BinaryTree) readObject;
             } else {
-                throw new ClassNotFoundException("The read Value is not of type BalancedTree.");
+                throw new ClassNotFoundException("The read Value is not of type BinaryTree.");
             }
 
             return treeToLoad;

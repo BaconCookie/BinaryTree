@@ -1,4 +1,4 @@
-package de.htwberlin.prog2.gui;
+package de.htwberlin.prog2.view;
 
 import java.awt.*;
 

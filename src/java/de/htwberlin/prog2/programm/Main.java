@@ -1,9 +1,6 @@
 package de.htwberlin.prog2.programm;
 
-import de.htwberlin.prog2.datamodel.BalancedTree;
-import de.htwberlin.prog2.datamodel.BalancedTreeNode;
-import de.htwberlin.prog2.controller.Controller;
-import de.htwberlin.prog2.gui.ViewTree;
+import de.htwberlin.prog2.model.BinaryTree;
 
 import java.util.LinkedList;
 
@@ -14,7 +11,7 @@ public class Main {
 
         public static void main(String[] args) {
 
-            BalancedTree smallTree = new BalancedTree();
+            BinaryTree smallTree = new BinaryTree();
             smallTree.insert("z");
             smallTree.insert("y");
             smallTree.insert("x");
@@ -40,7 +37,7 @@ public class Main {
 
 */
 /*
-            BalancedTree tree = new BalancedTree();
+            BinaryTree tree = new BinaryTree();
             tree.insert("a");
             tree.insert("yyy");
             tree.insert("uio");
@@ -54,7 +51,7 @@ public class Main {
             tree.printTree();
 
          /*   tree.saveTree();
-            tree.clear();
+            tree.clearTree();
             tree.loadTree();
             tree.printTree();
             */
@@ -62,7 +59,7 @@ public class Main {
 
 
 /*
-            BalancedTree<String> smallTree = new BalancedTree<>();
+            BinaryTree<String> smallTree = new BinaryTree<>();
             smallTree.insert("a");
             smallTree.insert("b");
             smallTree.insert("c");
@@ -76,8 +73,8 @@ tree.printTreeFromList(tree.treeAsList());
 
 /*
 
-            BalancedTreeNode testNode = new BalancedTreeNode("yyy");
-            BalancedTreeNode nodeToRemove = tree.getNode(testNode.getData());
+            BinaryTreeNode testNode = new BinaryTreeNode("yyy");
+            BinaryTreeNode nodeToRemove = tree.getNode(testNode.getData());
 
             tree.remove(nodeToRemove);
 

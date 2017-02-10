@@ -1,4 +1,4 @@
-package de.htwberlin.prog2.datamodel;
+package de.htwberlin.prog2.model;
 
 /**
  * Created by laura on 03.02.17.

@@ -1,15 +1,13 @@
 package de.htwberlin.prog2.controller;
 
-import de.htwberlin.prog2.datamodel.BalancedTree;
-import de.htwberlin.prog2.datamodel.BalancedTreeNode;
-import de.htwberlin.prog2.gui.DialogWindow;
-import de.htwberlin.prog2.gui.ViewTree;
+import de.htwberlin.prog2.model.BinaryTree;
+import de.htwberlin.prog2.model.BinaryTreeNode;
+import de.htwberlin.prog2.view.DialogWindow;
+import de.htwberlin.prog2.view.ViewTree;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.LinkedList;
 /**
  * Created by laura on 01.01.17.
@@ -27,9 +25,9 @@ import java.util.LinkedList;
  */
 public class Controller {
 
-    private BalancedTree balancedTree;
+    private BinaryTree binaryTree;
 
-    private LinkedList<BalancedTreeNode> listOfNodes;
+    private LinkedList<BinaryTreeNode> listOfNodes;
 
     private ViewTree viewTree;
 
@@ -61,13 +59,13 @@ public class Controller {
 
         initDefaultTree();
 
-        viewTree.setBalancedTree(balancedTree);
+        viewTree.setBinaryTree(binaryTree);
 
         addActionListener();
     }
 
     private void initDefaultTree() {
-        BalancedTree tree = new BalancedTree();
+        BinaryTree tree = new BinaryTree();
         tree.insert("a");
         tree.insert("yyy");
         tree.insert("uio");
@@ -78,8 +76,8 @@ public class Controller {
         tree.insert("ab");
         tree.insert("uuu");
         tree.insert("vvv");
-        balancedTree = tree;
-        //listOfNodes = balancedTree.treeAsList();
+        binaryTree = tree;
+        //listOfNodes = binaryTree.treeAsList();
     }
 
     /**
@@ -101,7 +99,7 @@ public class Controller {
      * </ul>
      */
     void updateView() {
-        this.viewTree.setBalancedTree(balancedTree);
+        this.viewTree.setBinaryTree(binaryTree);
 
         addActionListener();
     }
@@ -142,7 +140,7 @@ public class Controller {
 
             int nodeId = Integer.parseInt(jButton.getName());
 
-            BalancedTreeNode node = listOfNodes.get(nodeId);
+            BinaryTreeNode node = listOfNodes.get(nodeId);
 
             dialogWindow = new DialogWindow(nodeId, node.getData());
 
@@ -157,7 +155,7 @@ public class Controller {
      */
     class MenuNewListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-            balancedTree.clear();
+            binaryTree.clearTree();
             updateView();
         }
     }
@@ -168,7 +166,7 @@ public class Controller {
     class MenuLoadListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
 
-            balancedTree.loadTree();
+            binaryTree.loadTree();
             /*
             JFileChooser chooser = new JFileChooser();
 
@@ -176,7 +174,7 @@ public class Controller {
                     "Json", "json", "JSON");
             chooser.setFileFilter(filter);
 
-            chooser.setSelectedFile(new File("./BalancedTree.json"));
+            chooser.setSelectedFile(new File("./BinaryTree.json"));
 
             int chooseFile = chooser.showOpenDialog(null);
 
@@ -194,7 +192,7 @@ public class Controller {
      */
     class MenuSaveListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-            balancedTree.saveTree();
+            binaryTree.saveTree();
             /*
 
             JFileChooser chooser = new JFileChooser();
@@ -234,7 +232,7 @@ public class Controller {
      */
     class DialogRenameListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-            BalancedTreeNode nodeData = new BalancedTreeNode(dialogWindow.getText());
+            BinaryTreeNode nodeData = new BinaryTreeNode(dialogWindow.getText());
 
             listOfNodes.set(dialogWindow.getNodeId(), nodeData);
 
@@ -251,7 +249,7 @@ public class Controller {
      */
     class DialogAddListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-            listOfNodes.add(dialogWindow.getNodeId(), new BalancedTreeNode(dialogWindow.getText()));
+            listOfNodes.add(dialogWindow.getNodeId(), new BinaryTreeNode(dialogWindow.getText()));
 
             dialogWindow.setVisible(false);
 
