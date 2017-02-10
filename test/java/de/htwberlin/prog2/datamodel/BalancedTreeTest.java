@@ -209,7 +209,7 @@ public class BalancedTreeTest {
      //   assertEquals(expectedNode.getData(), actualNode.getData());
 
     }
-
+/*
     @org.junit.Test
     public void clear() throws Exception {
         int expectedDepth = 0;
@@ -217,4 +217,5 @@ public class BalancedTreeTest {
 
         assertEquals(expectedDepth, actualDepth);
     }
+*/
 }

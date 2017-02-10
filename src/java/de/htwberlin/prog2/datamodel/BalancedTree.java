@@ -63,7 +63,6 @@ public class BalancedTree implements Serializable {
             default:
                 break;
         }
-        setPositionAndID();
         return root;
     }
 
@@ -71,31 +70,31 @@ public class BalancedTree implements Serializable {
      * Overloading insert() method to insert a new node in relation to an already existing node
      * Rebalances tree if necessary
      *
-     * @param node already existing node
+     * @param lastNode already existing node
      * @param data belonging to new node
      * @return inserted node which will be rebalanced
      */
-    private BalancedTreeNode insert(BalancedTreeNode node, String data) {
+    private BalancedTreeNode insert(BalancedTreeNode lastNode, String data) {
         int depthOfNode;
-        if (node == null)
+        if (lastNode == null)
             return new BalancedTreeNode(data);
-        if (node.getData().compareTo(data) > 0) {
-            node = new BalancedTreeNode(node.getData(), insert(node.getLeft(), data),
-                    node.getRight());
+        if (lastNode.getData().compareTo(data) > 0) {
+            lastNode = new BalancedTreeNode(lastNode.getData(), insert(lastNode.getLeft(), data),
+                    lastNode.getRight());
         } else {
-            if (node.getData().compareTo(data) < 0) {
-                node = new BalancedTreeNode(node.getData(), node.getLeft(), insert(node.getRight(), data));
+            if (lastNode.getData().compareTo(data) < 0) {
+                lastNode = new BalancedTreeNode(lastNode.getData(), lastNode.getLeft(), insert(lastNode.getRight(), data));
             }
         }
         // After insert the new balancedTreeNode, check and rebalance the current tree if necessary.
-        reBalance(node);
+      //  reBalance(node);
 
         // Update depthOfTree if necessary.
-        depthOfNode = depthTree(node);
-        if (node.level  > depthOfTree){
-            depthOfTree = node.level;
-        }
-        return node;
+       // depthOfNode = depthTree(node);
+       // if (node.level  > depthOfTree){
+         //   depthOfTree = node.level;
+       // }
+        return reBalance(lastNode);
     }
 
     /**
@@ -465,17 +464,12 @@ public class BalancedTree implements Serializable {
         this.root = null;
         this.drawLines = new LinkedList<>();
         this.size = 0;
-        this.depthOfTree = 0;
+        //this.depthOfTree = 0;
         return new BalancedTree();
     }
 
     public BalancedTreeNode getRoot() {
         return this.root;
-    }
-
-
-    public int getDepthOfTree() {
-        return depthOfTree;
     }
 
 
@@ -510,6 +504,7 @@ public class BalancedTree implements Serializable {
 
     /**
      * Method to put tree in a LinkedList of <BalancedTreeNode>
+     * Acts like breadth first search
      *
      * @return list of nodes
      */
@@ -525,7 +520,7 @@ public class BalancedTree implements Serializable {
             BalancedTreeNode left = balancedTreeNode.getLeft();
             BalancedTreeNode right = balancedTreeNode.getRight();
             if (left != null) {
-                left.level = level + 1;
+                left.level = + 1;
                 list.add(left);
                 listWithAllElements.add(left);
             }
@@ -560,55 +555,11 @@ public class BalancedTree implements Serializable {
     }
 
 
-    private void setPositionAndID() {
-        int maxWidth = (int) Math.pow(2, this.depthOfTree) * iconSize;
-        //int depthOfCurrentTree = getDepthOfTree();
-
-        this.drawLines = new LinkedList<>();
-        int i = 0;
-
+    public int getDepthOfTree(){
         LinkedList<BalancedTreeNode> list = treeAsList();
-
-        while (!list.isEmpty()) {
-            BalancedTreeNode getNode = list.poll();
-
-            int blockSize = maxWidth / (int) Math.pow(2, depthOfTree);
-            int blockStartY = (this.iconSize * 3 / 2) * depthOfTree;
-            int blockStartX;
-
-            if (getNode == root) {
-                blockStartX = maxWidth / 2 - (iconSize / 2);
-                getNode.viewPosition = new ViewPosition(blockStartX, blockStartY, this.iconSize);
-                getNode.setId(i);
-                i++;
-            } else {
-
-                if (getNode == findParentNode(getNode).getLeft()) {
-                    // location for Button
-                    blockStartX = findParentNode(getNode).viewPosition.getMiddleX() - (blockSize / 2) - (iconSize / 2);
-                    getNode.viewPosition = new ViewPosition(blockStartX, blockStartY, this.iconSize);
-                    getNode.setId(i);
-                    i++;
-                } else {
-                    // location for Button
-                    blockStartX = findParentNode(getNode).viewPosition.getMiddleX() + (blockSize / 2) - (iconSize / 2);
-                    getNode.viewPosition = new ViewPosition(blockStartX, blockStartY, this.iconSize);
-                    getNode.setId(i);
-                    i++;
-                }
-
-                if (findParentNode(getNode) != null) {
-                    // location for DrawnLines
-                    int x1 = findParentNode(getNode).viewPosition.getMiddleX();
-                    int y1 = findParentNode(getNode).viewPosition.getY2();
-                    int x2 = getNode.viewPosition.getMiddleX();
-                    int y2 = getNode.viewPosition.getY();
-
-                    this.drawLines.add(new DrawLines(x1, x2, y1, y2));
-                }
-            }
-        }
-        size = i;
+        BalancedTreeNode nodeWithMaxIndex = list.getLast();
+        int depthOfTree = nodeWithMaxIndex.getDepth();
+        return depthOfTree;
     }
 
     public ViewPosition getPositionOfNodeByIndex(int id) {

@@ -5,6 +5,8 @@ import de.htwberlin.prog2.datamodel.BalancedTreeNode;
 import de.htwberlin.prog2.controller.Controller;
 import de.htwberlin.prog2.gui.ViewTree;
 
+import java.util.LinkedList;
+
 /**
  * Created by laura on 14.01.17.
  */
@@ -12,7 +14,21 @@ public class Main {
 
         public static void main(String[] args) {
 
+            BalancedTree smallTree = new BalancedTree();
+            smallTree.insert("z");
+            smallTree.insert("y");
+            smallTree.insert("x");
+            smallTree.insert("f");
+            smallTree.insert("d");
+            smallTree.printTree();
 
+            LinkedList list = smallTree.treeAsList();
+            System.out.println(list);
+
+
+            //smallTree.printTree();
+
+            /*
             final int defaultWidth = 660;
             final int defaultHeight = 550;
             ViewTree viewTree = new ViewTree(defaultWidth, defaultHeight);
@@ -22,7 +38,7 @@ public class Main {
             Controller controller = new Controller(viewTree);
             controller.runDefaultTree();
 
-
+*/
 /*
             BalancedTree tree = new BalancedTree();
             tree.insert("a");

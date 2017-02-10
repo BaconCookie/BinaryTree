@@ -78,14 +78,6 @@ public class BalancedTreeNode implements Serializable {
         this.data = data;
         this.left = left;
         this.right = right;
-        if (left == null && right == null)
-            setDepth(1);
-        else if (left == null)
-            setDepth(right.getDepth() + 1);
-        else if (right == null)
-            setDepth(left.getDepth() + 1);
-        else
-            setDepth(Math.max(left.getDepth(), right.getDepth()) + 1);
     }
 
     public String getData() {
