@@ -48,7 +48,7 @@ public class BinaryTree implements Serializable {
         if (node == root) {
             return depth;
         } else {
-            while (findParentNode(node) != null) {
+            while (root != node) {
                 depth++;
                 node = findParentNode(node);
             }
@@ -229,7 +229,7 @@ public class BinaryTree implements Serializable {
         MoveDirection whereDidTheChildGo;
 
         //childNode != root, double checking for security
-        if (childNode.getData().compareTo(root.getData()) == 0) {
+        if (childNode == root) {
             throw new IllegalArgumentException("If childNode == root, then it has no parent!");
         } else {
 

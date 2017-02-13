@@ -35,6 +35,8 @@ public class DialogWindow extends JFrame {
         this.jTextPane = new JTextPane();
         add(this.jTextPane);
         insertButton = new JButton("Insert Node");
+        removeButton = new JButton("Remove Node");
+
         add(this.insertButton);
 
         this.setVisible(true);

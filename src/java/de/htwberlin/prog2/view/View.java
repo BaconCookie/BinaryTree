@@ -31,8 +31,8 @@ public class View extends JFrame {
         setTitle("BinaryTree by Laura");
         setSize(1400, 700); //width, height
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //If JFrame instead of WinConst IntelliJ complains
-
         createMenuBar();
+        dialogWindow = new DialogWindow();
 
 
 //setupJPanel
@@ -135,4 +135,7 @@ public class View extends JFrame {
         jMenuBar.getMenu(0).getItem(3).addActionListener(listenerForMenuExit);
     }
 
+    public DialogWindow getDialogWindow() {
+        return dialogWindow;
+    }
 }

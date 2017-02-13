@@ -50,11 +50,12 @@ public class Controller {
      */
     public Controller(View view) {
         this.view = view;
+        dialogWindow = view.getDialogWindow();
     }
 
     public void runTree() {
         if (binaryTree != null) {
-         //   positionCalculator.setPositions(binaryTree);
+            //   positionCalculator.setPositions(binaryTree);
             this.view.setBinaryTree(binaryTree);
             addAllActionListener();
         } else {
@@ -245,9 +246,8 @@ public class Controller {
      */
     private class DialogInsertListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-
+            //DialogWindow dialogWindow = (DialogWindow) ((Component) ((Container) ((JPanel) ((JButton) arg0.getSource()).getParent()).getParent()).getParent()).getParent();
             insertInTree(dialogWindow.getText());
-
             dialogWindow.setVisible(false);
         }
     }
