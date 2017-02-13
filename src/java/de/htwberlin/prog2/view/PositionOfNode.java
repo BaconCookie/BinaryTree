@@ -1,15 +1,19 @@
 package de.htwberlin.prog2.view;
 
+import de.htwberlin.prog2.model.BinaryTreeNode;
+
 /**
  * Created by laura on 08.02.17.
  */
 public class PositionOfNode {
 
+    private BinaryTreeNode node;
     private int x;
     private int y;
     private int iconSize;
 
-    public PositionOfNode(int x, int y, int IconSize) {
+    public PositionOfNode(BinaryTreeNode node, int x, int y, int IconSize) {
+        this.node = node;
         this.x = x;
         this.y = y;
         this.iconSize = IconSize;
@@ -33,6 +37,10 @@ public class PositionOfNode {
 
     public int getIconSize() {
         return this.iconSize;
+    }
+
+    public BinaryTreeNode getNodeFromList() {
+        return this.node;
     }
 
 }

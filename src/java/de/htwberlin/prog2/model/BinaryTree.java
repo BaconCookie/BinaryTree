@@ -45,11 +45,15 @@ public class BinaryTree implements Serializable {
 
     private int measureDepthOfTree(BinaryTreeNode node) {
         int depth = 0;
-        while (findParentNode(node) != null) {
-            depth++;
-            node = findParentNode(node);
+        if (node == root) {
+            return depth;
+        } else {
+            while (findParentNode(node) != null) {
+                depth++;
+                node = findParentNode(node);
+            }
+            return depth;
         }
-        return depth;
     }
 
     /**
@@ -361,11 +365,24 @@ public class BinaryTree implements Serializable {
         return this.root;
     }
 
-
+/*
     public String toString() {
         return root.toString();
     }
-
+*/
+    @Override
+    public java.lang.String toString() {
+        BinaryTreeNode node = root;
+        if (node.getLeft() != null && node.getRight() != null) {
+            return "Node: " + node.getData() + " || left " + node.getLeft().getData()
+                    + " | right " + node.getRight().getData();
+        } else if (node.getLeft() != null && node.getRight() == null) {
+            return "Node: " + node.getData() + " || left " + node.getLeft().getData();
+        } else if (node.getLeft() == null && node.getRight() != null) {
+            return "Node: " + node.getData() + " || right " + node.getRight().getData();
+        }
+        return "Node: " + node.getData();
+    }
     /**
      * Method to put tree in a LinkedList of <BinaryTreeNode>
      * Acts like breadth first search
@@ -393,34 +410,8 @@ public class BinaryTree implements Serializable {
         return listWithAllElements;
     }
 
-
-/*
-    //TODO move to other package
-    public PositionOfNode getPositionOfNodeByIndex(int id) {
-        BinaryTreeNode node = searchNodeById(id);
-        return node.viewPosition;
-    }
-
-
-    public LinkedList<PositionOfLine> getDrawLines() {
-        return drawLines;
-    } //TODO move to other package
-
-
-
-    public int getWidth() {
-        return (int) Math.pow(2, depthOfTree) * iconSize;
-    } //TODO move to other package
-
-    public int getHeight() {
-        return depthOfTree * iconSize * 2;
-    } //TODO move to other package
-*/
-
     public int getSize() {
         return size;
     }
-
-
 
 }

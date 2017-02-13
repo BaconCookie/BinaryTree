@@ -21,22 +21,45 @@ import java.awt.event.ActionListener;
 public class DialogWindow extends JFrame {
 
     private JTextPane jTextPane;
-    private JButton insertButton = new JButton("Insert Node");
-    private JButton removeButton = new JButton("Remove Node");
+    private JButton insertButton;
+    private JButton removeButton;
+
+    //public DialogWindow(){}
+
+    public DialogWindow(){
+        this.setSize(400, 100);
+        this.setTitle("Insert the first node");
+
+        this.setLayout(new FlowLayout());
+
+        this.jTextPane = new JTextPane();
+        add(this.jTextPane);
+        insertButton = new JButton("Insert Node");
+        add(this.insertButton);
+
+        this.setVisible(true);
+    }
 
     public DialogWindow(BinaryTreeNode node) {
         this.setSize(400, 100);
+        this.setTitle("Insert or remove a node");
 
         this.setLayout(new FlowLayout());
 
         this.jTextPane = new JTextPane();
         this.jTextPane.setText(node.getData());
         add(this.jTextPane);
+
+        insertButton = new JButton("Insert Node");
         add(this.insertButton);
+
+        removeButton = new JButton("Remove Node");
         add(this.removeButton);
 
         this.setVisible(true);
     }
+
+
 
     /**
      * Button "Insert Node"

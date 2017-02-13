@@ -1,6 +1,8 @@
 package de.htwberlin.prog2.programm;
 
+import de.htwberlin.prog2.controller.Controller;
 import de.htwberlin.prog2.model.BinaryTree;
+import de.htwberlin.prog2.view.View;
 
 import java.util.LinkedList;
 
@@ -11,6 +13,14 @@ public class Main {
 
         public static void main(String[] args) {
 
+            View viewTree = new View();
+            viewTree.setLocationRelativeTo(null);
+
+            Controller controller = new Controller(viewTree);
+            controller.runTree();
+
+
+            /*
             BinaryTree smallTree = new BinaryTree();
             smallTree.insert("z");
             smallTree.insert("y");
@@ -26,14 +36,7 @@ public class Main {
             //smallTree.printTree();
 
             /*
-            final int defaultWidth = 660;
-            final int defaultHeight = 550;
-            View viewTree = new View(defaultWidth, defaultHeight);
 
-            viewTree.setLocationRelativeTo(null);
-
-            Controller controller = new Controller(viewTree);
-            controller.runDefaultTree();
 
 */
 /*

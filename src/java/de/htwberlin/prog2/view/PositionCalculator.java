@@ -20,8 +20,11 @@ public class PositionCalculator {
     }
 
     public void setPositions(BinaryTree binaryTree) {
-        this.positionOfLineList.clear();
-        this.positionOfNodeList.clear();
+        positionOfLineList = new LinkedList<>();
+        positionOfNodeList = new LinkedList<>();
+
+        //this.positionOfLineList.clear();
+        //this.positionOfNodeList.clear();
 
         LinkedList<BinaryTreeNode> list = binaryTree.treeAsList();
 
@@ -38,7 +41,7 @@ public class PositionCalculator {
 
             if (node == binaryTree.getRoot()) {
                 blockStartX = maxWidth / 2 - (iconSize / 2);
-                this.positionOfNodeList.add(i, new PositionOfNode(blockStartX, blockStartY, this.iconSize));
+                this.positionOfNodeList.add(new PositionOfNode(node, blockStartX, blockStartY, this.iconSize));
                 i++;
             } else {
 
@@ -46,13 +49,13 @@ public class PositionCalculator {
                     // location for Button
                     PositionOfNode positionOfParentNode = getSingleNodeFromList(binaryTree.getParentNode(node));
                     blockStartX = positionOfParentNode.getMiddleX() - (blockSize / 2) - (iconSize / 2);
-                    this.positionOfNodeList.add(i, new PositionOfNode(blockStartX, blockStartY, this.iconSize));
+                    this.positionOfNodeList.add(i, new PositionOfNode(node, blockStartX, blockStartY, this.iconSize));
                     i++;
                 } else {
                     // location for Button
                     PositionOfNode positionOfParentNode = getSingleNodeFromList(binaryTree.getParentNode(node));
                     blockStartX = positionOfParentNode.getMiddleX() + (blockSize / 2) - (iconSize / 2);
-                    this.positionOfNodeList.add(i, new PositionOfNode(blockStartX, blockStartY, this.iconSize));
+                    this.positionOfNodeList.add(i, new PositionOfNode(node, blockStartX, blockStartY, this.iconSize));
                     i++;
                 }
 
@@ -73,8 +76,13 @@ public class PositionCalculator {
     }
 
     public PositionOfNode getSingleNodeFromList(BinaryTreeNode node) {
-        int indexNode = positionOfNodeList.indexOf(node);
-        return positionOfNodeList.get(indexNode);
+        //int indexNode = positionOfNodeList.indexOf(node);
+        //return positionOfNodeList.get(indexNode);
+        PositionOfNode foundPositionOfNode = null;
+        for (PositionOfNode positionOfNode : positionOfNodeList){
+            if (positionOfNode.getNodeFromList().equals(node))
+                 foundPositionOfNode = positionOfNode;
+        }return foundPositionOfNode;
     }
 
     public LinkedList<PositionOfLine> getPositionOfLineList() {

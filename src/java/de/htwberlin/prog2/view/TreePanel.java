@@ -13,6 +13,7 @@ import java.util.LinkedList;
 /**
  * Created by laura on 08.02.17.
  */
+
 public class TreePanel extends JPanel {
 
     private BinaryTree binaryTree;
@@ -39,6 +40,7 @@ public class TreePanel extends JPanel {
 
     private void addButtons() {
         LinkedList<BinaryTreeNode> listOfNodes = binaryTree.treeAsList();
+        jButtons = new JButton[listOfNodes.size()];
         int i = 0;
 
         for (BinaryTreeNode node : listOfNodes) {
@@ -59,6 +61,8 @@ public class TreePanel extends JPanel {
             this.jButtons[i].setForeground(Color.GRAY);
 
             // set location
+            positionCalculator = new PositionCalculator();
+            positionCalculator.setPositions(binaryTree);
             PositionOfNode positionOfNode = positionCalculator.getSingleNodeFromList(node);
             this.jButtons[i].setBounds(positionOfNode.getX(), positionOfNode.getY(), positionOfNode.getIconSize(),
                     positionOfNode.getIconSize()); // ( x, y, width, height)
@@ -84,7 +88,7 @@ public class TreePanel extends JPanel {
         }
     }
 
-    public void addNodeListener(ActionListener listenerForNodeButton) {
+    public void addTreePanelNodeListener(ActionListener listenerForNodeButton) {
         int size = binaryTree.getSize();
         for (int i = 0; i < size; i++) {
             this.jButtons[i].addActionListener(listenerForNodeButton);

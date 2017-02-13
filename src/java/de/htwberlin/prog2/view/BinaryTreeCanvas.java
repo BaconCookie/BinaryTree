@@ -15,23 +15,13 @@ public class BinaryTreeCanvas extends java.awt.Canvas {
 
     private BinaryTree binaryTree;
     public JButton[] jButtons;
-/*
+
     public void addNodeListener(ActionListener listenerForNodeButton) {
-        int i = 0;
-        LinkedList<BinaryTreeNode> listOfNodes = binaryTree.treeAsList();
-
-        for (BinaryTreeNode node : listOfNodes){
-            this.jButtons[i].addActionListener(listenerForNodeButton);
-            i++;
-        }
-        //oder so:
-        int size = listOfNodes.size();
-        for (int j = 0; j < size; j++) {
+        int size = binaryTree.getSize();
+        for (int i = 0; i < size; i++) {
             this.jButtons[i].addActionListener(listenerForNodeButton);
         }
-
     }
-*/
 
     @Override
     public void paint(Graphics g) {

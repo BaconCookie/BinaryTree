@@ -4,7 +4,6 @@ package de.htwberlin.prog2.view;
 import de.htwberlin.prog2.model.BinaryTree;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
@@ -19,6 +18,7 @@ public class View extends JFrame {
 
     //private LinkedList<BinaryTreeNode> listOfNodes;
     private TreePanel treePanel;
+    private DialogWindow dialogWindow;
 
     JScrollPane jScrollPane;
     private BinaryTree binaryTree;
@@ -35,35 +35,10 @@ public class View extends JFrame {
         createMenuBar();
 
 
-
 //setupJPanel
-        /*
-        gridBagConstraints = new GridBagConstraints();
-        GridBagLayout gridBagLayout = new GridBagLayout();
-        gridBagLayout.setConstraints(this, gridBagConstraints);
-        setLayout(gridBagLayout);
 
-        setupCanvas();
-
-*/
-        composeLayout();
 
         setVisible(true);
-    }
-
-    private void setupCanvas() {
-        /*cnvs = new BinaryTreeCanvas();
-        cnvs.setSize(1400, 700);
-        cnvs.setBackground(Color.green);*/
-    }
-
-    private void composeLayout() {
-        /*gridBagConstraints.fill = GridBagConstraints.NONE;
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.gridwidth = 4;
-        add(cnvs, gridBagConstraints);*/
     }
 
     private void createMenuBar() {
@@ -107,7 +82,12 @@ public class View extends JFrame {
         getContentPane().removeAll(); //TODO check what it does
         getContentPane().invalidate(); //TODO check what it does
 
-        setupCanvas();
+        this.treePanel = new TreePanel();
+        JPanel jPanel = this.treePanel.getJPanel(binaryTree);
+
+        jScrollPane = new JScrollPane(jPanel);
+        jPanel.setAutoscrolls(true);
+        add(jScrollPane);
 
         validate();
         repaint();
@@ -118,8 +98,25 @@ public class View extends JFrame {
         updateView();
     }
 
-    public void addNodeListener(ActionListener listenerForNodeButton) {
-        treePanel.addNodeListener(listenerForNodeButton);
+    public void openDialogToInsertFirstNode() {
+        dialogWindow = new DialogWindow();
+    }
+
+    public String getStringFromDialogWindow() {
+        return dialogWindow.getText();
+    }
+
+    public void addTreePanelNodeListener(ActionListener listenerForNodeButton) {
+        treePanel.addTreePanelNodeListener(listenerForNodeButton);
+    }
+
+    public void addDialogWindowInsertListener(ActionListener listenerForInsertButton) {
+        dialogWindow.addInsertListener(listenerForInsertButton);
+
+    }
+
+    public void addDialogWindowRemoveListener(ActionListener listenerForRemoveButton) {
+        dialogWindow.addRemoveListener(listenerForRemoveButton);
     }
 
     public void addMenuNewListener(ActionListener listenerForMenuNew) {
@@ -138,4 +135,4 @@ public class View extends JFrame {
         jMenuBar.getMenu(0).getItem(3).addActionListener(listenerForMenuExit);
     }
 
-    }
+}

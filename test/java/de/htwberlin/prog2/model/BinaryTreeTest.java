@@ -131,7 +131,7 @@ public class BinaryTreeTest {
 
         //after removal of leaf, node is not in the tree
         testNode = new BinaryTreeNode("c");
-        tree.remove(testNode);
+        smallTree.remove(testNode);
         actualBool = smallTree.search("c");
 
         assertFalse(actualBool);
@@ -167,18 +167,23 @@ public class BinaryTreeTest {
 
         assertEquals(expectedNode.getData(), actualNode.getData());
     }
-/*
+
     @org.junit.Test
     public void testGetNodeToReplaceRemoved() throws Exception {
-        expectedNode = new BinaryTreeNode("vvv");
-        testNode = new BinaryTreeNode("uuu");
+        smallTree.insert("r");
+        smallTree.insert("f");
+        smallTree.insert("w");
+        smallTree.insert("e");
+        System.out.println(smallTree);
+        expectedNode = new BinaryTreeNode("c");
+        testNode = new BinaryTreeNode("b");
         testNode2 = tree.getNode(testNode.getData());
         actualNode = tree.getNodeToReplaceRemoved(testNode2);
 
-        assertEquals(expectedNode.getData(), actualNode.getData());
+        //assertEquals(expectedNode.getData(), actualNode.getData());
 
     }
-
+/*
     @org.junit.Test
     public void testGetNodeToReplaceRemovedTwoChildren() throws Exception {
         expectedNode = new BinaryTreeNode("ab");
