@@ -99,7 +99,8 @@ public class View extends JFrame {
     }
 
     public void openDialogToInsertFirstNode() {
-        dialogWindow = new DialogWindow();
+        //dialogWindow = new DialogWindow();
+        dialogWindow.setVisible(true);
     }
 
     public String getStringFromDialogWindow() {
