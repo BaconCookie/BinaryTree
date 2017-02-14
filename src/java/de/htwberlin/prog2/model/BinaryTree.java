@@ -2,7 +2,7 @@ package de.htwberlin.prog2.model;
 
 //needed for printTree method
 
-import java.io.Serializable; //TODO Serializable??
+import java.io.Serializable;
 import java.util.LinkedList;
 
 
@@ -14,8 +14,6 @@ public class BinaryTree implements Serializable {
 
     private BinaryTreeNode root;
     private int size;
-
-
 
 
     /**
@@ -32,18 +30,24 @@ public class BinaryTree implements Serializable {
      *
      * @return int depthOfTree
      */
-    public int getDepthOfTree() {
+    public int getDepthOfTree(LinkedList<BinaryTreeNode> list) {
         if (root == null) {
             return 0;
         } else {
-            LinkedList<BinaryTreeNode> list = treeAsList();
             BinaryTreeNode nodeWithMaxIndex = list.getLast();
-            int depthOfTree = measureDepthOfTree(nodeWithMaxIndex); //TODO new calc check
-            return depthOfTree;
+            return measureDepthOfSubTree(nodeWithMaxIndex);
         }
     }
 
-    private int measureDepthOfTree(BinaryTreeNode node) {
+    public int getDepthOfSubTree(BinaryTreeNode node) {
+        if (root == node) {
+            return 0;
+        } else {
+            return measureDepthOfSubTree(node);
+        }
+    }
+
+    private int measureDepthOfSubTree(BinaryTreeNode node) {
         int depth = 0;
         if (node == root) {
             return depth;
@@ -365,11 +369,11 @@ public class BinaryTree implements Serializable {
         return this.root;
     }
 
-/*
-    public String toString() {
-        return root.toString();
-    }
-*/
+    /*
+        public String toString() {
+            return root.toString();
+        }
+    */
     @Override
     public java.lang.String toString() {
         BinaryTreeNode node = root;
@@ -383,6 +387,7 @@ public class BinaryTree implements Serializable {
         }
         return "Node: " + node.getData();
     }
+
     /**
      * Method to put tree in a LinkedList of <BinaryTreeNode>
      * Acts like breadth first search

@@ -220,7 +220,7 @@ public class BinaryTreeTest {
     @org.junit.Test
     public void clearTree() throws Exception {
         int expectedDepth = 0;
-        int actualDepth = tree.clearTree().getDepthOfTree();
+        int actualDepth = tree.clearTree().getDepthOfTree(tree.treeAsList());
 
         assertEquals(expectedDepth, actualDepth);
     }

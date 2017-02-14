@@ -28,7 +28,7 @@ public class PositionOfNode {
     }
 
     public int getMiddleX() {
-        return this.x + this.iconSize / 2;
+        return this.x + (this.iconSize / 2);
     }
 
     public int getY2() {

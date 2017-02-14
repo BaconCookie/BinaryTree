@@ -20,6 +20,7 @@ public class TreePanel extends JPanel {
     private PositionCalculator positionCalculator;
     private JButton[] jButtons;
 
+
     private ImageIcon nodeIcon = new ImageIcon(this.getClass().getResource("/img/CircleGreenTransparent.png"));
 
 
@@ -40,6 +41,7 @@ public class TreePanel extends JPanel {
 
     private void addButtons() {
         LinkedList<BinaryTreeNode> listOfNodes = binaryTree.treeAsList();
+
         jButtons = new JButton[listOfNodes.size()];
         int i = 0;
 

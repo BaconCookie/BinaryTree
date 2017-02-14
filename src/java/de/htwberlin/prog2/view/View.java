@@ -34,10 +34,6 @@ public class View extends JFrame {
         createMenuBar();
         dialogWindow = new DialogWindow();
 
-
-//setupJPanel
-
-
         setVisible(true);
     }
 
@@ -79,12 +75,12 @@ public class View extends JFrame {
     }
 
     private void updateView() {
-        getContentPane().removeAll(); //TODO check what it does
-        getContentPane().invalidate(); //TODO check what it does
+        getContentPane().removeAll();
+        getContentPane().invalidate();
 
         this.treePanel = new TreePanel();
-        JPanel jPanel = this.treePanel.getJPanel(binaryTree);
 
+        JPanel jPanel = this.treePanel.getJPanel(binaryTree);
         jScrollPane = new JScrollPane(jPanel);
         jPanel.setAutoscrolls(true);
         add(jScrollPane);

@@ -25,38 +25,32 @@ public class PositionCalculator {
 
         //this.positionOfLineList.clear();
         //this.positionOfNodeList.clear();
-
-        LinkedList<BinaryTreeNode> list = binaryTree.treeAsList();
-
-        int depthOfTree = binaryTree.getDepthOfTree();
+        LinkedList<BinaryTreeNode> listOfNodes = binaryTree.treeAsList();
+        int depthOfTree = binaryTree.getDepthOfTree(listOfNodes);
         int maxWidth = (int) Math.pow(2, depthOfTree) * iconSize;
-        int i = 0;
 
-        while (!list.isEmpty()) {
-            BinaryTreeNode node = list.poll();
+        while (!listOfNodes.isEmpty()) {
+            BinaryTreeNode node = listOfNodes.poll();
 
-            int blockSize = maxWidth / (int) Math.pow(2, depthOfTree);
-            int blockStartY = (this.iconSize * 3 / 2) * depthOfTree;
+            int blockSize = maxWidth / (int) Math.pow(2, binaryTree.getDepthOfSubTree(node));
+            int blockStartY = (this.iconSize * 3 / 2) * binaryTree.getDepthOfSubTree(node);
             int blockStartX;
 
             if (node == binaryTree.getRoot()) {
                 blockStartX = maxWidth / 2 - (iconSize / 2);
                 this.positionOfNodeList.add(new PositionOfNode(node, blockStartX, blockStartY, this.iconSize));
-                i++;
             } else {
 
                 if (node == binaryTree.getParentNode(node).getLeft()) {
                     // location for Button
                     PositionOfNode positionOfParentNode = getSingleNodeFromList(binaryTree.getParentNode(node));
                     blockStartX = positionOfParentNode.getMiddleX() - (blockSize / 2) - (iconSize / 2);
-                    this.positionOfNodeList.add(i, new PositionOfNode(node, blockStartX, blockStartY, this.iconSize));
-                    i++;
+                    this.positionOfNodeList.add(new PositionOfNode(node, blockStartX, blockStartY, this.iconSize));
                 } else {
                     // location for Button
                     PositionOfNode positionOfParentNode = getSingleNodeFromList(binaryTree.getParentNode(node));
                     blockStartX = positionOfParentNode.getMiddleX() + (blockSize / 2) - (iconSize / 2);
-                    this.positionOfNodeList.add(i, new PositionOfNode(node, blockStartX, blockStartY, this.iconSize));
-                    i++;
+                    this.positionOfNodeList.add(new PositionOfNode(node, blockStartX, blockStartY, this.iconSize));
                 }
 
                 if (binaryTree.getParentNode(node) != null) {
@@ -76,8 +70,6 @@ public class PositionCalculator {
     }
 
     public PositionOfNode getSingleNodeFromList(BinaryTreeNode node) {
-        //int indexNode = positionOfNodeList.indexOf(node);
-        //return positionOfNodeList.get(indexNode);
         PositionOfNode foundPositionOfNode = null;
         for (PositionOfNode positionOfNode : positionOfNodeList){
             if (positionOfNode.getNodeFromList().equals(node))
@@ -87,10 +79,6 @@ public class PositionCalculator {
 
     public LinkedList<PositionOfLine> getPositionOfLineList() {
         return positionOfLineList;
-    }
-
-    public LinkedList<PositionOfNode> getPositionOfNodeList() {
-        return positionOfNodeList;
     }
 
 }
