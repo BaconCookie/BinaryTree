@@ -4,6 +4,7 @@ package de.htwberlin.prog2.view;
 import de.htwberlin.prog2.model.BinaryTree;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;

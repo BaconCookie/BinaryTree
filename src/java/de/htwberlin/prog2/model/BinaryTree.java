@@ -168,6 +168,11 @@ public class BinaryTree implements Serializable {
         }
     }
 
+    private boolean hasOneChild(BinaryTreeNode nodeToRemove) {
+        return ((nodeToRemove.getLeft() == null | nodeToRemove.getRight() == null) &&
+                (nodeToRemove.getLeft() != null | nodeToRemove.getRight() != null));
+    }
+
     private void removeNodeWithOneChild(BinaryTreeNode nodeToRemove) {
         BinaryTreeNode parentNode = findParentNode(nodeToRemove);
         BinaryTreeNode childNode = findOnlyChild(nodeToRemove);
@@ -189,19 +194,19 @@ public class BinaryTree implements Serializable {
     }
 
     private void removeNodeWhichIsCurrentRoot() {
-        if (root.getLeft() != null) {
-            root = root.getLeft();
-        } else if (root.getRight() != null) {
-            root = root.getRight();
+        if (hasOneChild(root)) {
+            if (root.getLeft() != null) {
+                root = root.getLeft();
+            } else if (root.getRight() != null) {
+                root = root.getRight();
+            } else {
+                root = null;
+            }
         } else {
-            root = null;
+            removeNodeFromTheMiddle(root);
         }
     }
 
-    private boolean hasOneChild(BinaryTreeNode nodeToRemove) {
-        return ((nodeToRemove.getLeft() == null | nodeToRemove.getRight() == null) &&
-                (nodeToRemove.getLeft() != null | nodeToRemove.getRight() != null));
-    }
 
     private BinaryTreeNode findOnlyChild(BinaryTreeNode nodeToRemove) {
         BinaryTreeNode childNode = new BinaryTreeNode();
