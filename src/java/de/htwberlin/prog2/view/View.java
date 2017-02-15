@@ -30,12 +30,14 @@ public class View extends JFrame {
 
         //Window
         setTitle("BinaryTree by Laura");
-        setSize(1400, 700); //width, height
+        setSize(1000, 600); //width, height
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //If JFrame instead of WinConst IntelliJ complains
         createMenuBar();
         dialogWindow = new DialogWindow();
+        this.treePanel = new TreePanel();
 
         setVisible(true);
+
     }
 
     private void createMenuBar() {
@@ -79,19 +81,25 @@ public class View extends JFrame {
         getContentPane().removeAll();
         getContentPane().invalidate();
 
-        this.treePanel = new TreePanel();
+        treePanel.setBinaryTree(binaryTree);
 
-        JPanel jPanel = this.treePanel.getJPanel(binaryTree);
-        jScrollPane = new JScrollPane(jPanel);
-        jPanel.setAutoscrolls(true);
+        jScrollPane = new JScrollPane(treePanel);
+        jScrollPane.setAutoscrolls(true);
+        jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        jScrollPane.setPreferredSize(new Dimension(1000, 600));
+        treePanel.repaint();
+        jScrollPane.setViewportView(treePanel);
+        jScrollPane.setSize(new Dimension(1000, 600));
         add(jScrollPane);
-
+        jScrollPane.repaint();
+        //TODO scrollbars not working yet (they appear but have no function)
         validate();
-        repaint();
     }
 
     public void setBinaryTree(BinaryTree binaryTree) {
         this.binaryTree = binaryTree;
+        treePanel.setBinaryTree(binaryTree);
         updateView();
     }
 
@@ -110,7 +118,6 @@ public class View extends JFrame {
 
     public void addDialogWindowInsertListener(ActionListener listenerForInsertButton) {
         dialogWindow.addInsertListener(listenerForInsertButton);
-
     }
 
     public void addDialogWindowRemoveListener(ActionListener listenerForRemoveButton) {
@@ -135,5 +142,9 @@ public class View extends JFrame {
 
     public DialogWindow getDialogWindow() {
         return dialogWindow;
+    }
+
+    public TreePanel getTreePanel() {
+        return treePanel;
     }
 }

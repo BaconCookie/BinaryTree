@@ -1,7 +1,5 @@
 package de.htwberlin.prog2.model;
 
-//needed for printTree method
-
 import java.io.Serializable;
 import java.util.LinkedList;
 
@@ -9,18 +7,15 @@ import java.util.LinkedList;
 /**
  * Created by laura on 01.01.17.
  */
-//TODO Serializable??
+
 public class BinaryTree implements Serializable {
 
     private BinaryTreeNode root;
-    private int size;
-
 
     /**
      * Constructor of empty tree
      */
     public BinaryTree() {
-        root = null;
     }
 
 
@@ -47,6 +42,12 @@ public class BinaryTree implements Serializable {
         }
     }
 
+    /**
+     * Method to measure the depth of a subtree
+     *
+     * @param node root node of subtree
+     * @return int depth of subtree
+     */
     private int measureDepthOfSubTree(BinaryTreeNode node) {
         int depth = 0;
         if (node == root) {
@@ -64,27 +65,25 @@ public class BinaryTree implements Serializable {
      * Method to insert a node
      *
      * @param data from node to insert
-     * @return updated root of the tree
      */
-    public void insert(String data) {
-        try {
-            size++;
-            if (root == null) {
-                root = new BinaryTreeNode(data);
-            } else {
+    public boolean insert(String data) {
+        if (root == null) {
+            root = new BinaryTreeNode(data);
+            return true;
+        } else {
+            if (!search(data)) {
                 insertRecursive(root, data);
+                return true;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error in insert method");
         }
+        return false;
     }
 
     /**
      * Insert a node recursively
      *
      * @param nodeToCompareWith node to insert
-     * @param data              data
+     * @param data              data belonging to the node
      */
     private void insertRecursive(BinaryTreeNode nodeToCompareWith, String data) {
         //if (data < data from nodeToCompareWith), go to the left
@@ -150,7 +149,6 @@ public class BinaryTree implements Serializable {
      */
     public void remove(BinaryTreeNode nodeToRemove) {
         try {
-            size--;
             //in case nodeToRemove == root
             if (nodeToRemove.getData().compareTo(root.getData()) == 0) {
                 removeNodeWhichIsCurrentRoot();
@@ -168,33 +166,13 @@ public class BinaryTree implements Serializable {
         }
     }
 
-    private boolean hasOneChild(BinaryTreeNode nodeToRemove) {
-        return ((nodeToRemove.getLeft() == null | nodeToRemove.getRight() == null) &&
-                (nodeToRemove.getLeft() != null | nodeToRemove.getRight() != null));
-    }
-
-    private void removeNodeWithOneChild(BinaryTreeNode nodeToRemove) {
-        BinaryTreeNode parentNode = findParentNode(nodeToRemove);
-        BinaryTreeNode childNode = findOnlyChild(nodeToRemove);
-        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) == 0)) {
-            parentNode.setLeft(childNode);
-        } else {
-            parentNode.setRight(childNode);
-        }
-    }
-
-    private void removeNodeWhichIsLeaf(BinaryTreeNode nodeToRemove) {
-        BinaryTreeNode parentNode = findParentNode(nodeToRemove);
-        //if nodeToRemove is/was the left child
-        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) == 0)) {
-            parentNode.setLeft(null);
-        } else {
-            parentNode.setRight(null);
-        }
-    }
-
+    /**
+     * Method to remove a node if it is the current root node
+     */
     private void removeNodeWhichIsCurrentRoot() {
-        if (hasOneChild(root)) {
+        if (hasNoChild(root)) {
+            root = null;
+        } else if (hasOneChild(root)) {
             if (root.getLeft() != null) {
                 root = root.getLeft();
             } else if (root.getRight() != null) {
@@ -207,7 +185,54 @@ public class BinaryTree implements Serializable {
         }
     }
 
+    /**
+     * Method to determine if a node has one child
+     *
+     * @param nodeToRemove node to check number of children from
+     * @return true if nodeToRemove has one child
+     * false if nodeToRemove has no child or two children
+     */
+    private boolean hasOneChild(BinaryTreeNode nodeToRemove) {
+        return ((nodeToRemove.getLeft() == null | nodeToRemove.getRight() == null) &&
+                (nodeToRemove.getLeft() != null | nodeToRemove.getRight() != null));
+    }
 
+    /**
+     * Method to remove a node with one child
+     *
+     * @param nodeToRemove node which will be removed
+     */
+    private void removeNodeWithOneChild(BinaryTreeNode nodeToRemove) {
+        BinaryTreeNode parentNode = findParentNode(nodeToRemove);
+        BinaryTreeNode childNode = findOnlyChild(nodeToRemove);
+        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) == 0)) {
+            parentNode.setLeft(childNode);
+        } else {
+            parentNode.setRight(childNode);
+        }
+    }
+
+    /**
+     * Method to remove a node which has no child (and therefore is called a leaf)
+     *
+     * @param nodeToRemove node which will be removed
+     */
+    private void removeNodeWhichIsLeaf(BinaryTreeNode nodeToRemove) {
+        BinaryTreeNode parentNode = findParentNode(nodeToRemove);
+        //if nodeToRemove is/was the left child
+        if ((parentNode.getLeft() != null) && (parentNode.getLeft().getData().compareTo(nodeToRemove.getData()) == 0)) {
+            parentNode.setLeft(null);
+        } else {
+            parentNode.setRight(null);
+        }
+    }
+
+    /**
+     * Method to find and return the child of a node which has one child
+     *
+     * @param nodeToRemove node which will be removed, child of this node is being sought
+     * @return childNode of nodeToRemove
+     */
     private BinaryTreeNode findOnlyChild(BinaryTreeNode nodeToRemove) {
         BinaryTreeNode childNode = new BinaryTreeNode();
 
@@ -246,7 +271,7 @@ public class BinaryTree implements Serializable {
             BinaryTreeNode searchChildNode = root;
 
             //now the child needs to go one level ahead of the parent
-            if (searchChildNode.getData().compareTo(childNode.getData()) > 0) { //
+            if (searchChildNode.getData().compareTo(childNode.getData()) >= 0) { //
                 searchChildNode = searchChildNode.getLeft();
                 whereDidTheChildGo = MoveDirection.LEFT;
             } else {
@@ -277,6 +302,13 @@ public class BinaryTree implements Serializable {
         return findParentNode(childNode);
     }
 
+    /**
+     * Method to let a node (=parent node) always be one step behind the (child)node
+     *
+     * @param parentNode node which will become the updatedParentNode
+     * @param dirChild   enum which says in which direction the child went
+     * @return BinaryTreeNode (updatedParentNode) which is one step behind th child
+     */
     private BinaryTreeNode followChild(BinaryTreeNode parentNode, MoveDirection dirChild) {
         BinaryTreeNode updatedParentNode = new BinaryTreeNode();
         if (dirChild == MoveDirection.LEFT) {
@@ -365,7 +397,6 @@ public class BinaryTree implements Serializable {
      */
     public BinaryTree clearTree() {
         this.root = null;
-        this.size = 0;
         return new BinaryTree();
     }
 
@@ -380,7 +411,7 @@ public class BinaryTree implements Serializable {
         }
     */
     @Override
-    public java.lang.String toString() {
+    public String toString() {
         BinaryTreeNode node = root;
         if (node.getLeft() != null && node.getRight() != null) {
             return "Node: " + node.getData() + " || left " + node.getLeft().getData()
@@ -421,7 +452,7 @@ public class BinaryTree implements Serializable {
     }
 
     public int getSize() {
-        return size;
+        return treeAsList().size();
     }
 
 }

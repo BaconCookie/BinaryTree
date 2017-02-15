@@ -26,12 +26,12 @@ public class TreePanel extends JPanel {
 
     public TreePanel() {
         this.setLayout(null);
+        positionCalculator = new PositionCalculator();
     }
 
-    public JPanel getJPanel(BinaryTree binaryTree) {
+    public void setBinaryTree(BinaryTree binaryTree) {
         this.binaryTree = binaryTree;
         updateButtons();
-        return this;
     }
 
     private void updateButtons() {
@@ -40,38 +40,39 @@ public class TreePanel extends JPanel {
     }
 
     private void addButtons() {
-        LinkedList<BinaryTreeNode> listOfNodes = binaryTree.treeAsList();
+        if (binaryTree.getRoot() != null) {
+            LinkedList<BinaryTreeNode> listOfNodes = binaryTree.treeAsList();
 
-        jButtons = new JButton[listOfNodes.size()];
-        int i = 0;
+            jButtons = new JButton[listOfNodes.size()];
+            int i = 0;
 
-        for (BinaryTreeNode node : listOfNodes) {
+            for (BinaryTreeNode node : listOfNodes) {
 
-            this.jButtons[i] = new JButton(node.getData());
+                this.jButtons[i] = new JButton(node.getData());
 
-            // icon
-            this.jButtons[i].setIcon(nodeIcon);
+                // icon
+                this.jButtons[i].setIcon(nodeIcon);
 
-            // border & background
-            this.jButtons[i].setBorderPainted(false);
-            this.jButtons[i].setContentAreaFilled(false);
+                // border & background
+                this.jButtons[i].setBorderPainted(false);
+                this.jButtons[i].setContentAreaFilled(false);
 
-            // set text font
-            this.jButtons[i].setVerticalTextPosition(SwingConstants.CENTER);
-            this.jButtons[i].setHorizontalTextPosition(SwingConstants.CENTER);
-            this.jButtons[i].setFont(new Font("Arial", Font.PLAIN, 15));
-            this.jButtons[i].setForeground(Color.GRAY);
+                // set text font
+                this.jButtons[i].setVerticalTextPosition(SwingConstants.CENTER);
+                this.jButtons[i].setHorizontalTextPosition(SwingConstants.CENTER);
+                this.jButtons[i].setFont(new Font("Arial", Font.PLAIN, 15));
+                this.jButtons[i].setForeground(Color.GRAY);
 
-            // set location
-            positionCalculator = new PositionCalculator();
-            positionCalculator.setPositions(binaryTree);
-            PositionOfNode positionOfNode = positionCalculator.getSingleNodeFromList(node);
-            this.jButtons[i].setBounds(positionOfNode.getX(), positionOfNode.getY(), positionOfNode.getIconSize(),
-                    positionOfNode.getIconSize()); // ( x, y, width, height)
+                // set location
+                positionCalculator.setPositions(binaryTree);
+                PositionOfNode positionOfNode = positionCalculator.getSingleNodeFromList(node);
+                this.jButtons[i].setBounds(positionOfNode.getX(), positionOfNode.getY(), positionOfNode.getIconSize(),
+                        positionOfNode.getIconSize()); // ( x, y, width, height)
 
-            // add  button to panel
-            this.add(this.jButtons[i]);
-            i++;
+                // add  button to panel
+                this.add(this.jButtons[i]);
+                i++;
+            }
         }
     }
 
@@ -93,7 +94,10 @@ public class TreePanel extends JPanel {
     public void addTreePanelNodeListener(ActionListener listenerForNodeButton) {
         int size = binaryTree.getSize();
         for (int i = 0; i < size; i++) {
-            this.jButtons[i].addActionListener(listenerForNodeButton);
+            JButton currentButton = this.jButtons[i];
+            if (currentButton.getActionListeners().length == 0) {
+                currentButton.addActionListener(listenerForNodeButton);
+            }
         }
     }
 

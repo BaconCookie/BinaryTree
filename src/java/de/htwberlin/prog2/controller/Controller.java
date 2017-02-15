@@ -4,6 +4,7 @@ import de.htwberlin.prog2.dataAccess.TreeIO;
 import de.htwberlin.prog2.model.BinaryTree;
 import de.htwberlin.prog2.view.DialogWindow;
 import de.htwberlin.prog2.view.PositionCalculator;
+import de.htwberlin.prog2.view.TreePanel;
 import de.htwberlin.prog2.view.View;
 
 import javax.swing.*;
@@ -39,31 +40,28 @@ public class Controller {
 
 
     /**
-     * Konstruktor des Controllers
-     * <ul>
-     * <li>1. Erstellt ein Demo Binärbaum</li>
-     * <li>2. Übergibt die Binärbaum informationen der View</li>
-     * <li>3. Fügt die Actionen Listener für jeden Button hinzu</li>
-     * </ul>
+     * Controller Constructor
      *
-     * @param view Die View für das haupt Fenster
+     * @param view
      */
     public Controller(View view) {
         this.view = view;
         dialogWindow = view.getDialogWindow();
+        addActionListenerForCaseTreeIsEmpty();
     }
 
     public void runTree() {
-        if (binaryTree != null) {
+        if (binaryTree != null && binaryTree.getRoot() != null) {
             //   positionCalculator.setPositions(binaryTree);
             this.view.setBinaryTree(binaryTree);
             addAllActionListener();
         } else {
             // this.dialogWindow = new DialogWindow();
             this.view.openDialogToInsertFirstNode();
-            addActionListenerForCaseTreeIsEmpty();
+            /*
             String data = this.view.getStringFromDialogWindow();
             insertInTree(data);
+            */
         }
     }
 
@@ -73,24 +71,27 @@ public class Controller {
      * If the string is any longer, this method will take the first three characters as a substring
      */
     public void insertInTree(String data) {
+        boolean updateNeeded = false;
         try {
             if (binaryTree == null) {
                 binaryTree = new BinaryTree();
             }
-            insertInExistingTree(data);
+            updateNeeded = insertInExistingTree(data);
 
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error in insertInTree.");
         }
-        sendUpdateToView();
+        if (updateNeeded) {
+            sendUpdateToView();
+        }
     }
 
-    private void insertInExistingTree(String data) {
+    private boolean insertInExistingTree(String data) {
         if (data.length() > MAX_CHARS) {
-            binaryTree.insert(data.substring(0, 3));
+            return binaryTree.insert(data.substring(0, 3));
         } else {
-            binaryTree.insert(data);
+            return binaryTree.insert(data);
         }
     }
 
@@ -170,22 +171,15 @@ public class Controller {
      */
     private void addAllActionListener() {
         view.addTreePanelNodeListener(new NodeListener());
-//        dialogWindow.addInsertListener(new DialogInsertListener());
-        view.addDialogWindowInsertListener(new DialogInsertListener());
-        view.addDialogWindowRemoveListener(new DialogRemoveListener());
-        view.addMenuNewListener(new MenuNewListener());
-        view.addMenuLoadListener(new MenuLoadListener());
-        view.addMenuSaveListener(new MenuSaveListener());
-        view.addMenuExitListener(new MenuExitListener());
     }
 
     private void addActionListenerForCaseTreeIsEmpty() {
-        //dialogWindow.addInsertListener(new DialogInsertListener());
         view.addDialogWindowInsertListener(new DialogInsertListener());
         view.addMenuNewListener(new MenuNewListener());
         view.addMenuLoadListener(new MenuLoadListener());
         view.addMenuSaveListener(new MenuSaveListener());
         view.addMenuExitListener(new MenuExitListener());
+        view.addDialogWindowRemoveListener(new DialogRemoveListener());
     }
 
 
@@ -196,11 +190,8 @@ public class Controller {
         public void actionPerformed(ActionEvent arg0) {
             JButton jButton = (JButton) arg0.getSource();
             String s = jButton.getText();
-            dialogWindow = new DialogWindow(binaryTree.getNode(s));
-
-            // add action listener for dialog
-            dialogWindow.addInsertListener(new DialogInsertListener());
-            dialogWindow.addRemoveListener(new DialogRemoveListener());
+            dialogWindow.setText(binaryTree.getNode(s).getData());
+            dialogWindow.setVisible(true);
         }
     }
 
@@ -209,8 +200,9 @@ public class Controller {
      */
     private class MenuNewListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
-            binaryTree.clearTree();
-            sendUpdateToView();
+            binaryTree = new BinaryTree();
+            TreePanel treePanel = view.getTreePanel();
+            runTree();
         }
     }
 

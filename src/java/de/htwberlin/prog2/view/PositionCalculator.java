@@ -16,15 +16,13 @@ public class PositionCalculator {
     private LinkedList<PositionOfNode> positionOfNodeList;
 
     public PositionCalculator() {
-
+        positionOfLineList = new LinkedList<>();
+        positionOfNodeList = new LinkedList<>();
     }
 
     public void setPositions(BinaryTree binaryTree) {
-        positionOfLineList = new LinkedList<>();
-        positionOfNodeList = new LinkedList<>();
+        positionOfLineList.clear();
 
-        //this.positionOfLineList.clear();
-        //this.positionOfNodeList.clear();
         LinkedList<BinaryTreeNode> listOfNodes = binaryTree.treeAsList();
         int depthOfTree = binaryTree.getDepthOfTree(listOfNodes);
         int maxWidth = (int) Math.pow(2, depthOfTree) * iconSize;

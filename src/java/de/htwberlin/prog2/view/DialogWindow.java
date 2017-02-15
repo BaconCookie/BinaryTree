@@ -37,6 +37,7 @@ public class DialogWindow extends JFrame {
         insertButton = new JButton("Insert Node");
         removeButton = new JButton("Remove Node");
 
+        add(this.removeButton);
         add(this.insertButton);
 
         this.setVisible(true);
@@ -88,6 +89,10 @@ public class DialogWindow extends JFrame {
      */
     public String getText() {
         return this.jTextPane.getText();
+    }
+
+    public void setText(String text){
+        jTextPane.setText(text);
     }
 
 }
