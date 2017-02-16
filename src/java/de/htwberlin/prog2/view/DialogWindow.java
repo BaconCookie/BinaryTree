@@ -34,6 +34,7 @@ public class DialogWindow extends JFrame {
 
         this.jTextPane = new JTextPane();
         add(this.jTextPane);
+
         insertButton = new JButton("Insert Node");
         removeButton = new JButton("Remove Node");
 
@@ -42,26 +43,6 @@ public class DialogWindow extends JFrame {
 
         this.setVisible(true);
     }
-
-    public DialogWindow(BinaryTreeNode node) {
-        this.setSize(400, 100);
-        this.setTitle("Insert or remove a node");
-
-        this.setLayout(new FlowLayout());
-
-        this.jTextPane = new JTextPane();
-        this.jTextPane.setText(node.getData());
-        add(this.jTextPane);
-
-        insertButton = new JButton("Insert Node");
-        add(this.insertButton);
-
-        removeButton = new JButton("Remove Node");
-        add(this.removeButton);
-
-        this.setVisible(true);
-    }
-
 
 
     /**

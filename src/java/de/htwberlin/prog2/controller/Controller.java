@@ -3,7 +3,6 @@ package de.htwberlin.prog2.controller;
 import de.htwberlin.prog2.dataAccess.TreeIO;
 import de.htwberlin.prog2.model.BinaryTree;
 import de.htwberlin.prog2.view.DialogWindow;
-import de.htwberlin.prog2.view.PositionCalculator;
 import de.htwberlin.prog2.view.TreePanel;
 import de.htwberlin.prog2.view.View;
 
@@ -18,7 +17,7 @@ import java.io.InvalidObjectException;
 
 /**
  * Class Controller
- * <p>
+ *
  * for:
  * Manage Balanced Tree
  * Manage View
@@ -31,12 +30,9 @@ public class Controller {
     private BinaryTree binaryTree;
     private View view;
     private DialogWindow dialogWindow;
-    private PositionCalculator positionCalculator;
 
     public Controller() {
     }
-
-    //actionlistener implementieren,  actionperformed
 
 
     /**
@@ -52,16 +48,10 @@ public class Controller {
 
     public void runTree() {
         if (binaryTree != null && binaryTree.getRoot() != null) {
-            //   positionCalculator.setPositions(binaryTree);
             this.view.setBinaryTree(binaryTree);
-            addAllActionListener();
+            addActionListenerForNodes();
         } else {
-            // this.dialogWindow = new DialogWindow();
             this.view.openDialogToInsertFirstNode();
-            /*
-            String data = this.view.getStringFromDialogWindow();
-            insertInTree(data);
-            */
         }
     }
 
@@ -101,7 +91,7 @@ public class Controller {
      * @param data data from node which should be removed from the tree
      * @throws InvalidObjectException if "Node not found in Tree."
      */
-    public void removeFromTree(String data) {
+    private void removeFromTree(String data) {
         try {
             if (binaryTree.search(data)) {
                 binaryTree.remove(binaryTree.getNode(data));
@@ -120,7 +110,7 @@ public class Controller {
      * Method which saves tree in a file
      * The file is being placed in the folder of this program.
      */
-    public void saveTree() {
+    private void saveTree() {
         try {
             TreeIO treeIO = new TreeIO();
             String filePath = "./BinaryTree.tree";
@@ -138,7 +128,7 @@ public class Controller {
      * @return Loaded tree
      * @throws RuntimeException in case of a caught Exception
      */
-    public void loadTree() {
+    private void loadTree() {
         try {
             TreeIO treeIO = new TreeIO();
 
@@ -153,15 +143,7 @@ public class Controller {
         sendUpdateToView();
     }
 
-
-    /**
-     * Führt ein update der View aus
-     * <ul>
-     * <li>1. Binärbaum der View übergeben</li>
-     * <li>2. Actionlistener einfügen</li>
-     * </ul>
-     */
-    void sendUpdateToView() {
+    private void sendUpdateToView() {
         view.setBinaryTree(binaryTree);
         runTree();
     }
@@ -169,7 +151,7 @@ public class Controller {
     /**
      * Adds ActionListener for all menu buttons, the dialog window and the tree panel
      */
-    private void addAllActionListener() {
+    private void addActionListenerForNodes() {
         view.addTreePanelNodeListener(new NodeListener());
     }
 

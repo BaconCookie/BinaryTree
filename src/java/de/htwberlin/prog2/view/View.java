@@ -7,24 +7,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.LinkedList;
 
 /**
  * Created by laura on 08.02.17.
  */
 public class View extends JFrame {
 
-
-    private LinkedList<PositionOfLine> PositionOfLine; // = new LinkedList();
-
-    //private LinkedList<BinaryTreeNode> listOfNodes;
     private TreePanel treePanel;
     private DialogWindow dialogWindow;
-
-    JScrollPane jScrollPane;
+    private JScrollPane jScrollPane;
     private BinaryTree binaryTree;
     private JMenuBar jMenuBar;
-    private JButton[] jButtons;
 
     public View() {
 
@@ -87,14 +80,13 @@ public class View extends JFrame {
         jScrollPane.setAutoscrolls(true);
         jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        jScrollPane.setPreferredSize(new Dimension(1000, 600));
+        jScrollPane.setPreferredSize(new Dimension(2000, 2000));
         treePanel.repaint();
-        jScrollPane.setViewportView(treePanel);
-        jScrollPane.setSize(new Dimension(1000, 600));
         add(jScrollPane);
         jScrollPane.repaint();
         //TODO scrollbars not working yet (they appear but have no function)
         validate();
+        repaint();
     }
 
     public void setBinaryTree(BinaryTree binaryTree) {
@@ -104,7 +96,6 @@ public class View extends JFrame {
     }
 
     public void openDialogToInsertFirstNode() {
-        //dialogWindow = new DialogWindow();
         dialogWindow.setVisible(true);
     }
 

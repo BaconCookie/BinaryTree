@@ -15,6 +15,7 @@ public class PositionCalculator {
     private LinkedList<PositionOfLine> positionOfLineList;
     private LinkedList<PositionOfNode> positionOfNodeList;
 
+
     public PositionCalculator() {
         positionOfLineList = new LinkedList<>();
         positionOfNodeList = new LinkedList<>();

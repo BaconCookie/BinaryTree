@@ -169,55 +169,6 @@ public class BinaryTreeTest {
     }
 
     @org.junit.Test
-    public void testGetNodeToReplaceRemoved() throws Exception {
-        smallTree.insert("r");
-        smallTree.insert("f");
-        smallTree.insert("w");
-        smallTree.insert("e");
-        System.out.println(smallTree);
-        expectedNode = new BinaryTreeNode("c");
-        testNode = new BinaryTreeNode("b");
-        testNode2 = tree.getNode(testNode.getData());
-        actualNode = tree.getNodeToReplaceRemoved(testNode2);
-
-        //assertEquals(expectedNode.getData(), actualNode.getData());
-
-    }
-/*
-    @org.junit.Test
-    public void testGetNodeToReplaceRemovedTwoChildren() throws Exception {
-        expectedNode = new BinaryTreeNode("ab");
-        testNode = new BinaryTreeNode("ibb");
-        testNode2 = tree.getNode(testNode.getData());
-        actualNode = tree.getNodeToReplaceRemoved(testNode2);
-
-        assertEquals(expectedNode.getData(), actualNode.getData());
-
-    }
-
-    @org.junit.Test
-    public void testGetNodeToReplaceRemovedTwoChildren2() throws Exception {
-        expectedNode = new BinaryTreeNode("vvv");
-        testNode = new BinaryTreeNode("yyy");
-        testNode2 = tree.getNode(testNode.getData());
-        actualNode = tree.getNodeToReplaceRemoved(testNode2);
-
-        assertEquals(expectedNode.getData(), actualNode.getData());
-    }
-
-        @org.junit.Test
-    public void removeAMiddleNodeWithTwoChildren() throws Exception {
-        expectedNode = new BinaryTreeNode("vvv");
-        testNode = new BinaryTreeNode("yyy");
-        testNode2 = tree.getNode(testNode.getData());
-
-
-     //   assertEquals(expectedNode.getData(), actualNode.getData());
-
-    }
-    */
-
-    @org.junit.Test
     public void clearTree() throws Exception {
         int expectedDepth = 0;
         int actualDepth = tree.clearTree().getDepthOfTree(tree.treeAsList());

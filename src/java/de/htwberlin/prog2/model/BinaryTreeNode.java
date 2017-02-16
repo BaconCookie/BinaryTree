@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by laura on 14.01.17.
  */
-//TODO Serializable??
+
 public class BinaryTreeNode implements Serializable {
 
     private String data;
